@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PantryCell() {
-    Card (
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),

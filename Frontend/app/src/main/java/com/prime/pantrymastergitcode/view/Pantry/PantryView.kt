@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun PantryView(
     navController: NavController
-){
+) {
     Text(text = "toDo")
 }
 
