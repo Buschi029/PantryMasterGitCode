@@ -8,13 +8,13 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun PantryView(
-    navController : NavController
+    navController: NavController
 ){
-
+    Text(text = "toDo")
 }
 
 @Preview
 @Composable
-fun DefaultPreview(){
+fun DefaultPreview() {
     PantryView(navController = rememberNavController())
 }
