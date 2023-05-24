@@ -15,6 +15,7 @@ conn = psycopg2.connect(
 def empty():
     return 'leerer Pfad!'
 
+
 @app.route('/data', methods=['GET'])
 def get_data():
     cursor = conn.cursor()
@@ -28,11 +29,11 @@ def get_data():
         results.append(result)
     return jsonify(results)
 
+
 @app.route('/data', methods=['POST'])
 def add_data():
 
     data = request.get_json()
-  
     id = data['id']
     name = data['name']
 
@@ -43,6 +44,6 @@ def add_data():
 
     return 'Daten hinzugefügt.'
 
+
 if __name__ == '__main__':
     app.run()
-
