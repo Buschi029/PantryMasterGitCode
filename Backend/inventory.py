@@ -1,15 +1,25 @@
 import psycopg2
 from flask import Flask, jsonify, request
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 app = Flask(__name__)
 
+host = os.environ.get('DB_HOST')
+port = os.environ.get('DB_PORT')
+database = os.environ.get('DB_DATABASE')
+user = os.environ.get('DB_USER')
+password = os.environ.get('DB_PASSWORD')
+
 conn = psycopg2.connect(
-    host="ep-dark-surf-104265.eu-central-1.aws.neon.tech",
-    port=5432,
-    database="pantry",
-    user="admin",
-    password="Xb5hNqigjzl4"
+    host=host,
+    port=port,
+    database=database,
+    user=user,
+    password=password
 )
+
 
 @app.route('/')
 def empty():
