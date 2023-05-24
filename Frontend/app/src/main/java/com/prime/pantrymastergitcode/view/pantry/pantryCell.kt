@@ -1,4 +1,4 @@
-package com.prime.pantrymastergitcode.view.Pantry
+package com.prime.pantrymastergitcode.view.pantry
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

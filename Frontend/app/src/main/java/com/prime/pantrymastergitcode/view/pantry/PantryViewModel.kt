@@ -1,4 +1,4 @@
-package com.prime.pantrymastergitcode.view.Pantry
+package com.prime.pantrymastergitcode.view.pantry
 
 import androidx.lifecycle.ViewModel
 

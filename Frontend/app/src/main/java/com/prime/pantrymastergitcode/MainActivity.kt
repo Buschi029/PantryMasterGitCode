@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.prime.pantrymastergitcode.ui.theme.PantryMasterGitCodeTheme
-import com.prime.pantrymastergitcode.view.Pantry.PantryView
+import com.prime.pantrymastergitcode.view.pantry.PantryView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
