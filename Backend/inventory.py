@@ -1,8 +1,9 @@
 import psycopg2
-from flask import Flask, jsonify, request
 from dotenv import load_dotenv
-load_dotenv()
+from flask import Flask, jsonify, request
 import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -13,11 +14,7 @@ user = os.environ.get('DB_USER')
 password = os.environ.get('DB_PASSWORD')
 
 conn = psycopg2.connect(
-    host=host,
-    port=port,
-    database=database,
-    user=user,
-    password=password
+    host=host, port=port, database=database, user=user, password=password
 )
 
 
