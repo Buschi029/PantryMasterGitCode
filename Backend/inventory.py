@@ -1,4 +1,5 @@
 import os
+
 import psycopg2
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
@@ -39,7 +40,6 @@ def get_data():
 
 @app.route("/data", methods=["POST"])
 def add_data():
-
     data = request.get_json()
     id = data["id"]
     name = data["name"]
