@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 fun PantryMaster(service: OFFAPIService) {
     val navController = rememberNavController()
     val pantryViewModel = PantryViewModel(service)
-    NavHost(navController, startDestination = "inputView") {
+    NavHost(navController, startDestination = "PantryView") {
         composable("PantryView") {
             PantryView(
                 navController = navController,
