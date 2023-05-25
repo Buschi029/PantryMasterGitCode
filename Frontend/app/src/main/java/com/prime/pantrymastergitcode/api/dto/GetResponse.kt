@@ -11,5 +11,4 @@ data class GetResponse (
     val name: String,
     @SerialName("product.image_front_small_url")
     val image: String
-
 )

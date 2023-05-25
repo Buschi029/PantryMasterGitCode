@@ -11,7 +11,7 @@ class OFFAPIServiceImplementation(
 ) : OFFAPIService {
     override suspend fun getProduct(): GetResponse? {
         return try {
-            client.get("url(HttpRoutes.product").body<GetResponse>()
+            client.get(HttpRoutes.product).body()
         }catch (e: Exception){
             print(e)
             null
