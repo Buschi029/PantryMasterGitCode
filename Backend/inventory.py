@@ -1,6 +1,6 @@
 import os
-
 import psycopg2
+import requests
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 
@@ -18,11 +18,41 @@ conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
+barcode = "42143628"
+
+def get_produktinfo(barcode):
+
+    url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
+    response = requests.get(url)
+    abfrage = response.json()
+
+    if "product" in abfrage:
+        product_name = abfrage["product"]["product_name"]
+        product_quantity = abfrage["product"]["product_quantity"]
+        return product_name, product_quantity
+    else:
+        return None
+    
+def save_produktinfo(barcode):
+
+    product_name, product_quantity = get_produktinfo(barcode)
+
+    if product_name:
+
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO test (name, quantity) VALUES (%s, %s)", (product_name, product_quantity ))
+        conn.commit()
+        conn.close()
+
+        print("Produktname gespeichert.")
+    else:
+        print("Fehler.")
+
+save_produktinfo(barcode)
 
 @app.route("/")
 def empty():
     return "leerer Pfad!"
-
 
 @app.route("/data", methods=["GET"])
 def get_dataNew():
