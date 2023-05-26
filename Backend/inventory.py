@@ -67,7 +67,18 @@ def add_data():
 
     cursor = conn.cursor()
     cursor.execute("INSERT INTO tbl_pantry (productCode, userID, productName, expirationDate, quantity, quantityUnit, \
-                   appendDate, productCategory) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory))
+                   appendDate, productCategory) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                    (
+                        productCode,
+                        userID,
+                        productName, 
+                        expirationDate, 
+                        quantity, 
+                        quantityUnit, 
+                        appendDate, 
+                        productCategory
+                    ),
+            )
     conn.commit()
     cursor.close()
 
