@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.prime.pantrymastergitcode.view.HomeScreen
 import com.prime.pantrymastergitcode.view.ScannerScreen
-import com.prime.pantrymastergitcode.view.ShoppingListScreen
+import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListScreen
 import com.prime.pantrymastergitcode.view.pantry.PantryView
 
 @Composable

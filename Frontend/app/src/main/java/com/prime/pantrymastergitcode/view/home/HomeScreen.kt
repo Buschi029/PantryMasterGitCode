@@ -13,7 +13,7 @@ import com.prime.pantrymastergitcode.ui.theme.PantryMasterGitCodeTheme
 import com.prime.pantrymastergitcode.view.pantry.PantryView
 import com.prime.pantrymastergitcode.view.HomeScreen
 import com.prime.pantrymastergitcode.view.ScannerScreen
-import com.prime.pantrymastergitcode.view.ShoppingListScreen
+import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListScreen
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

@@ -1,4 +1,4 @@
-package com.prime.pantrymastergitcode.view
+package com.prime.pantrymastergitcode.view.shoppingList
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
