@@ -25,7 +25,7 @@ def empty():
 
 
 @app.route("/data", methods=["GET"])
-def get_data():
+def get_dataNew():
     cursor = conn.cursor()
     cursor.execute("SELECT id, name FROM test")
     data = cursor.fetchall()
@@ -41,7 +41,8 @@ def get_data():
 @app.route("/inventory", methods=["GET"])
 def get_data():
     cursor = conn.cursor()
-    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory FROM tbl_pantry")
+    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, \
+                   appendDate, productCategory FROM tbl_pantry")
     data = cursor.fetchall()
     cursor.close()
 
@@ -65,7 +66,8 @@ def add_data():
     productCategory = data["productCategory"]
 
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO tbl_pantry (productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory))
+    cursor.execute("INSERT INTO tbl_pantry (productCode, userID, productName, expirationDate, quantity, quantityUnit, \
+                   appendDate, productCategory) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory))
     conn.commit()
     cursor.close()
 
