@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PantryMasterGitCode"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -25,7 +28,8 @@
 
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />
+                android:value=""
+                />
         </activity>
     </application>
 
