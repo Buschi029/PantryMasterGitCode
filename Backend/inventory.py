@@ -18,37 +18,62 @@ conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
-barcode = "42143628"
+a = [1, 2, 3, 4, 5, 6, 7]
 
 def get_produktinfo(barcode):
 
     url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
     response = requests.get(url)
     abfrage = response.json()
-
+    print(abfrage)
+ 
     if "product" in abfrage:
-        product_name = abfrage["product"]["product_name"]
-        product_quantity = abfrage["product"]["product_quantity"]
-        return product_name, product_quantity
+        global a 
+        a[0] = barcode
+        a[1] = abfrage["product"]["nutriments"]["carbohydrates"]
+        a[2] = abfrage["product"]["nutriments"]["energy-kcal"]
+        a[3] = abfrage["product"]["nutriments"]["fat"]
+        a[4] = abfrage["product"]["nutriscore_grade"]
+        a[5] = abfrage["product"]["nutriments"]["proteins"]
+        a[6] = abfrage["product"]["nutriments"]["sugars"]
+        return a
     else:
-        return None
-    
-def save_produktinfo(barcode):
+        return None 
 
-    product_name, product_quantity = get_produktinfo(barcode)
+@app.route("/inventory", methods=["POST"])
+def add_data():
+    data = request.get_json()
+    barcode = data["barcode"]
 
-    if product_name:
+    cursor = conn.cursor()
+    cursor.execute("SELECT productcode FROM tbl_product WHERE productcode = %s", (barcode,))
+    existing_entry = cursor.fetchone()
 
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO test (name, quantity) VALUES (%s, %s)", (product_name, product_quantity ))
+    if existing_entry is None:
+        get_produktinfo(barcode)
+
+        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (
+                a[0],
+                a[1],
+                a[2],
+                a[3],
+                a[4],
+                a[5],
+                a[6]
+            ),
+        )
         conn.commit()
-        conn.close()
-
-        print("Produktname gespeichert.")
+        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product")
+        data = cursor.fetchall()
+        cursor.close()
+        return data
     else:
-        print("Fehler.")
-
-save_produktinfo(barcode)
+        cursor.execute("SELECT * FROM tbl_product")
+        data = cursor.fetchall()
+        cursor.close()
+        # data["productcode"] = "productcode: " + data["productcode"]
+        return data 
 
 @app.route("/")
 def empty():
@@ -83,37 +108,6 @@ def get_data():
     return jsonify(results)
 
 
-@app.route("/inventory", methods=["POST"])
-def add_data():
-    data = request.get_json()
-    productCode = data["productCode"]
-    userID = data["userID"]
-    productName = data["productName"]
-    expirationDate = data["expirationDate"]
-    quantity = data["quantity"]
-    quantityUnit = data["quantityUnit"]
-    appendDate = data["appendDate"]
-    productCategory = data["productCategory"]
-
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO tbl_pantry (productCode, userID, productName, expirationDate, quantity, quantityUnit, \
-                   appendDate, productCategory) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                    (
-                        productCode,
-                        userID,
-                        productName, 
-                        expirationDate, 
-                        quantity, 
-                        quantityUnit, 
-                        appendDate, 
-                        productCategory
-                    ),
-            )
-    conn.commit()
-    cursor.close()
-
-    return "Daten hinzugefügt."
-
-
 if __name__ == "__main__":
     app.run()
+
