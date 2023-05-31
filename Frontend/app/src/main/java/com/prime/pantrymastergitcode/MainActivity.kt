@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.prime.pantrymastergitcode.ui.theme.PantryMasterGitCodeTheme
 import com.prime.pantrymastergitcode.view.pantry.PantryView
+import com.prime.pantrymastergitcode.view.scanner.ScannerView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +33,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PantryMaster() {
     val navController = rememberNavController()
-    NavHost(navController, startDestination = "inputView") {
-        composable("PantryView") {
-            PantryView(
-                navController = navController
+    NavHost(navController, startDestination = "ScannerView") {
+        composable("ScannerView") {
+            ScannerView(
             )
         }
     }
