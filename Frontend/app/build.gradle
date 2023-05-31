@@ -68,16 +68,16 @@ dependencies {
     //Scanner
     implementation 'com.google.android.gms:play-services-code-scanner:16.0.0'
 
-    //permissions
+    //permissions only needed if we need additional permisions look at: https://google.github.io/accompanist/permissions/#usage
     implementation "com.google.accompanist:accompanist-permissions:0.31.3-beta"
 
-    //Camera
-    def camerax_version = "1.2.2"
+    //Camera only needed if we change the scanner
+    /*def camerax_version = "1.2.2"
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-video:${camerax_version}"
 
     implementation "androidx.camera:camera-view:${camerax_version}"
-    implementation "androidx.camera:camera-extensions:${camerax_version}"
+    implementation "androidx.camera:camera-extensions:${camerax_version}"*/
 }

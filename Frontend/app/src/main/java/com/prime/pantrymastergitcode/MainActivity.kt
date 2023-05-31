@@ -36,7 +36,6 @@ fun PantryMaster() {
     NavHost(navController, startDestination = "ScannerView") {
         composable("ScannerView") {
             ScannerView(
-
             )
         }
     }
