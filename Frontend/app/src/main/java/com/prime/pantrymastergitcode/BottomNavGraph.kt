@@ -10,6 +10,7 @@ import com.prime.pantrymastergitcode.view.HomeScreen
 import com.prime.pantrymastergitcode.view.ScannerScreen
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListScreen
 import com.prime.pantrymastergitcode.view.pantry.PantryView
+import com.prime.pantrymastergitcode.view.pantry.PantryViewTestScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
@@ -27,7 +28,7 @@ fun BottomNavGraph(navController: NavHostController) {
             ShoppingListScreen()
         }
         composable(route = BottomBarScreen.Pantry.route) {
-            PantryView()
+            PantryViewTestScreen()
         }
     }
 }

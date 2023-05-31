@@ -1,26 +1,20 @@
 package com.prime.pantrymastergitcode.view.shoppingList
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Fastfood
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import androidx.compose.foundation.lazy.LazyColumn
-
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.Alignment.Companion.CenterEnd
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.*
-import java.time.format.TextStyle
+import androidx.compose.ui.unit.*
 
 @Composable
 fun ShoppingListScreen() {
@@ -41,13 +35,32 @@ fun ShoppingList() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-    ) { Text(
-            text = "Shopping List",
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier.padding(bottom = 12.dp)
-    )
+            .verticalScroll(rememberScrollState())
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Shopping List",
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "ShoppingList",
+                tint = Color.Black,
+                modifier = Modifier.size(40.dp)
+                    .padding(bottom = 10.dp)
+            )
+        }
+
+
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
+
+
 
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -55,7 +68,8 @@ fun ShoppingList() {
             value = newQuantity,
             onValueChange = { newQuantity = it },
             placeholder = { Text("Quantity") },
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier
+                .width(100.dp)
                 .height(50.dp)
         )
             Spacer(modifier = Modifier.width(8.dp))
@@ -75,16 +89,17 @@ fun ShoppingList() {
                     newItem = ""
                     newQuantity = ""
                 },
-                modifier = Modifier.width(60.dp)
+                modifier = Modifier
+                    .width(60.dp)
                     .height(50.dp)
             ) {
                 Text("Add")
             }
         }
-        //Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Divider(color = Color.LightGray, thickness = 1.dp)
         Column(modifier = Modifier.fillMaxWidth()) {
-            items.forEach { item ->
+            items.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
 
@@ -123,14 +138,39 @@ fun ShoppingList() {
                         checked = isCheckedState.value,
                         onCheckedChange = { isChecked -> isCheckedState.value = isChecked},
                         modifier = Modifier
-                            .clickable{isCheckedState.value = !isCheckedState.value}
+                            .clickable { isCheckedState.value = !isCheckedState.value }
                             .clip(RoundedCornerShape(8.dp))
-                            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(8.dp))
+                            .border(
+                                width = 1.dp,
+                                color = Color.White,
+                                shape = RoundedCornerShape(8.dp)
+                            )
                     )
+                    IconButton(
+                        onClick = {
+                            items.removeAt(index)
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.Black
+                        )
+                    }
 
                 }
                 Divider(color = Color.LightGray, thickness = 1.dp)
             }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { var saveButtonClicked = true },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .width(120.dp)
+        ) {
+            Text("Save")
         }
     }
 }
