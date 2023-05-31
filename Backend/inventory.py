@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import psycopg2
 import requests
 from dotenv import load_dotenv
@@ -27,9 +28,9 @@ def get_produktinfo(barcode):
     response = requests.get(url)
     abfrage = response.json()
     print(abfrage)
- 
+
     if "product" in abfrage:
-        global a 
+        global a
         a[0] = barcode
         a[1] = abfrage["product"]["nutriments"]["carbohydrates"]
         a[2] = abfrage["product"]["nutriments"]["energy-kcal"]
@@ -42,7 +43,8 @@ def get_produktinfo(barcode):
         a[6] = abfrage["product"]["nutriments"]["sugars"]
         return a
     else:
-        return None 
+        return None
+
 
 @app.route("/inventory", methods=["POST"])
 def add_data():
@@ -83,7 +85,7 @@ def add_data():
         json.dumps(article)
 
         return article
-    
+
     else:
         cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
@@ -105,6 +107,7 @@ def add_data():
 @app.route("/")
 def empty():
     return "leerer Pfad!"
+
 
 @app.route("/inventory", methods=["GET"])
 def get_data():
