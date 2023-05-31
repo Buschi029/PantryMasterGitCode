@@ -1,4 +1,5 @@
 import os
+import json
 import psycopg2
 import requests
 from dotenv import load_dotenv
@@ -33,7 +34,10 @@ def get_produktinfo(barcode):
         a[1] = abfrage["product"]["nutriments"]["carbohydrates"]
         a[2] = abfrage["product"]["nutriments"]["energy-kcal"]
         a[3] = abfrage["product"]["nutriments"]["fat"]
-        a[4] = abfrage["product"]["nutriscore_grade"]
+        if abfrage["product"]["misc_tags"][0] == "en:nutriscore-not-computed":
+            a[4] = "z"
+        else:
+            a[4] = abfrage["product"]["nutriscore_grade"]
         a[5] = abfrage["product"]["nutriments"]["proteins"]
         a[6] = abfrage["product"]["nutriments"]["sugars"]
         return a
@@ -64,34 +68,43 @@ def add_data():
             ),
         )
         conn.commit()
-        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product")
+        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
-        return data
+        article = {
+            'productcode': data[0][0],
+            'carbohydrates': data[0][1],
+            'kcal': data[0][2],
+            'fat': data[0][3],
+            'nutriscore': data[0][4],
+            'protein': data[0][5],
+            'sugar': data[0][6],
+        }
+        json.dumps(article)
+
+        return article
+    
     else:
-        cursor.execute("SELECT * FROM tbl_product")
+        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
-        # data["productcode"] = "productcode: " + data["productcode"]
-        return data 
+        article = {
+            'productcode': data[0][0],
+            'carbohydrates': data[0][1],
+            'kcal': data[0][2],
+            'fat': data[0][3],
+            'nutriscore': data[0][4],
+            'protein': data[0][5],
+            'sugar': data[0][6],
+        }
+        json.dumps(article)
+
+        return article
+
 
 @app.route("/")
 def empty():
     return "leerer Pfad!"
-
-@app.route("/data", methods=["GET"])
-def get_dataNew():
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, name FROM test")
-    data = cursor.fetchall()
-    cursor.close()
-
-    results = []
-    for row in data:
-        result = {"id": row[0], "name": row[1]}
-        results.append(result)
-    return jsonify(results)
-
 
 @app.route("/inventory", methods=["GET"])
 def get_data():
