@@ -10,11 +10,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.ui.theme.PantryMasterGitCodeTheme
 import com.prime.pantrymastergitcode.view.pantry.PantryView
 import com.prime.pantrymastergitcode.view.scanner.ScannerView
+import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 
 class MainActivity : ComponentActivity() {
+    private val service = OFFAPIService.create()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,7 +26,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = MaterialTheme.colors.background
                 ) {
-                    PantryMaster()
+                    PantryMaster(service = service)
                 }
             }
         }
@@ -31,20 +34,24 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PantryMaster() {
+fun PantryMaster(service: OFFAPIService) {
     val navController = rememberNavController()
-    NavHost(navController, startDestination = "ScannerView") {
-        composable("ScannerView") {
-            ScannerView(
+    val pantryViewModel = PantryViewModel(service)
+    NavHost(navController, startDestination = "PantryView") {
+        composable("PantryView") {
+            PantryView(
+                navController = navController,
+                pantryViewModel = pantryViewModel
             )
         }
     }
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     PantryMasterGitCodeTheme {
-        PantryMaster()
+        PantryMaster(service = OFFAPIService.create())
     }
 }
