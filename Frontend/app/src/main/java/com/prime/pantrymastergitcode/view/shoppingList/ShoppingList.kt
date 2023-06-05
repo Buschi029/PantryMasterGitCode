@@ -1,5 +1,6 @@
 package com.prime.pantrymastergitcode.view.shoppingList
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,22 +16,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import io.ktor.client.*
+import com.prime.pantrymastergitcode.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+
+
 
 @Composable
 fun ShoppingListScreen() {
-    //Text(text = "ShoppingList")
+
     ShoppingList()
 }
 
 data class ShoppingItem(val name: String, var quantity: String, var isChecked: Boolean = false)
-
 
 @Composable
 fun ShoppingList() {
     val items = remember { mutableStateListOf<ShoppingItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: String by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -52,7 +62,8 @@ fun ShoppingList() {
                 imageVector = Icons.Default.ShoppingCart,
                 contentDescription = "ShoppingList",
                 tint = Color.Black,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier
+                    .size(40.dp)
                     .padding(bottom = 10.dp)
             )
         }
@@ -176,7 +187,4 @@ fun ShoppingList() {
     }
 }
 
-fun getData() {
-
-}
 
