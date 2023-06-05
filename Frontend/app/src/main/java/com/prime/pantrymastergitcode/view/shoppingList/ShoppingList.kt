@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
+import io.ktor.client.*
 
 @Composable
 fun ShoppingListScreen() {
@@ -173,5 +174,9 @@ fun ShoppingList() {
             Text("Save")
         }
     }
+}
+
+fun getData() {
+
 }
 
