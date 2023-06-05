@@ -24,7 +24,6 @@ class PantryViewModel(private val service: OFFAPIService) : ViewModel() {
                 errorMessage = e.message.toString()
                 print(e)
             }
-
         }
     }
 }

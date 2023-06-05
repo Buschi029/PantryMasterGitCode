@@ -16,10 +16,7 @@ class OFFAPIServiceImplementation(
     override suspend fun getProduct(): GetResponse? {
         var response: GetResponse
          try {
-             var test:String
-             test = client.get("https://world.openfoodfacts.org/api/v2/product/04963406").bodyAsText()
-             Log.e(TAG,test)
-             response = client.get("https://world.openfoodfacts.org/api/v2/product/04963406").body()
+             response = client.get(HttpRoutes.product).body()
              return response
         }catch (e: JsonConvertException){
             Log.e(TAG,e.toString())

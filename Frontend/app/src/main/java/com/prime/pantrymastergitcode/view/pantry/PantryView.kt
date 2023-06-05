@@ -22,8 +22,6 @@ fun PantryView(
             Text(text = "get Product Name")
         }
     }
-
-
 }
 
 @Preview
