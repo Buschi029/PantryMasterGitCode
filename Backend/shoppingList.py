@@ -40,7 +40,7 @@ def get_data():
     data = request.get_json()
     userID = data["userID"]
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM tbl_shoppingList WHERE userID=%s", (userID))
+    cursor.execute("SELECT * FROM tbl_shoppingList WHERE userID=%s", (userID,))
     data = cursor.fetchall()
     cursor.close()
 
