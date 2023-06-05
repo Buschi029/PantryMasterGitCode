@@ -47,6 +47,8 @@ android {
     }
 }
 
+
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -89,6 +91,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation "io.ktor:ktor-client-logging:$ktor_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
+
+
+
+    //Icons
+    implementation "androidx.compose.material:material-icons-extended:1.0.0"
+
 
 
 }
