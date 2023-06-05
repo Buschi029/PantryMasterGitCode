@@ -7,11 +7,11 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-host = #
-port = #
+host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
+port = #"5432"
 database = #
-user = #
-password = #
+user = #"ADMIN"
+password = #"uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
