@@ -34,7 +34,7 @@ def get_alldata():
         results.append(result)
     return jsonify(results)
 
-@app.route("/shoppingList", methods=["UPDATE"])
+@app.route("/shoppingList", methods=["POST"])
 def get_data():
     data = request.get_json()
     userID = data["userID"]
@@ -50,7 +50,7 @@ def get_data():
     return jsonify(results)
 
 
-@app.route("/shoppingList", methods=["POST"])
+@app.route("/shoppingList", methods=["PUT"])
 def add_data():
     data = request.get_json()
     userID = data["userID"]
