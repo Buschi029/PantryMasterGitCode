@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = #"5432"
-database = #
+database = #"pantryDB"
 user = #"ADMIN"
 password = #"uihkP3cnT0Wo"
 
@@ -24,8 +24,7 @@ def empty():
 @app.route("/inventory", methods=["GET"])
 def get_data():
     cursor = conn.cursor()
-    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, \
-                   appendDate, productCategory FROM tbl_pantry")
+    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory FROM tbl_pantry")
     data = cursor.fetchall()
     cursor.close()
 
@@ -36,7 +35,7 @@ def get_data():
     return jsonify(results)
 
 @app.route("/inventory", methods=["POST"])
-def get_data():
+def post_data():
     data = request.get_json()
     barcode = data["barcode"]
     userID = data["userID"]
@@ -52,7 +51,4 @@ def get_data():
     #     results.append(result)
     return jsonify(cursor)
 
-
-if __name__ == "__main__":
-    app.run()
-
+app.run(host='0.0.0.0', port=81)

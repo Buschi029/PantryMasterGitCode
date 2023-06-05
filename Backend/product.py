@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = #"5432"
-database = #
+database = #"pantryDB"
 user = #"ADMIN"
 password = #"uihkP3cnT0Wo"
 
@@ -100,14 +100,9 @@ def add_data():
 
         return article
 
-
 @app.route("/")
 def empty():
     return "leerer Pfad!"
 
-
-
-
-if __name__ == "__main__":
-    app.run()
+app.run(host='0.0.0.0', port=81)
 
