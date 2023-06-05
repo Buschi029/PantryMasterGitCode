@@ -13,10 +13,10 @@ import io.ktor.serialization.JsonConvertException
 class OFFAPIServiceImplementation(
     private val client: HttpClient
 ) : OFFAPIService {
-    override suspend fun getProduct(): GetResponse? {
+    override suspend fun getProduct(code : String): GetResponse? {
         var response: GetResponse
          try {
-             response = client.get(HttpRoutes.product).body()
+             response = client.get(HttpRoutes.product + code).body()
              return response
         }catch (e: JsonConvertException){
             Log.e(TAG,e.toString())

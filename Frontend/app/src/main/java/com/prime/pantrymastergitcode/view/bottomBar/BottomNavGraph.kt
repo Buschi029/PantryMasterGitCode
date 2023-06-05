@@ -1,19 +1,20 @@
-package com.prime.pantrymastergitcode
+package com.prime.pantrymastergitcode.view.bottomBar
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.*
 import androidx.navigation.NavHostController
-import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.HomeScreen
-import com.prime.pantrymastergitcode.view.ScannerScreen
+import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListScreen
 import com.prime.pantrymastergitcode.view.pantry.PantryView
-import com.prime.pantrymastergitcode.view.pantry.PantryViewTestScreen
+import com.prime.pantrymastergitcode.view.scanner.ScannerView
+import com.prime.pantrymastergitcode.view.scanner.ScannerViewModel
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(navController: NavHostController, service: OFFAPIService) {
+    val scannerViewModel = ScannerViewModel(service = service)
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Home.route
@@ -22,13 +23,13 @@ fun BottomNavGraph(navController: NavHostController) {
             HomeScreen()
         }
         composable(route = BottomBarScreen.Scanner.route) {
-            ScannerScreen()
+            ScannerView(scannerViewModel)
         }
         composable(route = BottomBarScreen.ShoppingList.route) {
             ShoppingListScreen()
         }
         composable(route = BottomBarScreen.Pantry.route) {
-            PantryViewTestScreen()
+            PantryView(navController = navController)
         }
     }
 }

@@ -11,14 +11,17 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.prime.pantrymastergitcode.api.OFFAPIService
+import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
+import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 
 @Composable
-fun MainScreen() {
+fun MainScreen(service:OFFAPIService) {
     val navController = rememberNavController()
     Scaffold (
         bottomBar = { BottomBar(navController = navController)}
     ){
-    BottomNavGraph(navController = navController)
+    BottomNavGraph(navController = navController, service = service)
     }
 }
 

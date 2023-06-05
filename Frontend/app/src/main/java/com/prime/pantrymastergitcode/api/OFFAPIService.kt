@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 
 interface OFFAPIService {
-    suspend fun getProduct(): GetResponse?
+    suspend fun getProduct(code : String): GetResponse?
 
     companion object {
         fun create(): OFFAPIService {
