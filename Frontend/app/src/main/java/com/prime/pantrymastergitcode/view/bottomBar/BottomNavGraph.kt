@@ -29,7 +29,7 @@ fun BottomNavGraph(navController: NavHostController, service: OFFAPIService) {
             ShoppingListScreen()
         }
         composable(route = BottomBarScreen.Pantry.route) {
-            PantryView(navController = navController)
+            PantryView()
         }
     }
 }
