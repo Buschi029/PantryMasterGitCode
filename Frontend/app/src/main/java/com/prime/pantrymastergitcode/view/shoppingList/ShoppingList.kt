@@ -1,29 +1,18 @@
 package com.prime.pantrymastergitcode.view.shoppingList
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.*
-import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.prime.pantrymastergitcode.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+
 
 
 
@@ -33,11 +22,9 @@ fun ShoppingListScreen() {
     ShoppingList()
 }
 
-data class ShoppingItem(val name: String, var quantity: String, var isChecked: Boolean = false)
-
 @Composable
-fun ShoppingList() {
-    val items = remember { mutableStateListOf<ShoppingItem>() }
+fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
+    val items = remember { mutableStateListOf<ShoppingListViewModel.ShoppingItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: String by remember { mutableStateOf("") }
 
@@ -97,7 +84,9 @@ fun ShoppingList() {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    items.add(ShoppingItem(newItem, newQuantity))
+                    shoppingListViewModel.addItemToDatabase(newItem, newQuantity, "L"))
+                    //Text(text = shoppingListViewModel.response)
+                    items.add(ShoppingListViewModel.ShoppingItem(newItem, newQuantity))
                     newItem = ""
                     newQuantity = ""
                 },
@@ -125,20 +114,9 @@ fun ShoppingList() {
                         modifier = Modifier
                             .width(80.dp)
                             .padding(end = 8.dp)
-                            //.height(40.dp)
-                            //.weight(1f)
-                            //.clip(RoundedCornerShape(8.dp))
-                            //.background(Color(0xFFF3F3F3))
-                            //.border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(8.dp))
-                            //.align(Alignment.CenterVertically),
-                        //textAlign = TextAlign.Center,
-
-
-
-
 
                     )
-                    //Spacer(modifier = Modifier.width(8.dp))
+
                     Text(
                         item.name,
                         modifier = Modifier.weight(1f)
@@ -184,6 +162,7 @@ fun ShoppingList() {
         ) {
             Text("Save")
         }
+
     }
 }
 
