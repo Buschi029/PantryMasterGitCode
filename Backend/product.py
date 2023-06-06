@@ -14,7 +14,7 @@ user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
-    host=host, port=port, database=database, user=user, password=password
+    host=host, port=port, database=database, user=user, password=password, keepalives=1
 )
 
 a = [1, 2, 3, 4, 5, 6, 7]
