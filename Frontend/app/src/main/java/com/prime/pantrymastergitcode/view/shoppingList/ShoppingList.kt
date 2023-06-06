@@ -12,14 +12,13 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
-
-
+import io.ktor.client.statement.HttpResponse
 
 
 @Composable
 fun ShoppingListScreen() {
 
-    ShoppingList()
+    ShoppingList(shoppingListViewModel = ShoppingListViewModel())
 }
 
 @Composable
@@ -27,6 +26,8 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
     val items = remember { mutableStateListOf<ShoppingListViewModel.ShoppingItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: String by remember { mutableStateOf("") }
+    var quantityInt: Int by remember { mutableStateOf(0) }
+    var response: String by remember { mutableStateOf("") }
 
 
     Column(
@@ -58,14 +59,17 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
-
+        Text(text = response)
 
 
         Row(
             modifier = Modifier.fillMaxWidth()
         ) { TextField(
             value = newQuantity,
-            onValueChange = { newQuantity = it },
+            onValueChange = {
+                newQuantity = it
+                quantityInt = it.toInt()
+            },
             placeholder = { Text("Quantity") },
             modifier = Modifier
                 .width(100.dp)
@@ -84,8 +88,8 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    shoppingListViewModel.addItemToDatabase(newItem, newQuantity, "L"))
-                    //Text(text = shoppingListViewModel.response)
+                    shoppingListViewModel.addItemToDatabase(newItem, quantityInt, "L")
+                    response = shoppingListViewModel.response
                     items.add(ShoppingListViewModel.ShoppingItem(newItem, newQuantity))
                     newItem = ""
                     newQuantity = ""
