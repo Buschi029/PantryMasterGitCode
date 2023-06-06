@@ -12,14 +12,33 @@ user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
-    host=host, port=port, database=database, user=user, password=password, keepalives=1
-)
+    host=host, port=port, database=database, user=user, password=password
+    )
 
 
 
 @app.route("/user", methods=["GET"])
 def get_AllUser():
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
+    except:
+        print('{} - connection will be reset'.format(e))
+        # Close old connection 
+        if conn:
+            if cursor:
+                cursor.close()
+            conn.close()
+        conn = None
+        cursor = None
+    
+        # Reconnect 
+        conn = psycopg2.connect(user=user,
+                            password=password,
+                            host=host,
+                            port=port,
+                            database=database)
+        cursor = conn.cursor()
+        
     cursor.execute("SELECT * FROM tbl_user")
     data = cursor.fetchall()
     cursor.close()
