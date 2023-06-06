@@ -3,26 +3,23 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
+from __main__ import app
 
 
-app = Flask(__name__)
 
-host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
-port = #"5432"
-database = #"pantryDB"
-user = #"ADMIN"
-password = #"uihkP3cnT0Wo"
+host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
+port = "5432"
+database = "pantryDB"
+user = "ADMIN"
+password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
-@app.route("/")
-def empty():
-    return "leerer Pfad!"
 
 @app.route("/inventory", methods=["GET"])
-def get_data():
+def get_allInvItem():
     cursor = conn.cursor()
     cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory FROM tbl_pantry")
     data = cursor.fetchall()
@@ -35,7 +32,7 @@ def get_data():
     return jsonify(results)
 
 @app.route("/inventory", methods=["POST"])
-def post_data():
+def get_oneInvItem():
     data = request.get_json()
     userID = data["userID"]
 
@@ -52,7 +49,7 @@ def post_data():
 
 
 @app.route("/inventory", methods=["DELETE"])
-def delete_data():
+def delete_invItem():
     data = request.get_json()
     userID = data["userID"]
     barcode = data["barcode"]
@@ -63,5 +60,3 @@ def delete_data():
     cursor.close()
 
     return "Entfernt"
-
-app.run(host='0.0.0.0', port=81)

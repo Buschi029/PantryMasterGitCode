@@ -1,28 +1,24 @@
 
 import psycopg2
 from flask import Flask, jsonify, request
+from __main__ import app
 
 
-app = Flask(__name__)
 
-host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
-port = #"5432"
-database = #"userDB"
-user = #"ADMIN"
-password = #"uihkP3cnT0Wo"
+host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
+port = "5432"
+database = "userDB"
+user = "ADMIN"
+password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
 
-@app.route("/")
-def empty():
-    return "leerer Pfad!"
-
 
 @app.route("/user", methods=["GET"])
-def get_alldata():
+def get_AllUser():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tbl_user")
     data = cursor.fetchall()
@@ -36,7 +32,7 @@ def get_alldata():
 
 
 @app.route("/user", methods=["POST"])
-def get_data():
+def get_userInfo():
     data = request.get_json()
     userID = data["userID"]
 
@@ -53,7 +49,7 @@ def get_data():
 
 
 @app.route("/user", methods=["PUT"])
-def add_data():
+def add_user():
     data = request.get_json()
     userID = data["userID"]
     userName = data["userName"]
@@ -68,7 +64,7 @@ def add_data():
     return "User angelegt"
 
 @app.route("/user", methods=["DELETE"])
-def delete_data():
+def delete_user():
     data = request.get_json()
     userID = data["userID"]
 
@@ -78,7 +74,3 @@ def delete_data():
     cursor.close()
 
     return "User entfernt"
-
-
-
-app.run(host='0.0.0.0', port=81)

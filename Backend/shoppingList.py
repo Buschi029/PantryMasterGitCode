@@ -1,28 +1,24 @@
 
 import psycopg2
 from flask import Flask, jsonify, request
+from __main__ import app
 
 
-app = Flask(__name__)
 
-host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
-port = #"5432"
-database = #"shoppingListDB"
-user = #"ADMIN"
-password = #"uihkP3cnT0Wo"
+host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
+port = "5432"
+database = "shoppingListDB"
+user = "ADMIN"
+password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
 
-@app.route("/")
-def empty():
-    return "leerer Pfad!"
-
 
 @app.route("/shoppingList", methods=["GET"])
-def get_alldata():
+def get_allItems():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tbl_shoppingList")
     data = cursor.fetchall()
@@ -35,7 +31,7 @@ def get_alldata():
     return jsonify(results)
 
 @app.route("/shoppingList", methods=["POST"])
-def get_data():
+def get_oneItem():
     data = request.get_json()
     userID = data["userID"]
     cursor = conn.cursor()
@@ -51,7 +47,7 @@ def get_data():
 
 
 @app.route("/shoppingList", methods=["PUT"])
-def add_data():
+def add_item():
     data = request.get_json()
     userID = data["userID"]
     productName = data["productName"]
@@ -88,7 +84,7 @@ def addEntry(productName, userID, quantity, quantityUnit):
 
 
 @app.route("/shoppingList", methods=["DELETE"])
-def delete_data():
+def delete_item():
     data = request.get_json()
     userID = data["userID"]
     productName = data["productName"]
@@ -99,7 +95,3 @@ def delete_data():
     cursor.close()
 
     return "Entfernt"
-
-
-
-app.run(host='0.0.0.0', port=81)
