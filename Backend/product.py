@@ -13,9 +13,11 @@ database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
-conn = psycopg2.connect(
+def tryConnect():
+    conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
-)
+    )
+    return conn
 
 a = [1, 2, 3, 4, 5, 6, 7]
 
@@ -48,6 +50,7 @@ def get_oneProduct():
     data = request.get_json()
     barcode = data["barcode"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("SELECT productcode FROM tbl_product WHERE productcode = %s", (barcode,))
     existing_entry = cursor.fetchone()
@@ -70,6 +73,7 @@ def get_oneProduct():
         cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
+        conn.close()
         article = {
             'productcode': data[0][0],
             'carbohydrates': data[0][1],
@@ -87,6 +91,7 @@ def get_oneProduct():
         cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
+        conn.close()
         article = {
             'productcode': data[0][0],
             'carbohydrates': data[0][1],

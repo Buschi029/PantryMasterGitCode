@@ -13,17 +13,21 @@ database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
-conn = psycopg2.connect(
+def tryConnect():
+    conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
-)
+    )
+    return conn
 
 
 @app.route("/inventory", methods=["GET"])
 def get_allInvItem():
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory FROM tbl_pantry")
     data = cursor.fetchall()
     cursor.close()
+    conn.close()
 
     results = []
     for row in data:
@@ -36,10 +40,12 @@ def get_oneInvItem():
     data = request.get_json()
     userID = data["userID"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tbl_pantry WHERE userid = %s", (userID))
     data = cursor.fetchall()
     cursor.close()
+    conn.close()    
 
     # results = []
     #     for row in data:
@@ -54,9 +60,11 @@ def delete_invItem():
     userID = data["userID"]
     barcode = data["barcode"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s", (barcode, userID))
     conn.commit()
     cursor.close()
+    conn.close()
 
     return "Entfernt"
