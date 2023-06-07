@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProductDTO(
-    val carbohydrates : Int,
+    val carbohydrates: Int,
     val fat: Int,
     val kcal: Int,
     val nutriscore: String,

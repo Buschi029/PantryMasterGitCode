@@ -42,7 +42,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel) {
         Button(onClick = {
             scannerViewModel.getProduct(code = 90162480)
             Log.i("Scannerview", "mehtodenaufruf gestartet")
-            }) {
+        }) {
             Text(text = "Test")
         }
         Text(text = scannerViewModel.product.kcal.toString())
