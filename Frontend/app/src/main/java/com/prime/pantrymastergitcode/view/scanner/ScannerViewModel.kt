@@ -14,20 +14,17 @@ class ScannerViewModel(private val service: OFFAPIService) : ViewModel() {
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
     var product: ProductDTO by mutableStateOf(
-        ProductDTO(0,0,0,"",0,0,0)
+        ProductDTO(0, 0, 0, "", 0, 0, 0)
     )
 
-    fun getProduct(code : Long){
-        Log.i("Test","Methodenaufruf gestartet 1")
+    fun getProduct(code: Long) {
         viewModelScope.launch {
             try {
-                Log.i("Test","Methodenaufruf gestartet 2")
                 product = service.postProductDetails(code)!!
-
             } catch (e: Exception) {
                 loading = false
                 errorMessage = e.message.toString()
-                Log.e("ScannerViewModel",e.toString())
+                Log.e("ScannerViewModel", e.toString())
             }
         }
     }
