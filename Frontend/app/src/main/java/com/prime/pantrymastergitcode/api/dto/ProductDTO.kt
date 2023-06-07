@@ -1,13 +1,15 @@
 package com.prime.pantrymastergitcode.api.dto
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProductDTO (
-    @SerialName("product_name")
-    val name: String,
-    @SerialName("image_front_small_url")
-    val image: String
-    )
+    val carbohydrates : Int,
+    val fat : Int,
+    val kcal : Int,
+    val nutriscore : String,
+    val productcode : Long,
+    val protein : Int,
+    val sugar : Int
+)
 

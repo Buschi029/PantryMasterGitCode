@@ -1,6 +1,6 @@
 package com.prime.pantrymastergitcode.api
 
-import com.prime.pantrymastergitcode.api.dto.GetResponse
+import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 
 interface OFFAPIService {
-    suspend fun getProduct(code : String): GetResponse?
+    suspend fun postProductDetails(code : Long): ProductDTO?
 
     companion object {
         fun create(): OFFAPIService {
