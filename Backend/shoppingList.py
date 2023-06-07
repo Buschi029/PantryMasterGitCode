@@ -12,7 +12,7 @@ user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
-    host=host, port=port, database=database, user=user, password=password, keepalives=1
+    host=host, port=port, database=database, user=user, password=password
 )
 
 

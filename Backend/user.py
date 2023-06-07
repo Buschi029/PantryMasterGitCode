@@ -11,37 +11,22 @@ database = "userDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
-conn = psycopg2.connect(
+
+def tryConnect():
+    conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
     )
-
-
+    return conn
 
 @app.route("/user", methods=["GET"])
 def get_AllUser():
-    try:
-        cursor = conn.cursor()
-    except:
-        print('{} - connection will be reset'.format(e))
-        # Close old connection 
-        if conn:
-            if cursor:
-                cursor.close()
-            conn.close()
-        conn = None
-        cursor = None
-    
-        # Reconnect 
-        conn = psycopg2.connect(user=user,
-                            password=password,
-                            host=host,
-                            port=port,
-                            database=database)
-        cursor = conn.cursor()
-        
+    conn = tryConnect() 
+    cursor = conn.cursor()
+
     cursor.execute("SELECT * FROM tbl_user")
     data = cursor.fetchall()
     cursor.close()
+    conn.close()
 
     results = []
     for row in data:
@@ -55,10 +40,12 @@ def get_userInfo():
     data = request.get_json()
     userID = data["userID"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tbl_user WHERE userID = %s", (userID,))
     data = cursor.fetchall()
     cursor.close()
+    conn.close()
 
     results = []
     for row in data:
@@ -75,10 +62,12 @@ def add_user():
     age = data["age"]
     gender = data["gender"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("INSERT INTO tbl_user (userID, userName, age, gender) VALUES (%s, %s, %s, %s)", (userID, userName, age, gender))
     conn.commit()
     cursor.close()
+    conn.close()
 
     return "User angelegt"
 
@@ -87,9 +76,11 @@ def delete_user():
     data = request.get_json()
     userID = data["userID"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("DELETE FROM tbl_user WHERE userID=%s", (userID,))
     conn.commit()
     cursor.close()
+    conn.close()
 
     return "User entfernt"
