@@ -18,10 +18,16 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.ui.draw.clip
+import com.prime.pantrymastergitcode.view.detailView.DetailView
+
 
 @Composable
 fun PantryView() {
-    PantryList()
+    Box {
+        PantryList()
+        DetailView()
+    }
+
 }
 
 data class PantryItem(val name: String, var quantity: Int, var date: String)
@@ -52,7 +58,8 @@ fun PantryList() {
             imageVector = Icons.Default.Fastfood,
             contentDescription = "Pantry",
             tint = Color.Black,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier
+                .size(40.dp)
                 .padding(bottom = 10.dp)
         )
     }
@@ -66,7 +73,8 @@ fun PantryList() {
             value = if (newQuantity != 0) newQuantity.toString() else "",
             onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
             placeholder = { Text("Quantity") },
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier
+                .width(100.dp)
                 .height(50.dp)
                 .weight(1f)
         )
@@ -100,7 +108,8 @@ fun PantryList() {
                     newQuantity = 0
                     newDate = ""
                 },
-                modifier = Modifier.width(60.dp)
+                modifier = Modifier
+                    .width(60.dp)
                     .height(50.dp)
             ) {
                 Text("Add")
@@ -156,13 +165,15 @@ fun PantryList() {
                     //Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         item.name,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                             .width(100.dp)
 
                     )
                     Text(
                         item.date,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                             .width(100.dp)
 
                     )
@@ -187,7 +198,8 @@ fun PantryList() {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { var saveButtonClicked = true },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
                 .width(120.dp)
         ) {
             Text("Save")

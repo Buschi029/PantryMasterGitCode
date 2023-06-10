@@ -1,5 +1,6 @@
 package com.prime.pantrymastergitcode.api
 
+import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -7,7 +8,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import com.prime.pantrymastergitcode.api.dto.ProductDTO
 
 interface OFFAPIService {
 
