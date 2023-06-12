@@ -17,7 +17,7 @@ conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
-a = [1, 2, 3, 4, 5, 6, 7]
+a = [1, 2, 3, 4, 5, 6, 7, 8]
 
 def get_produktinfo(barcode):
 
@@ -38,6 +38,8 @@ def get_produktinfo(barcode):
             a[4] = abfrage["product"]["nutriscore_grade"]
         a[5] = abfrage["product"]["nutriments"]["proteins"]
         a[6] = abfrage["product"]["nutriments"]["sugars"]
+        a[7] = abfrage["product"]["image_front_url"]
+        a[8] = abfrage["product"]["product_name_de"]
         return a
     else:
         return None
@@ -55,7 +57,7 @@ def add_data():
     if existing_entry is None:
         get_produktinfo(barcode)
 
-        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
             (
                 a[0],
                 a[1],
@@ -63,11 +65,13 @@ def add_data():
                 a[3],
                 a[4],
                 a[5],
-                a[6]
+                a[6],
+                a[7],
+                a[8]
             ),
         )
         conn.commit()
-        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
+        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
         article = {
@@ -78,13 +82,15 @@ def add_data():
             'nutriscore': data[0][4],
             'protein': data[0][5],
             'sugar': data[0][6],
+            'name': data[0][7],
+            'pictureLink': data[0][8]
         }
         json.dumps(article)
 
         return article
 
     else:
-        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar FROM tbl_product WHERE productcode = %s", (barcode,))
+        cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
         article = {
@@ -95,6 +101,8 @@ def add_data():
             'nutriscore': data[0][4],
             'protein': data[0][5],
             'sugar': data[0][6],
+            'name': data[0][7],
+            'pictureLink': data[0][8]
         }
         json.dumps(article)
 
