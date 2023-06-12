@@ -11,4 +11,6 @@ data class ProductDTO(
     val productcode: Long,
     val protein: Int,
     val sugar: Int
-)
+){
+    constructor() : this(0,0,0,"",0,0,0)
+}

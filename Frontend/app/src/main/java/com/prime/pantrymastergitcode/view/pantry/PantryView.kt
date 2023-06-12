@@ -1,6 +1,8 @@
 package com.prime.pantrymastergitcode.view.pantry
 
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
@@ -22,10 +24,12 @@ import com.prime.pantrymastergitcode.view.detailView.DetailView
 
 
 @Composable
-fun PantryView() {
+fun PantryView(pantryViewModel: PantryViewModel) {
     Box {
-        PantryList()
-        DetailView()
+        PantryList(pantryViewModel)
+        if (pantryViewModel.showProductDetails){
+            DetailView(pantryViewModel)
+        }
     }
 
 }
@@ -34,7 +38,7 @@ data class PantryItem(val name: String, var quantity: Int, var date: String)
 
 
 @Composable
-fun PantryList() {
+fun PantryList(pantryViewModel: PantryViewModel) {
     val items = remember { mutableStateListOf<PantryItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
@@ -127,6 +131,10 @@ fun PantryList() {
                     modifier = Modifier
                     //.padding(vertical = 4.dp)
                     //.padding(horizontal = 4.dp)
+                        .background(color = Color.White).clickable {
+                            pantryViewModel.getProductDetails(90162480)
+                            pantryViewModel.showProductDetails = true
+                        }
                 ) {
                     IconButton(
                         onClick = {

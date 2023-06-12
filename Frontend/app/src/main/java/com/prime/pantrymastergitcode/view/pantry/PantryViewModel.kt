@@ -1,8 +1,9 @@
-package com.prime.pantrymastergitcode.view.scanner
+package com.prime.pantrymastergitcode.view.pantry
 
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,20 +11,19 @@ import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import kotlinx.coroutines.launch
 
-class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
-    var errorMessage: String by mutableStateOf("")
-    var loading: Boolean by mutableStateOf(false)
-    var product: ProductDTO by mutableStateOf(
-        ProductDTO(0, 0, 0, "", 0, 0, 0)
-    )
+class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
+    var product: ProductDTO by mutableStateOf(ProductDTO())
+    var loading : Boolean by mutableStateOf(false)
+    var showProductDetails: Boolean by mutableStateOf(false)
 
-    fun getProduct(code: Long) {
+    fun getProductDetails(code:Long){
+        loading = false
         viewModelScope.launch {
             try {
                 product = service.postProductDetails(code)!!
+                loading = true
             } catch (e: Exception) {
                 loading = false
-                errorMessage = e.message.toString()
                 Log.e("ScannerViewModel", e.toString())
             }
         }
