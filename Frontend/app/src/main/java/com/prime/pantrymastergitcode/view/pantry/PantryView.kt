@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.ui.draw.clip
 import com.prime.pantrymastergitcode.view.detailView.DetailView
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 @Composable
@@ -28,7 +29,12 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     Box {
         PantryList(pantryViewModel)
         if (pantryViewModel.showProductDetails){
-            DetailView(pantryViewModel)
+            Column(verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()) {
+                DetailView(pantryViewModel)
+            }
+
         }
     }
 
@@ -129,10 +135,11 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                    //.padding(vertical = 4.dp)
-                    //.padding(horizontal = 4.dp)
-                        .background(color = Color.White).clickable {
-                            pantryViewModel.getProductDetails(90162480)
+                        //.padding(vertical = 4.dp)
+                        //.padding(horizontal = 4.dp)
+                        .background(color = Color.White)
+                        .clickable {
+                            pantryViewModel.getProductDetails(4002468202435)
                             pantryViewModel.showProductDetails = true
                         }
                 ) {

@@ -103,7 +103,7 @@ fun DetailView(pantryViewModel: PantryViewModel){
                                 .fillMaxWidth()
                         ) {
                             Text(text = "Kilocalories: ${pantryViewModel.product.kcal}")
-                            Text(text = "Carbohydrates")
+                            Text(text = "Carbohydrates: ${pantryViewModel.product.carbohydrates}")
                         }
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -111,8 +111,8 @@ fun DetailView(pantryViewModel: PantryViewModel){
                                 .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                 .fillMaxWidth()
                         ) {
-                            Text(text = "Fat")
-                            Text(text = "Sugar")
+                            Text(text = "Fat: ${pantryViewModel.product.fat}")
+                            Text(text = "Sugar: ${pantryViewModel.product.sugar}")
                         }
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -120,8 +120,8 @@ fun DetailView(pantryViewModel: PantryViewModel){
                                 .padding(start = 10.dp, end = 10.dp)
                                 .fillMaxWidth()
                         ) {
-                            Text(text = "Protein")
-                            Text(text = "Nutriscore")
+                            Text(text = "Protein: ${pantryViewModel.product.protein}")
+                            Text(text = "Nutriscore: ${pantryViewModel.product.nutriscore}")
                         }
                     }
 
