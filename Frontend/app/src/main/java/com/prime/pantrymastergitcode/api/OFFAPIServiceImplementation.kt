@@ -31,4 +31,13 @@ class OFFAPIServiceImplementation(
             null
         }
     }
+
+    override suspend fun addProductToPantry(code: String, userId: Int): ProductDTO? {
+        var response: GetResponse
+        try {
+            response = client.post(HttpRoutes.pantry):ProductDTO? {
+                
+            }
+        }
+    }
 }
