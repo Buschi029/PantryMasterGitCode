@@ -36,7 +36,7 @@ def get_alldata():
 
 
 @app.route("/user", methods=["POST"])
-def get_alldata():
+def get_data():
     data = request.get_json()
     userID = data["userID"]
 
@@ -71,7 +71,6 @@ def add_data():
 def delete_data():
     data = request.get_json()
     userID = data["userID"]
-    productName = data["productName"]
 
     cursor = conn.cursor()
     cursor.execute("DELETE FROM tbl_user WHERE userID=%s", (userID,))

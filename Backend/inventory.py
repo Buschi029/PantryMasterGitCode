@@ -37,11 +37,10 @@ def get_data():
 @app.route("/inventory", methods=["POST"])
 def post_data():
     data = request.get_json()
-    barcode = data["barcode"]
     userID = data["userID"]
 
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM tbl_product WHERE productcode = %s AND userid = %s", (barcode,userID))
+    cursor.execute("SELECT * FROM tbl_pantry WHERE userid = %s", (userID))
     data = cursor.fetchall()
     cursor.close()
 
@@ -50,5 +49,19 @@ def post_data():
     #     result = {"id": row[0], "name": row[1]}
     #     results.append(result)
     return jsonify(cursor)
+
+
+@app.route("/inventory", methods=["DELETE"])
+def delete_data():
+    data = request.get_json()
+    userID = data["userID"]
+    barcode = data["barcode"]
+
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s", (barcode, userID))
+    conn.commit()
+    cursor.close()
+
+    return "Entfernt"
 
 app.run(host='0.0.0.0', port=81)
