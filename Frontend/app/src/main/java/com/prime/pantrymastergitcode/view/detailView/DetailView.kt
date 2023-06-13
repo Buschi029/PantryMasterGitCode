@@ -50,19 +50,20 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                 Box {
                     Column(
                         modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(3.dp),
+                            .fillMaxWidth()
+                            .padding(3.dp),
                         horizontalAlignment = Alignment.End
                     ) {
                         Button(
-                            onClick = {pantryViewModel.showProductDetails = false},
+                            onClick = { pantryViewModel.showProductDetails = false },
                             modifier = Modifier
                                 .size(30.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color.Red
                             )
                         ) {
-                            Icon(Icons.Outlined.Close,
+                            Icon(
+                                Icons.Outlined.Close,
                                 contentDescription = "Close",
                                 modifier = Modifier
                                     .size(10.dp)
@@ -73,8 +74,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                     }
                     Column(
                         modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 20.dp),
+                            .fillMaxSize()
+                            .padding(top = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
@@ -130,6 +131,6 @@ fun DetailView(pantryViewModel: PantryViewModel) {
 
 @Preview(showBackground = false)
 @Composable
-fun DefaultPreview(){
+fun DefaultPreview() {
     DetailView(PantryViewModel(OFFAPIService.create()))
 }

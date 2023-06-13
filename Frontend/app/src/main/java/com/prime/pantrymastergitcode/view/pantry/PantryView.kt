@@ -2,8 +2,6 @@ package com.prime.pantrymastergitcode.view.pantry
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,19 +13,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.prime.pantrymastergitcode.view.detailView.DetailView
 
@@ -43,16 +43,16 @@ import com.prime.pantrymastergitcode.view.detailView.DetailView
 fun PantryView(pantryViewModel: PantryViewModel) {
     Box {
         PantryList(pantryViewModel)
-        if (pantryViewModel.showProductDetails){
+        if (pantryViewModel.showProductDetails) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()) {
+                modifier = Modifier.fillMaxSize()
+            ) {
                 DetailView(pantryViewModel)
             }
         }
     }
-
 }
 
 data class PantryItem(val name: String, var quantity: Int, var date: String)
@@ -93,7 +93,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            TextField(value = if (newQuantity != 0) newQuantity.toString() else "",
+            TextField(
+                value = if (newQuantity != 0) newQuantity.toString() else "",
                 onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
                 placeholder = { Text("Quantity") },
                 modifier = Modifier
@@ -143,12 +144,12 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         // Tabelle
         Column(modifier = Modifier.fillMaxWidth()) {
-            items.forEachIndexed{ index, item ->
+            items.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        //.padding(vertical = 4.dp)
-                        //.padding(horizontal = 4.dp)
+                        // .padding(vertical = 4.dp)
+                        // .padding(horizontal = 4.dp)
                         .background(color = Color.White)
                         .clickable {
                             pantryViewModel.getProductDetails(4002468202435)
@@ -160,7 +161,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                             if (item.quantity > 0) {
                                 items[index] = item.copy(quantity = item.quantity - 1)
                             }
-                        },
+                        }
                     ) {
                         Icon(
                             Icons.Default.Remove,
@@ -172,9 +173,9 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     Text(
                         item.quantity.toString(),
                         modifier = Modifier
-                        //.width(80.dp)
-                        //.padding(end = 8.dp)
-                        //.weight(1f)
+                        // .width(80.dp)
+                        // .padding(end = 8.dp)
+                        // .weight(1f)
                     )
                     IconButton(
                         onClick = {
@@ -188,7 +189,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                             tint = Color.Black
                         )
                     }
-                    //Spacer(modifier = Modifier.width(8.dp))
+                    // Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         item.name,
                         modifier = Modifier
@@ -230,4 +231,3 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         }
     }
 }
-
