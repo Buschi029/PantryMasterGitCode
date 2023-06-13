@@ -44,7 +44,8 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     Box {
         PantryList(pantryViewModel)
         if (pantryViewModel.showProductDetails){
-            Column(verticalArrangement = Arrangement.Center,
+            Column(
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()) {
                 DetailView(pantryViewModel)
@@ -91,9 +92,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
             TextField(value = if (newQuantity != 0) newQuantity.toString() else "",
                 onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
                 placeholder = { Text("Quantity") },
@@ -103,7 +102,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .weight(1f)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            TextField(value = newItem,
+            TextField(
+                value = newItem,
                 onValueChange = { newItem = it },
                 placeholder = { Text("Element") },
                 modifier = Modifier
@@ -113,7 +113,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .clip(RoundedCornerShape(4.dp))
             )
             Spacer(modifier = Modifier.width(8.dp))
-            TextField(value = newDate,
+            TextField(
+                value = newDate,
                 onValueChange = { newDate = it },
                 placeholder = { Text("Date") },
                 modifier = Modifier
@@ -123,12 +124,13 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .clip(RoundedCornerShape(4.dp))
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = {
-                items.add(PantryItem(newItem, newQuantity, newDate))
-                newItem = ""
-                newQuantity = 0
-                newDate = ""
-            },
+            Button(
+                onClick = {
+                    items.add(PantryItem(newItem, newQuantity, newDate))
+                    newItem = ""
+                    newQuantity = 0
+                    newDate = ""
+                },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
@@ -218,7 +220,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         // speichern
 
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { var saveButtonClicked = true },
+        Button(
+            onClick = { var saveButtonClicked = true },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)

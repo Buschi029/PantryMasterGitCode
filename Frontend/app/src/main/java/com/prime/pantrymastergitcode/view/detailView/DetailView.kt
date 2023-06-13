@@ -34,8 +34,9 @@ import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 
 @Composable
-fun DetailView(pantryViewModel: PantryViewModel){
-    Card(elevation = 10.dp,
+fun DetailView(pantryViewModel: PantryViewModel) {
+    Card(
+        elevation = 10.dp,
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .size(300.dp)
@@ -47,12 +48,14 @@ fun DetailView(pantryViewModel: PantryViewModel){
                 CircularProgressIndicator()
             } else {
                 Box {
-                    Column(modifier = Modifier
+                    Column(
+                        modifier = Modifier
                         .fillMaxWidth()
                         .padding(3.dp),
                         horizontalAlignment = Alignment.End
                     ) {
-                        Button(onClick = {pantryViewModel.showProductDetails = false},
+                        Button(
+                            onClick = {pantryViewModel.showProductDetails = false},
                             modifier = Modifier
                                 .size(30.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -68,25 +71,30 @@ fun DetailView(pantryViewModel: PantryViewModel){
                             )
                         }
                     }
-                    Column(modifier = Modifier
+                    Column(
+                        modifier = Modifier
                         .fillMaxSize()
                         .padding(top = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(painterResource(id = R.drawable.samlepicture),
+                        Image(
+                            painterResource(id = R.drawable.samlepicture),
                             contentDescription = "ProductImage",
                             modifier = Modifier
                                 .height(100.dp)
                                 .clip(RoundedCornerShape(10.dp))
                         )
-                        Text(text = "ProductName",
+                        Text(
+                            text = "ProductName",
                             style = TextStyle(fontWeight = FontWeight.Bold)
                         )
-                        Column(verticalArrangement = Arrangement.Center,
+                        Column(
+                            verticalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxSize()
                         ) {
-                            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
@@ -94,7 +102,8 @@ fun DetailView(pantryViewModel: PantryViewModel){
                                 Text(text = "Kilocalories: ${pantryViewModel.product.kcal}")
                                 Text(text = "Carbohydrates: ${pantryViewModel.product.carbohydrates}")
                             }
-                            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
@@ -102,7 +111,8 @@ fun DetailView(pantryViewModel: PantryViewModel){
                                 Text(text = "Fat: ${pantryViewModel.product.fat}")
                                 Text(text = "Sugar: ${pantryViewModel.product.sugar}")
                             }
-                            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier
                                     .padding(start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
