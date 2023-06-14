@@ -22,13 +22,14 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun ScannerView() {
     val tag = "Scanner"
     val context = LocalContext.current
     val scanner = GmsBarcodeScanning.getClient(context)
-    var scannerTag by remember { mutableStateOf("") }
+    var textField by remember { mutableStateOf("") }
     val scannerViewModel = viewModel<ScannerViewModel>()
     val flowProduct by scannerViewModel.product.collectAsState()
 
@@ -37,11 +38,10 @@ fun ScannerView() {
         modifier = Modifier.fillMaxSize()) {
         Text(text = "Add your Product manually")
         TextField(
-                value = scannerViewModel.product.kcal.toString(),
-                onValueChange = {
-                    scannerViewModel.product.kcal = scannerViewModel.product.kcal.copyit.toInt()
-                },
-            keyboardOptions = KeyboardOptions(
+                value = if(flowProduct.kcal != 0){flowProduct.kcal.toString()} else{textField},
+                label = { Text(text = "Kcal")},
+                onValueChange = {textField = it},
+                keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             )
@@ -61,11 +61,10 @@ fun ScannerView() {
                     // Task failed with an exception
                     Log.e(tag, e.toString())
                     Toast.makeText(context, "An Error occurred", Toast.LENGTH_SHORT).show()
-                    scannerTag = e.toString()
                 }
         }) {
             Text(text = "Scan")
         }
-        Text(text = scannerViewModel.product.kcal.toString())
+        Text(text = flowProduct.kcal.toString())
     }
 }

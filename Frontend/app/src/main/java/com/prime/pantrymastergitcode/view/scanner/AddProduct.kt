@@ -26,97 +26,97 @@ import com.prime.pantrymastergitcode.api.OFFAPIService
 
 @Composable
 fun AddProduct(scannerViewModel: ScannerViewModel){
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            if (!scannerViewModel.loading) {
-                CircularProgressIndicator()
-            }else{
-                Box() {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(3.dp),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        /*Button(
-                            onClick = { scannerViewModel.showProductDetails = false },
-                            modifier = Modifier
-                                .size(30.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Red
-                            )
-                        ) {
-                            Icon(
-                                Icons.Outlined.Close,
-                                contentDescription = "Close",
-                                modifier = Modifier
-                                    .size(10.dp)
-                                    .fillMaxSize(),
-                                tint = Color.White
-                            )
-                        }*/
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painterResource(id = R.drawable.samlepicture),
-                            contentDescription = "ProductImage",
-                            modifier = Modifier
-                                .height(100.dp)
-                                .clip(
-                                    RoundedCornerShape(10.dp)
-                                )
-                        )
-                        Text(text = "ProductName", style = TextStyle(fontWeight = FontWeight.Bold))
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(text = "Kilocalories: ${scannerViewModel.product.kcal}")
-                                Text(text = "Carbohydrates: ${scannerViewModel.product.carbohydrates}")
-                            }
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(text = "Fat: ${scannerViewModel.product.fat}")
-                                Text(text = "Sugar: ${scannerViewModel.product.sugar}")
-                            }
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .padding(start = 10.dp, end = 10.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Text(text = "Protein: ${scannerViewModel.product.protein}")
-                                Text(text = "Nutriscore: ${scannerViewModel.product.nutriscore}")
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
+//        Box(
+//            contentAlignment = Alignment.Center
+//        ) {
+//            if (!scannerViewModel.loading) {
+//                CircularProgressIndicator()
+//            }else{
+//                Box() {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(3.dp),
+//                        horizontalAlignment = Alignment.End
+//                    ) {
+//                        /*Button(
+//                            onClick = { scannerViewModel.showProductDetails = false },
+//                            modifier = Modifier
+//                                .size(30.dp),
+//                            colors = ButtonDefaults.buttonColors(
+//                                backgroundColor = Color.Red
+//                            )
+//                        ) {
+//                            Icon(
+//                                Icons.Outlined.Close,
+//                                contentDescription = "Close",
+//                                modifier = Modifier
+//                                    .size(10.dp)
+//                                    .fillMaxSize(),
+//                                tint = Color.White
+//                            )
+//                        }*/
+//                    }
+//
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .padding(top = 20.dp),
+//                        horizontalAlignment = Alignment.CenterHorizontally
+//                    ) {
+//                        Image(
+//                            painterResource(id = R.drawable.samlepicture),
+//                            contentDescription = "ProductImage",
+//                            modifier = Modifier
+//                                .height(100.dp)
+//                                .clip(
+//                                    RoundedCornerShape(10.dp)
+//                                )
+//                        )
+//                        Text(text = "ProductName", style = TextStyle(fontWeight = FontWeight.Bold))
+//                        Column(
+//                            verticalArrangement = Arrangement.Center,
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                        ) {
+//                            Row(
+//                                horizontalArrangement = Arrangement.SpaceBetween,
+//                                modifier = Modifier
+//                                    .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(text = "Kilocalories: ${scannerViewModel.product.kcal}")
+//                                Text(text = "Carbohydrates: ${scannerViewModel.product.carbohydrates}")
+//                            }
+//                            Row(
+//                                horizontalArrangement = Arrangement.SpaceBetween,
+//                                modifier = Modifier
+//                                    .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(text = "Fat: ${scannerViewModel.product.fat}")
+//                                Text(text = "Sugar: ${scannerViewModel.product.sugar}")
+//                            }
+//                            Row(
+//                                horizontalArrangement = Arrangement.SpaceBetween,
+//                                modifier = Modifier
+//                                    .padding(start = 10.dp, end = 10.dp)
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(text = "Protein: ${scannerViewModel.product.protein}")
+//                                Text(text = "Nutriscore: ${scannerViewModel.product.nutriscore}")
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
 
 }
 
 @Preview(showBackground = false)
 @Composable
 fun DefaultPreview(){
-    AddProduct(ScannerViewModel(OFFAPIService.create()))
+    AddProduct(ScannerViewModel())
 }
