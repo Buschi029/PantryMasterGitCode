@@ -20,6 +20,7 @@ class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
     fun getProduct(code: Long) {
         viewModelScope.launch {
             try {
+                Log.i("SVM", "method called with $code")
                 product = service.postProductDetails(code)!!
             } catch (e: Exception) {
                 loading = false

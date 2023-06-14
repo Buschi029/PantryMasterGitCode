@@ -1,6 +1,5 @@
 package com.prime.pantrymastergitcode.view.scanner
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,21 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,8 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.view.pantry.scannerViewModel
-
 
 @Composable
 fun AddProduct(scannerViewModel: ScannerViewModel){
@@ -43,8 +32,6 @@ fun AddProduct(scannerViewModel: ScannerViewModel){
             if (!scannerViewModel.loading) {
                 CircularProgressIndicator()
             }else{
-
-
                 Box() {
                     Column(
                         modifier = Modifier
@@ -52,7 +39,7 @@ fun AddProduct(scannerViewModel: ScannerViewModel){
                             .padding(3.dp),
                         horizontalAlignment = Alignment.End
                     ) {
-                        Button(
+                        /*Button(
                             onClick = { scannerViewModel.showProductDetails = false },
                             modifier = Modifier
                                 .size(30.dp),
@@ -68,7 +55,7 @@ fun AddProduct(scannerViewModel: ScannerViewModel){
                                     .fillMaxSize(),
                                 tint = Color.White
                             )
-                        }
+                        }*/
                     }
 
                     Column(
@@ -131,5 +118,5 @@ fun AddProduct(scannerViewModel: ScannerViewModel){
 @Preview(showBackground = false)
 @Composable
 fun DefaultPreview(){
-    DetailView(scannerViewModel(OFFAPIService.create()))
+    AddProduct(ScannerViewModel(OFFAPIService.create()))
 }
