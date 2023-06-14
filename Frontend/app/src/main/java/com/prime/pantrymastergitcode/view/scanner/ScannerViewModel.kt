@@ -8,18 +8,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
-    var product: ProductDTO by mutableStateOf(
-        ProductDTO(0, 0, 0, "", 0, 0, 0)
-    )
+    private val _product = MutableStateFlow(ProductDTO())
+    val product = _product.asStateFlow()
+
 
     fun getProduct(code: Long) {
         viewModelScope.launch {
             try {
+                _product.value = service.postProductDetails(code)!!
                 Log.i("SVM", "method called with $code")
                 product = service.postProductDetails(code)!!
             } catch (e: Exception) {

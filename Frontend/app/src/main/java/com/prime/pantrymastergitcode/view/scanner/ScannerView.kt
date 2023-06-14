@@ -10,23 +10,27 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
-fun ScannerView(scannerViewModel: ScannerViewModel) {
+fun ScannerView() {
     val tag = "Scanner"
     val context = LocalContext.current
     val scanner = GmsBarcodeScanning.getClient(context)
     var scannerTag by remember { mutableStateOf("") }
+    val scannerViewModel = viewModel<ScannerViewModel>()
+    val flowProduct by scannerViewModel.product.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
