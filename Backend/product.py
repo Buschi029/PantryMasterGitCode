@@ -7,17 +7,17 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-host = #"ep-old-rice-105179.eu-central-1.aws.neon.tech"
-port = #"5432"
-database = #"pantryDB"
-user = #"ADMIN"
-password = #"uihkP3cnT0Wo"
+host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
+port = "5432"
+database = "pantryDB"
+user = "ADMIN"
+password = "uihkP3cnT0Wo"
 
 conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
 )
 
-a = [1, 2, 3, 4, 5, 6, 7, 8]
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 def get_produktinfo(barcode):
 
@@ -38,8 +38,8 @@ def get_produktinfo(barcode):
             a[4] = abfrage["product"]["nutriscore_grade"]
         a[5] = abfrage["product"]["nutriments"]["proteins"]
         a[6] = abfrage["product"]["nutriments"]["sugars"]
-        a[7] = abfrage["product"]["image_front_url"]
-        a[8] = abfrage["product"]["product_name_de"]
+        a[7] = abfrage["product"]["product_name_de"]
+        a[8] = abfrage["product"]["image_front_url"]
         return a
     else:
         return None
@@ -112,5 +112,6 @@ def add_data():
 def empty():
     return "leerer Pfad!"
 
-app.run(host='0.0.0.0', port=81)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=81)
 
