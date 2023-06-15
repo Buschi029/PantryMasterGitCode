@@ -3,9 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
+from __main__ import app
 
 
-app = Flask(__name__)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
@@ -13,9 +13,11 @@ database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
-conn = psycopg2.connect(
+def tryConnect():
+    conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
-)
+    )
+    return conn
 
 a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -46,10 +48,11 @@ def get_produktinfo(barcode):
 
 
 @app.route("/product", methods=["POST"])
-def add_data():
+def get_oneProduct():
     data = request.get_json()
     barcode = data["barcode"]
 
+    conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("SELECT productcode FROM tbl_product WHERE productcode = %s", (barcode,))
     existing_entry = cursor.fetchone()
@@ -57,7 +60,7 @@ def add_data():
     if existing_entry is None:
         get_produktinfo(barcode)
 
-        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, pictureLink, productName) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
             (
                 a[0],
                 a[1],
@@ -74,6 +77,7 @@ def add_data():
         cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
+        conn.close()
         article = {
             'productcode': data[0][0],
             'carbohydrates': data[0][1],
@@ -93,6 +97,7 @@ def add_data():
         cursor.execute("SELECT productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink FROM tbl_product WHERE productcode = %s", (barcode,))
         data = cursor.fetchall()
         cursor.close()
+        conn.close()
         article = {
             'productcode': data[0][0],
             'carbohydrates': data[0][1],
@@ -108,10 +113,6 @@ def add_data():
 
         return article
 
-@app.route("/")
-def empty():
-    return "leerer Pfad!"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=81)
-
