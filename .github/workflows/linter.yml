@@ -61,11 +61,11 @@ jobs:
       run: chmod +x ./Frontend/gradlew
 
     - name: Run Android Unit Tests
-      run: ./gradlew test
+      run: ./Frontend/gradlew test
 
     - name: Set up Emulator
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
         api-level: 29
-        script: ./gradlew connectedCheck
+        script: ./Frontend/gradlew connectedCheck
 
