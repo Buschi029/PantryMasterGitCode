@@ -5,6 +5,13 @@ buildscript {
         serialization_version = '1.5.1'
     }
     dependencies {
+        testImplementation 'junit:junit:4.13.2'
+        testImplementation 'org.mockito:mockito-core:3.3.3'
+
+    // for android instrumentation tests
+        androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+        androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
         classpath "org.jetbrains.kotlin:kotlin-serialization:1.8.21"
     }
 
