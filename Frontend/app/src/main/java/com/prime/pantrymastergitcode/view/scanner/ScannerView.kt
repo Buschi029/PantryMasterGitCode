@@ -21,6 +21,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import coil.compose.AsyncImage
 
 @Composable
 fun ScannerView() {
@@ -34,6 +35,13 @@ fun ScannerView() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()) {
+        if (product.pictureLink != ""){
+            AsyncImage(
+                model = "${product.pictureLink}",
+                contentDescription = "This is an example image"
+            )
+        }
+
         Text(text = "Add your Product manually")
         TextField(
                 value = if (product.kcal != 0) {product.kcal.toString()} else {""},
