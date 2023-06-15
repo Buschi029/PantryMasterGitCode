@@ -60,14 +60,11 @@ jobs:
     - name: Grant execute permissions for gradlew
       run: chmod +x ./Frontend/gradlew
 
-    - name: CD
-      run: cd ./Frontend
-
     - name: clean 
-      run: ./gradlew clean
+      run: ./Frontend/gradlew clean
 
     - name: Run Android Unit Tests
-      run: ./gradlew test
+      run: ./Frontend/gradlew test
 
     - name: Set up Emulator
       uses: ReactiveCircus/android-emulator-runner@v2
