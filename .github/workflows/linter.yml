@@ -61,7 +61,7 @@ jobs:
       run: chmod +x ./Frontend/gradlew
 
     - name: CD
-      run: cd .\Frontend\
+      run: cd ./Frontend
 
     - name: clean 
       run: ./gradlew clean
