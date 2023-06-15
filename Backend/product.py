@@ -60,7 +60,7 @@ def get_oneProduct():
     if existing_entry is None:
         get_produktinfo(barcode)
 
-        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, productName, pictureLink) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO tbl_product (productcode, carbohydrates, kcal, fat, nutriscore, protein, sugar, pictureLink, productName) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
             (
                 a[0],
                 a[1],
