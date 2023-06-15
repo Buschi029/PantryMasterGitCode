@@ -61,7 +61,7 @@ jobs:
       run: chmod +x ./Frontend/gradlew
 
     - name: Init
-      run: gradlew init
+      run: ./Frontend/gradlew init
 
     - name: Cleaner
       run: ./Frontend/gradlew clean
