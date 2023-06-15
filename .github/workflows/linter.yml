@@ -20,3 +20,9 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Run Unit Tests
+        run: |
+          pip install -r requirements.txt
+          python -m unittest discover -s PantryMasterGitCode/Backend -p 'test_product.py'
+          python -m unittest discover -s PantryMasterGitCode/Backend/test_product.py -p 'test_product.py'

@@ -3,9 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from __main__ import app
+#from __main__ import app
 
-
+app = Flask(__name__)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
@@ -40,8 +40,8 @@ def get_produktinfo(barcode):
             a[4] = abfrage["product"]["nutriscore_grade"]
         a[5] = abfrage["product"]["nutriments"]["proteins"]
         a[6] = abfrage["product"]["nutriments"]["sugars"]
-        a[7] = abfrage["product"]["image_front_url"]
-        a[8] = abfrage["product"]["product_name_de"]
+        a[7] = abfrage["product"]["product_name_de"]
+        a[8] = abfrage["product"]["image_front_url"]
         return a
     else:
         return None
@@ -114,3 +114,5 @@ def get_oneProduct():
         return article
 
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=81)
