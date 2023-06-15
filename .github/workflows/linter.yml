@@ -60,8 +60,7 @@ jobs:
     - name: Grant execute permissions for gradlew
       run: chmod +x ./Frontend/gradlew
 
-    - name: clean 
-      run: ./Frontend/gradlew clean
+
 
     - name: Run Android Unit Tests
       run: ./Frontend/gradlew test
