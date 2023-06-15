@@ -1,6 +1,7 @@
 package com.prime.pantrymastergitcode.view.pantry
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,6 +16,7 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
     var product: ProductDTO by mutableStateOf(ProductDTO())
     var loading : Boolean by mutableStateOf(false)
     var showProductDetails: Boolean by mutableStateOf(false)
+
 
     fun getProductDetails(code:Long){
         loading = false

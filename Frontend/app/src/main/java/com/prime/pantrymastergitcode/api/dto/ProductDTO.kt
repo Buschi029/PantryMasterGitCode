@@ -1,6 +1,8 @@
 package com.prime.pantrymastergitcode.api.dto
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.util.Date
 
 @Serializable
 data class ProductDTO(

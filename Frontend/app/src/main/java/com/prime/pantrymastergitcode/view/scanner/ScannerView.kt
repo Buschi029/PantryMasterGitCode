@@ -2,8 +2,10 @@ package com.prime.pantrymastergitcode.view.scanner
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -21,6 +23,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
@@ -31,30 +34,16 @@ fun ScannerView() {
     val scannerViewModel = viewModel<ScannerViewModel>()
     val product by scannerViewModel.product.collectAsState()
 
-
     Column(
+        modifier = Modifier
+            .padding(top=20.dp, bottom= 100.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()) {
-        if (product.pictureLink != ""){
-            AsyncImage(
-                model = "${product.pictureLink}",
-                contentDescription = "This is an example image"
-            )
-        }
-
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(text = "Add your Product manually")
-        TextField(
-                value = if (product.kcal != 0) {product.kcal.toString()} else {""},
-                label = { Text(text = "Kcal")},
-                onValueChange = {
-                    scannerViewModel.setProduct(product.copy(kcal = it.toIntOrNull() ?: 0))},
-                keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            )
-        )
+        AddProduct(product = product, scannerViewModel = scannerViewModel)
         Text(text = "OR")
-
         Button(onClick = {
             scanner.startScan()
                 .addOnSuccessListener { barcode ->
@@ -70,8 +59,7 @@ fun ScannerView() {
                     Toast.makeText(context, "An Error occurred", Toast.LENGTH_SHORT).show()
                 }
         }) {
-            Text(text = "Scan")
+            Text(text = "Scan the Barcode of the Product")
         }
-        Text(text = product.kcal.toString())
     }
 }

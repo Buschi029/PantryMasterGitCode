@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
@@ -41,50 +42,56 @@ fun DetailView(pantryViewModel: PantryViewModel) {
         modifier = Modifier
             .size(300.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
+        Box() {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Button(
+                    onClick = { pantryViewModel.showProductDetails = false },
+                    modifier = Modifier
+                        .size(30.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Red
+                    )
+                ) {
+                    Icon(
+                        Icons.Outlined.Close,
+                        contentDescription = "Close",
+                        modifier = Modifier
+                            .size(10.dp)
+                            .fillMaxSize(),
+                        tint = Color.White
+                    )
+                }
+            }
             if (!pantryViewModel.loading) {
-                CircularProgressIndicator()
+                Box(contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()){
+                    CircularProgressIndicator()
+                }
             } else {
                 Box {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(3.dp),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        Button(
-                            onClick = { pantryViewModel.showProductDetails = false },
-                            modifier = Modifier
-                                .size(30.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Red
-                            )
-                        ) {
-                            Icon(
-                                Icons.Outlined.Close,
-                                contentDescription = "Close",
-                                modifier = Modifier
-                                    .size(10.dp)
-                                    .fillMaxSize(),
-                                tint = Color.White
-                            )
-                        }
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(
-                            painterResource(id = R.drawable.samlepicture),
-                            contentDescription = "ProductImage",
-                            modifier = Modifier
-                                .height(100.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                        )
+                        if (pantryViewModel.product.pictureLink != "") {
+                            AsyncImage(
+                                model = "${pantryViewModel.product.pictureLink}",
+                                contentDescription = "ProductImage",
+                                modifier = Modifier
+                                    .height(100.dp)
+                                    .clip(
+                                        RoundedCornerShape(10.dp)
+                                    )
+                            )
+                        }
                         Text(
                             text = "ProductName",
                             style = TextStyle(fontWeight = FontWeight.Bold)
