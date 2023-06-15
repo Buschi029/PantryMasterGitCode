@@ -3,9 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from __main__ import app
+#from __main__ import app
 
-
+app = Flask(__name__)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
