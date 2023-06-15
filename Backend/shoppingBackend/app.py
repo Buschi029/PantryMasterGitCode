@@ -7,8 +7,6 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-import inventory
-import product
 import shoppingList
 import user
 
