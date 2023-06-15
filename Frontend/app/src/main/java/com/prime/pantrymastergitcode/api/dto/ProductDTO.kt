@@ -4,13 +4,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProductDTO(
-    var carbohydrates: Int,
-    var fat: Int,
-    var kcal: Int,
-    var nutriscore: String,
-    var productcode: Long,
-    var protein: Int,
-    var sugar: Int
+    val carbohydrates: Int,
+    val fat: Int,
+    val kcal: Int,
+    val name: String,
+    val nutriscore: String,
+    val pictureLink: String,
+    val productcode: Long,
+    val protein: Int,
+    val sugar: Int
 ){
-    constructor() : this(0,0,0,"",0,0,0)
+    constructor() : this(0,0,0,"", "", "",0,0,0)
 }

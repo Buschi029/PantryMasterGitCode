@@ -20,6 +20,10 @@ class ScannerViewModel(): ViewModel() {
     private val service = OFFAPIService.create()
 
 
+
+    fun setProduct(product:ProductDTO){
+        _product.value = product
+    }
     fun getProduct(code: Long) {
         viewModelScope.launch {
             try {
