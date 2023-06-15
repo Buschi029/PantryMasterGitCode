@@ -56,18 +56,22 @@ jobs:
 
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
-    
-    - name: Grant execute permissions for gradlew
-      run: chmod +x ./Frontend/gradlew
 
-    - name: Init
-      run: ./Frontend/gradlew init
+    - name: Grant execute permissions for gradlew and run tests
+      run: |
+        cd Frontend
+        chmod +x ./gradlew
+        ./gradlew clean
+        ./gradlew test
+
+    - name: Grant execute permissions for gradlew
+      run: chmod +x ./gradlew
 
     - name: Cleaner
-      run: ./Frontend/gradlew clean
+      run: ./gradlew clean
 
     - name: Run Android Unit Tests
-      run: ./Frontend/gradlew test
+      run: ./gradlew test
 
     - name: Set up Emulator
       uses: ReactiveCircus/android-emulator-runner@v2
