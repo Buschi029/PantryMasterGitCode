@@ -22,7 +22,7 @@ class FlaskTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data["productcode"], "42143574")
+        self.assertEqual(data["productcode"], 42143574)
 
 
     def test_add_data_existing_product(self):
@@ -40,7 +40,7 @@ class FlaskTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        self.assertEqual(data["productcode"], "5000159452540")
+        self.assertEqual(data["productcode"], 5000159452540)
 
 
 if __name__ == "__main__":
