@@ -41,8 +41,8 @@ def get_produktinfo(barcode):
             a[4] = abfrage["product"]["nutriscore_grade"]
         a[5] = abfrage["product"]["nutriments"]["proteins"]
         a[6] = abfrage["product"]["nutriments"]["sugars"]
-        a[7] = abfrage["product"]["product_name_de"]
-        a[8] = abfrage["product"]["image_front_url"]
+        a[7] = abfrage["product"]["image_front_url"]
+        a[8] = abfrage["product"]["product_name_de"]
         return a
     else:
         return None
