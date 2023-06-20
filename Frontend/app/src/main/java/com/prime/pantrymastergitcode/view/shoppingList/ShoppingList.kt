@@ -14,9 +14,16 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import com.prime.pantrymastergitcode.R
+import com.prime.pantrymastergitcode.ui.theme.Ebony
+import com.prime.pantrymastergitcode.ui.theme.Olivine
+import com.prime.pantrymastergitcode.ui.theme.Timberwolf
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.http.ContentType.Application.Json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,14 +40,15 @@ fun ShoppingListScreen() {
     ShoppingList()
 }
 
-data class ShoppingItem(val name: String, var quantity: String, var isChecked: Boolean = false)
+data class ShoppingItem(val name: String, var quantity: String,
+                        var quantityType: String, var isChecked: Boolean = false)
 
 @Composable
 fun ShoppingList() {
     val items = remember { mutableStateListOf<ShoppingItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: String by remember { mutableStateOf("") }
-
+    var newQuantityType: String by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -68,44 +76,55 @@ fun ShoppingList() {
             )
         }
 
-
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
-
-
 
         Row(
             modifier = Modifier.fillMaxWidth()
         ) { TextField(
             value = newQuantity,
             onValueChange = { newQuantity = it },
-            placeholder = { Text("Quantity") },
+            placeholder = { Text("Quantity", style = TextStyle(fontSize = 14.sp)) },
             modifier = Modifier
-                .width(100.dp)
+                .weight(1f)
                 .height(50.dp)
+                .background(Timberwolf)
         )
             Spacer(modifier = Modifier.width(8.dp))
             TextField(
-                value = newItem,
-                onValueChange = { newItem = it },
-                placeholder = { Text("Element") },
+                value = newQuantityType,
+                onValueChange = { newQuantityType = it },
+                placeholder = { Text("Type", style = TextStyle(fontSize = 14.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
                     .clip(RoundedCornerShape(4.dp))
+                    .background(Timberwolf)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            TextField(
+                value = newItem,
+                onValueChange = { newItem = it },
+                placeholder = { Text("Element", style = TextStyle(fontSize = 14.sp)) },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Timberwolf)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    items.add(ShoppingItem(newItem, newQuantity))
+                    items.add(ShoppingItem(newItem, newQuantity, newQuantityType))
                     newItem = ""
                     newQuantity = ""
+                    newQuantityType = ""
                 },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
             ) {
-                Text("Add")
+                Text("Add", color = Color.Black)
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -120,22 +139,11 @@ fun ShoppingList() {
                         .padding(horizontal = 4.dp)
                 ) {
                     Text(
-                        item.quantity,
+                        "${item.quantity} ${item.quantityType}",
 
                         modifier = Modifier
-                            .width(80.dp)
+                            .weight(1f)
                             .padding(end = 8.dp)
-                            //.height(40.dp)
-                            //.weight(1f)
-                            //.clip(RoundedCornerShape(8.dp))
-                            //.background(Color(0xFFF3F3F3))
-                            //.border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(8.dp))
-                            //.align(Alignment.CenterVertically),
-                        //textAlign = TextAlign.Center,
-
-
-
-
 
                     )
                     //Spacer(modifier = Modifier.width(8.dp))
@@ -177,14 +185,48 @@ fun ShoppingList() {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { var saveButtonClicked = true },
+            onClick = { saveShoppingList(items) },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)
+
         ) {
-            Text("Save")
+            Text("Save", color = Color.Black)
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+        )
     }
+}
+
+// Daten speichern
+
+fun saveShoppingList(items: List<ShoppingItem>) {
+    /*
+    val json = Json.encodeToString(items)
+
+    // Send the JSON data to the backend endpoint
+    val url = "http:// 82.165.114.121"
+    val client = HttpClient()
+    val request = HttpRequest.newBuilder()
+        .uri(URI.create(url))
+        .header("Content-Type", "application/json")
+        .POST(HttpRequest.BodyPublishers.ofString(json))
+        .build()
+
+    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+
+    if (response.statusCode() == 200) {
+        // Successfully saved the shopping list
+        println("Shopping list saved!")
+    } else {
+        // Error occurred while saving the shopping list
+        println("Failed to save the shopping list. Status code: ${response.statusCode()}")
+    }
+    */
+
 }
 
 

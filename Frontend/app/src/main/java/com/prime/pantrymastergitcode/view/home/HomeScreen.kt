@@ -6,5 +6,5 @@ import androidx.compose.material.Text
 
 @Composable
 fun HomeScreen() {
-   Text(text = "Home")
+   Text(text = "Unbekannt was mit der Seite passieren soll.")
 }
