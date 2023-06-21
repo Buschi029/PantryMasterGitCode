@@ -31,24 +31,42 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 
 
 
 @Composable
-fun ShoppingListScreen() {
+fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
 
-    ShoppingList()
+    ShoppingList(shoppingListViewModel)
 }
 
 data class ShoppingItem(val name: String, var quantity: String,
                         var quantityType: String, var isChecked: Boolean = false)
 
 @Composable
-fun ShoppingList() {
+fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
+/*
     val items = remember { mutableStateListOf<ShoppingItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: String by remember { mutableStateOf("") }
     var newQuantityType: String by remember { mutableStateOf("") }
+
+ */
+
+    val items = shoppingListViewModel.items
+    var newItem = shoppingListViewModel.newItem
+    var newQuantity = shoppingListViewModel.newQuantity
+    var newQuantityType = shoppingListViewModel.newQuantityType
+
+    /*
+    var items by shoppingListViewModel.items.collectAsState()
+    var newItem by shoppingListViewModel.newItem.collectAsState()
+    var newQuantity by shoppingListViewModel.newQuantity.collectAsState()
+    var newQuantityType by shoppingListViewModel.newQuantityType.collectAsState()
+
+     */
+
 
     Column(
         modifier = Modifier
@@ -114,12 +132,7 @@ fun ShoppingList() {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = {
-                    items.add(ShoppingItem(newItem, newQuantity, newQuantityType))
-                    newItem = ""
-                    newQuantity = ""
-                    newQuantityType = ""
-                },
+                onClick = { shoppingListViewModel.addItem() },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
@@ -168,7 +181,7 @@ fun ShoppingList() {
                     )
                     IconButton(
                         onClick = {
-                            items.removeAt(index)
+                            shoppingListViewModel.removeItem(item)
                         }
                     ) {
                         Icon(

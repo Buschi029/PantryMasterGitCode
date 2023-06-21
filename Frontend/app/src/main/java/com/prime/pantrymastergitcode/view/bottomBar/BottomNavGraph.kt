@@ -12,11 +12,14 @@ import com.prime.pantrymastergitcode.view.pantry.PantryView
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 import com.prime.pantrymastergitcode.view.scanner.ScannerView
 import com.prime.pantrymastergitcode.view.scanner.ScannerViewModel
+import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 
 @Composable
 fun BottomNavGraph(navController: NavHostController, service: OFFAPIService) {
     val pantryViewModel = PantryViewModel(service = service)
     val scannerViewModel = ScannerViewModel(service)
+    val shoppingListViewModel = ShoppingListViewModel()
+
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Home.route
@@ -28,7 +31,7 @@ fun BottomNavGraph(navController: NavHostController, service: OFFAPIService) {
             ScannerView(scannerViewModel)
         }
         composable(route = BottomBarScreen.ShoppingList.route) {
-            ShoppingListScreen()
+            ShoppingListScreen(shoppingListViewModel)
         }
         composable(route = BottomBarScreen.Pantry.route) {
             PantryView(pantryViewModel)

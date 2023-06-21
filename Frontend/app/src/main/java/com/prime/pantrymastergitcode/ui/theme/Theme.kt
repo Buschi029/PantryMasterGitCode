@@ -52,12 +52,12 @@ fun PantryMasterGitCodeTheme(
 
     val colors = if (darkTheme) {
         systemUiController.setSystemBarsColor(
-            color = Color.Transparent
+            color = Timberwolf
         )
         DarkColorPalette
     } else {
         systemUiController.setSystemBarsColor(
-            color = Color.White
+            color = Timberwolf
         )
         LightColorPalette
     }
