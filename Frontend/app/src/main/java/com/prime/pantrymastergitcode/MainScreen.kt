@@ -5,6 +5,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
@@ -22,9 +23,14 @@ fun MainScreen(service:OFFAPIService) {
     val navController = rememberNavController()
     Scaffold (
         topBar = {
-            // Hier kannst du den Inhalt der Top Bar platzieren, aber da du sie ausblenden möchtest,
-            // kannst du sie einfach leer lassen oder null setzen.
+
+        //TopAppBar(title = {
+         //   Text("Pantry Master")
+        //})
+
         },
+
+
         bottomBar = { BottomBar(navController = navController)}
     ){
     BottomNavGraph(navController = navController, service = service)
