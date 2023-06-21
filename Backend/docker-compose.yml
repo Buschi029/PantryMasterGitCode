@@ -1,0 +1,9 @@
+services:
+  inventory:
+    build: /inventoryBackend/
+    ports:
+      - "8080:5000"
+  shopping:
+    build: /shoppingBackend/
+    ports:
+      - "8081:5001"
