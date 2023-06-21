@@ -41,7 +41,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
-import com.prime.pantrymastergitcode.view.detailView.DetailView
+import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
+
 
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
