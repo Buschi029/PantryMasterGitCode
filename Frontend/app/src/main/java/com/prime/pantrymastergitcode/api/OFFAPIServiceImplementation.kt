@@ -15,6 +15,7 @@ import io.ktor.http.contentType
 class OFFAPIServiceImplementation(
     private val client: HttpClient
 ) : OFFAPIService {
+
     override suspend fun postProductDetails(code: Long): ProductDTO? {
         val response: HttpResponse
         val body: ProductDTO
@@ -31,4 +32,13 @@ class OFFAPIServiceImplementation(
             null
         }
     }
+
+    /*override suspend fun addProductToPantry(code: String, userId: Int): ProductDTO? {
+        var response: GetResponse
+        try {
+            response = client.post(HttpRoutes.pantry):ProductDTO? {
+                
+            }
+        }
+    }*/
 }

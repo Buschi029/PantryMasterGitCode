@@ -5,13 +5,16 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.prime.pantrymastergitcode.api.OFFAPIService
+import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
 import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 
@@ -19,6 +22,15 @@ import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 fun MainScreen(service:OFFAPIService) {
     val navController = rememberNavController()
     Scaffold (
+        topBar = {
+
+        //TopAppBar(title = {
+         //   Text("Pantry Master")
+        //})
+
+        },
+
+
         bottomBar = { BottomBar(navController = navController)}
     ){
     BottomNavGraph(navController = navController, service = service)
@@ -60,7 +72,8 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+        unselectedContentColor = Color(0x70000000),
+        selectedContentColor = Color.Black,
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)

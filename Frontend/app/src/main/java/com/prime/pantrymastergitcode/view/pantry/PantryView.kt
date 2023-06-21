@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -37,13 +40,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.prime.pantrymastergitcode.view.detailView.DetailView
+import com.prime.pantrymastergitcode.ui.theme.Timberwolf
+import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
+
 
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
+    val showProductDetails = pantryViewModel.showProductDetails.collectAsState()
     Box {
         PantryList(pantryViewModel)
-        if (pantryViewModel.showProductDetails) {
+        if (showProductDetails.value) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,10 +70,14 @@ fun PantryList(pantryViewModel: PantryViewModel) {
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newDate: String by remember { mutableStateOf("") }
 
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -101,6 +111,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .width(100.dp)
                     .height(50.dp)
                     .weight(1f)
+                    .background(Timberwolf)
             )
             Spacer(modifier = Modifier.width(8.dp))
             TextField(
@@ -112,6 +123,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .width(120.dp)
                     .height(50.dp)
                     .clip(RoundedCornerShape(4.dp))
+                    .background(Timberwolf)
             )
             Spacer(modifier = Modifier.width(8.dp))
             TextField(
@@ -123,6 +135,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .width(80.dp)
                     .height(50.dp)
                     .clip(RoundedCornerShape(4.dp))
+                    .background(Timberwolf)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
@@ -136,7 +149,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .width(60.dp)
                     .height(50.dp)
             ) {
-                Text("Add")
+                Text("Add", color = Color.Black)
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -152,8 +165,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                         // .padding(horizontal = 4.dp)
                         .background(color = Color.White)
                         .clickable {
-                            pantryViewModel.getProductDetails(4002468202435)
-                            pantryViewModel.showProductDetails = true
+                            pantryViewModel.getProductDetails(4000140703881)
+                            pantryViewModel.setProductDetails(true)
                         }
                 ) {
                     IconButton(
@@ -227,7 +240,13 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)
         ) {
-            Text("Save")
+            Text("Save", color = Color.Black)
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+        )
+
     }
 }

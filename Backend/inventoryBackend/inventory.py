@@ -3,7 +3,7 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from __main__ import app
+from app import app
 
 
 
