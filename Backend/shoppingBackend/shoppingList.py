@@ -1,7 +1,7 @@
 
 import psycopg2
 from flask import Flask, jsonify, request
-from __main__ import app
+from app import app
 
 
 
@@ -111,3 +111,4 @@ def delete_item():
     conn.close()
 
     return "Entfernt"
+
