@@ -1,4 +1,4 @@
-package com.prime.pantrymastergitcode.view.detailView
+package com.prime.pantrymastergitcode.view.pantry.detailView
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +38,9 @@ import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 
 @Composable
 fun DetailView(pantryViewModel: PantryViewModel) {
+    val product by pantryViewModel.product.collectAsState()
+    val loading by pantryViewModel.loading.collectAsState()
+
     Card(
         elevation = 10.dp,
         shape = RoundedCornerShape(8.dp),
@@ -51,7 +56,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                 verticalArrangement = Arrangement.Top
             ) {
                 Button(
-                    onClick = { pantryViewModel.showProductDetails = false },
+                    onClick = { pantryViewModel.setProductDetails(false) },
                     modifier = Modifier
                         .size(30.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -68,7 +73,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                     )
                 }
             }
-            if (!pantryViewModel.loading) {
+            if (!loading) {
                 Box(contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()){
                     CircularProgressIndicator()
@@ -81,9 +86,9 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                             .padding(top = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        if (pantryViewModel.product.pictureLink != "") {
+                        if (product.pictureLink != "") {
                             AsyncImage(
-                                model = "${pantryViewModel.product.pictureLink}",
+                                model = "${product.pictureLink}",
                                 contentDescription = "ProductImage",
                                 modifier = Modifier
                                     .height(100.dp)
@@ -93,7 +98,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                             )
                         }
                         Text(
-                            text = "ProductName",
+                            text = "${product.name}",
                             style = TextStyle(fontWeight = FontWeight.Bold)
                         )
                         Column(
@@ -107,8 +112,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Kilocalories: ${pantryViewModel.product.kcal}")
-                                Text(text = "Carbohydrates: ${pantryViewModel.product.carbohydrates}")
+                                Text(text = "Kilocalories: ${product.kcal}")
+                                Text(text = "Carbohydrates: ${product.carbohydrates}")
                             }
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -116,8 +121,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Fat: ${pantryViewModel.product.fat}")
-                                Text(text = "Sugar: ${pantryViewModel.product.sugar}")
+                                Text(text = "Fat: ${product.fat}")
+                                Text(text = "Sugar: ${product.sugar}")
                             }
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,8 +130,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Protein: ${pantryViewModel.product.protein}")
-                                Text(text = "Nutriscore: ${pantryViewModel.product.nutriscore}")
+                                Text(text = "Protein: ${product.protein}")
+                                Text(text = "Nutriscore: ${product.nutriscore}")
                             }
                         }
                     }

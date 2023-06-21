@@ -12,12 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ScannerViewModel(): ViewModel() {
+class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
 //    var errorMessage: String by mutableStateOf("")
 //    var loading: Boolean by mutableStateOf(false)
     private val _product = MutableStateFlow(ProductDTO())
     val product = _product.asStateFlow()
-    private val service = OFFAPIService.create()
 
 
 

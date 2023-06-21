@@ -8,6 +8,7 @@ android {
     namespace 'com.prime.pantrymastergitcode'
     compileSdk 33
 
+
     defaultConfig {
         applicationId "com.prime.pantrymastergitcode"
         minSdk 21
@@ -71,7 +72,7 @@ dependencies {
     //Scanner
     implementation 'com.google.android.gms:play-services-code-scanner:16.0.0'
 
-    //permissions only needed if we need additional permisions look at: https://google.github.io/accompanist/permissions/#usage
+    //permissions only needed if we need additional permissions look at: https://google.github.io/accompanist/permissions/#usage
     implementation "com.google.accompanist:accompanist-permissions:0.31.3-beta"
 
     //Camera only needed if we change the scanner
@@ -94,6 +95,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation "io.ktor:ktor-client-logging:$ktor_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
+
+    //Coroutines
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1"
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    testImplementation("org.slf4j:slf4j-simple:2.0.7")
+
 
     //Load Images
     implementation("io.coil-kt:coil-compose:2.4.0")

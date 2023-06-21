@@ -15,6 +15,7 @@ import io.ktor.http.contentType
 class OFFAPIServiceImplementation(
     private val client: HttpClient
 ) : OFFAPIService {
+
     override suspend fun postProductDetails(code: Long): ProductDTO? {
         val response: HttpResponse
         val body: ProductDTO

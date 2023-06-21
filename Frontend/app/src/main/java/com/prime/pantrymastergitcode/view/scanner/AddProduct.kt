@@ -209,5 +209,5 @@ fun AddProduct(product:ProductDTO, scannerViewModel:ScannerViewModel){
 @Preview(showBackground = false)
 @Composable
 fun DefaultPreview(){
-    AddProduct(product = ProductDTO(), scannerViewModel = ScannerViewModel())
+    AddProduct(product = ProductDTO(), scannerViewModel = ScannerViewModel(OFFAPIService.create()))
 }

@@ -1,5 +1,9 @@
 package com.prime.pantrymastergitcode
 
+import com.prime.pantrymastergitcode.api.OFFAPIService
+import com.prime.pantrymastergitcode.view.scanner.ScannerViewModel
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -10,9 +14,11 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
+    private val service = OFFAPIService.create()
 
-        assertEquals(4, 2 + 2)
+    @Test
+    fun getProductDetails() = runTest {
+        val product = service.postProductDetails(4000140703881)
+        assertEquals("Produkt wurde aus Backend geladen", product!!.name, "Orangina original")
     }
 }

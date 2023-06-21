@@ -27,11 +27,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
-fun ScannerView() {
+fun ScannerView(scannerViewModel: ScannerViewModel) {
     val tag = "Scanner"
     val context = LocalContext.current
     val scanner = GmsBarcodeScanning.getClient(context)
-    val scannerViewModel = viewModel<ScannerViewModel>()
     val product by scannerViewModel.product.collectAsState()
 
     Column(
