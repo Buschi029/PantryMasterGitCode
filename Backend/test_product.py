@@ -23,7 +23,7 @@ class FlaskTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertEqual(data["productcode"], 4103840026417)
-
+#test
 
 if __name__ == "__main__":
     unittest.main()
