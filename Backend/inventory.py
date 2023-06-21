@@ -24,7 +24,7 @@ def tryConnect():
 def get_allInvItem():
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory FROM tbl_pantry")
+    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate FROM tbl_pantry")
     data = cursor.fetchall()
     cursor.close()
     conn.close()
