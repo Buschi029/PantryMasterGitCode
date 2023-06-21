@@ -24,7 +24,7 @@ def tryConnect():
 def get_allInvItem():
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate, productCategory FROM tbl_pantry")
+    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate FROM tbl_pantry")
     data = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -36,22 +36,49 @@ def get_allInvItem():
     return jsonify(results)
 
 @app.route("/inventory", methods=["POST"])
-def get_oneInvItem():
-    data = request.get_json()
-    userID = data["userID"]
-
+def insert_Item():
+    
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM tbl_pantry WHERE userid = %s", (userID))
-    data = cursor.fetchall()
+    json_data = request.get_json()
+
+    productCode = json_data.get("productCode")
+    userID = json_data.get("userID")
+    productName = json_data.get("productName")
+    expirationDate = json_data.get("expirationDate")
+    quantity = json_data.get("quantity")
+    quantityUnit = json_data.get("quantityUnit")
+    appendDate = json_data.get("appendDate")
+
+    cursor.execute("INSERT INTO tbl_pantry (productCode, productName, userID, expirationDate, appendDate, quantity, quantityUnit) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                (productCode, productName, userID, expirationDate, appendDate, quantity, quantityUnit))
+    
+    conn.commit()
     cursor.close()
-    conn.close()    
+    conn.close()
+
+    response = {"message": "Data inserted successfully"}
+    return jsonify(response)
+
+
+
+# @app.route("/inventory", methods=["POST"])
+# def get_oneInvItem():
+#     data = request.get_json()
+#     userID = data["userID"]
+
+#     conn = tryConnect() 
+#     cursor = conn.cursor()
+#     cursor.execute("SELECT * FROM tbl_pantry WHERE userid = %s", (userID))
+#     data = cursor.fetchall()
+#     cursor.close()
+#     conn.close()    
 
     # results = []
     #     for row in data:
     #     result = {"id": row[0], "name": row[1]}
     #     results.append(result)
-    return jsonify(cursor)
+    #return jsonify(cursor)
 
 
 @app.route("/inventory", methods=["DELETE"])
