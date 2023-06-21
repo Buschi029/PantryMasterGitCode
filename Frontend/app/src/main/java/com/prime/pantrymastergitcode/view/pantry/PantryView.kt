@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,9 +45,10 @@ import com.prime.pantrymastergitcode.view.detailView.DetailView
 
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
+    val showProductDetails = pantryViewModel.showProductDetails.collectAsState()
     Box {
         PantryList(pantryViewModel)
-        if (pantryViewModel.showProductDetails) {
+        if (showProductDetails.value) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -162,8 +164,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                         // .padding(horizontal = 4.dp)
                         .background(color = Color.White)
                         .clickable {
-                            pantryViewModel.getProductDetails(4002468202435)
-                            pantryViewModel.showProductDetails = true
+                            pantryViewModel.getProductDetails(4000140703881)
+                            pantryViewModel.setProductDetails(true)
                         }
                 ) {
                     IconButton(

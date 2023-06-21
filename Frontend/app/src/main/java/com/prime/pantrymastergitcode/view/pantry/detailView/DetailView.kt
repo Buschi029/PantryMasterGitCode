@@ -1,4 +1,4 @@
-package com.prime.pantrymastergitcode.view.detailView
+package com.prime.pantrymastergitcode.view.pantry.detailView
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,64 +31,74 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 
 @Composable
 fun DetailView(pantryViewModel: PantryViewModel) {
+    val product by pantryViewModel.product.collectAsState()
+    val loading by pantryViewModel.loading.collectAsState()
+
     Card(
         elevation = 10.dp,
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .size(300.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            if (!pantryViewModel.loading) {
-                CircularProgressIndicator()
+        Box() {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Button(
+                    onClick = { pantryViewModel.setProductDetails(false) },
+                    modifier = Modifier
+                        .size(30.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Red
+                    )
+                ) {
+                    Icon(
+                        Icons.Outlined.Close,
+                        contentDescription = "Close",
+                        modifier = Modifier
+                            .size(10.dp)
+                            .fillMaxSize(),
+                        tint = Color.White
+                    )
+                }
+            }
+            if (!loading) {
+                Box(contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()){
+                    CircularProgressIndicator()
+                }
             } else {
                 Box {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(3.dp),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        Button(
-                            onClick = { pantryViewModel.showProductDetails = false },
-                            modifier = Modifier
-                                .size(30.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Red
-                            )
-                        ) {
-                            Icon(
-                                Icons.Outlined.Close,
-                                contentDescription = "Close",
-                                modifier = Modifier
-                                    .size(10.dp)
-                                    .fillMaxSize(),
-                                tint = Color.White
-                            )
-                        }
-                    }
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Image(
-                            painterResource(id = R.drawable.samlepicture),
-                            contentDescription = "ProductImage",
-                            modifier = Modifier
-                                .height(100.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                        )
+                        if (product.pictureLink != "") {
+                            AsyncImage(
+                                model = "${product.pictureLink}",
+                                contentDescription = "ProductImage",
+                                modifier = Modifier
+                                    .height(100.dp)
+                                    .clip(
+                                        RoundedCornerShape(10.dp)
+                                    )
+                            )
+                        }
                         Text(
-                            text = "ProductName",
+                            text = "${product.name}",
                             style = TextStyle(fontWeight = FontWeight.Bold)
                         )
                         Column(
@@ -100,8 +112,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Kilocalories: ${pantryViewModel.product.kcal}")
-                                Text(text = "Carbohydrates: ${pantryViewModel.product.carbohydrates}")
+                                Text(text = "Kilocalories: ${product.kcal}")
+                                Text(text = "Carbohydrates: ${product.carbohydrates}")
                             }
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -109,8 +121,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Fat: ${pantryViewModel.product.fat}")
-                                Text(text = "Sugar: ${pantryViewModel.product.sugar}")
+                                Text(text = "Fat: ${product.fat}")
+                                Text(text = "Sugar: ${product.sugar}")
                             }
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -118,8 +130,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Protein: ${pantryViewModel.product.protein}")
-                                Text(text = "Nutriscore: ${pantryViewModel.product.nutriscore}")
+                                Text(text = "Protein: ${product.protein}")
+                                Text(text = "Nutriscore: ${product.nutriscore}")
                             }
                         }
                     }
