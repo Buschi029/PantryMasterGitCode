@@ -67,6 +67,8 @@ fun AddProduct(product:ProductDTO, scannerViewModel:ScannerViewModel){
                         imeAction = ImeAction.Done
                     )
                 )
+
+
                 Column(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier

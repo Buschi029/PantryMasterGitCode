@@ -1,5 +1,6 @@
 package com.prime.pantrymastergitcode.api
 
+import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.HttpClient
@@ -10,8 +11,8 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 interface OFFAPIService {
-
     suspend fun postProductDetails(code: Long): ProductDTO?
+    suspend fun postPantryEntry(pantryProductDTO: PantryProductDTO)
 
     companion object {
         fun create(): OFFAPIService {
