@@ -32,8 +32,8 @@ jobs:
   
     - name: Run Unit Tests in Docker
       run: |
-        docker exec -it mybackend pip install pytest
-        docker exec -it mybackend pytest
+        docker exec -i mybackend pip install pytest
+        docker exec -i mybackend pytest
 
   android-test:
     name: Android Unit Tests
