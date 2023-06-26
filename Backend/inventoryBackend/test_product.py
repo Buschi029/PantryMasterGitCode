@@ -20,7 +20,7 @@ class TestFlaskRoutes(unittest.TestCase):
 
         self.assertEqual(data["productcode"], 4103840026417)
         self.assertEqual(data["carbohydrates"], 4)
-        self.assertEqual(data["energy-kcal"], 69)
+        self.assertEqual(data["kcal"], 69)
         self.assertEqual(data["fat"], 1)
         self.assertEqual(data["nutriscore"], "z")
         self.assertEqual(data["protein"], 12)
