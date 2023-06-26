@@ -1,4 +1,4 @@
-package android.util; 
+package com.prime.pantrymastergitcode.util;
 
 public class Log {
     public static int d(String tag, String msg) {
@@ -21,3 +21,4 @@ public class Log {
         return 0;
     }
 }
+
