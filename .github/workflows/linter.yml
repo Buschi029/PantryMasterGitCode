@@ -26,20 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install dependencies
+    - name: Set up Docker
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=$PWD/Backend" >> $GITHUB_ENV
-    - name: Run Unit Tests
+        docker build -t mybackend .
+        docker run -d --name mybackend mybackend
+    - name: Run Unit Tests in Docker
       run: |
-        pip install pytest
-        pytest
+        docker exec -it mybackend pip install pytest
+        docker exec -it mybackend pytest
 
   android-test:
     name: Android Unit Tests
@@ -69,6 +63,4 @@ jobs:
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
         api-level: 29
-        run: cd Frontend
         script: ./gradlew connectedCheck
-
