@@ -28,7 +28,8 @@ jobs:
 
     - name: Build and Run Docker for Android tests
       run: |
-        docker build -t myandroid ./Frontend
+        cd Frontend
+        docker build -t myandroid .
         docker run --name myandroid myandroid
 
     - name: Set up Emulator
