@@ -10,6 +10,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+
           fetch-depth: 0
 
       - name: Lint Code Base
@@ -45,22 +46,20 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'adopt'  
+        distribution: 'adopt'
 
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
 
-    - name: Build and Run Docker
-      run: |
-        docker build -t myandroid ./Backend/inventoryBackend
-        docker run -d --name myandroid myandroid
-        docker exec -i myandroid bash -c "cd Frontend && chmod +x ./gradlew && ./gradlew clean && ./gradlew test"
-
     - name: Grant execute permissions for gradlew and run tests
       run: |
-        docker exec -i myandroid bash -c "cd Frontend && chmod +x ./gradlew && ./gradlew clean && ./gradlew test"
+        cd Frontend
+        chmod +x ./gradlew
+        ./gradlew clean
+        ./gradlew test
 
     - name: Set up Emulator
+
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
         api-level: 29
