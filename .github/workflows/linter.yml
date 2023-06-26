@@ -55,9 +55,10 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
 
-    - name: Grant execute permissions for gradlew and run tests
+    - name: Run Unit Tests in Docker
       run: |
-        docker exec -it myandroid bash -c "cd Frontend && chmod +x ./gradlew && ./gradlew clean && ./gradlew test"
+        docker exec myandroid bash -c "cd Frontend && chmod +x ./gradlew && ./gradlew clean && ./gradlew test"
+    
 
     - name: Set up Emulator
       uses: ReactiveCircus/android-emulator-runner@v2
