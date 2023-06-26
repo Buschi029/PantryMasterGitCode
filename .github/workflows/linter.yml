@@ -18,23 +18,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Docker
-      run: |
-        docker build -t mybackend ./Backend/inventoryBackend
-        docker run -d --name mybackend mybackend
   
-    - name: Run Unit Tests in Docker
-      run: |
-        docker exec -i mybackend pip install pytest
-        docker exec -i mybackend pytest
-        docker kill $(docker ps -q)
-
   android-test:
     name: Android Unit Tests
     runs-on: ubuntu-latest
@@ -52,3 +36,19 @@ jobs:
       with:
         api-level: 29
         script: ./gradlew connectedCheck
+
+  build:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Docker
+      run: |
+        docker build -t mybackend ./Backend/inventoryBackend
+        docker run -d --name mybackend mybackend
+  
+    - name: Run Unit Tests in Docker
+      run: |
+        docker exec -i mybackend pip install pytest
+        docker exec -i mybackend pytest
+
