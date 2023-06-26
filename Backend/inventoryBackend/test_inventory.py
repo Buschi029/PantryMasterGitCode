@@ -1,5 +1,5 @@
-import json
 import unittest
+import json
 from app import app
 
 class TestFlaskRoutes(unittest.TestCase):
@@ -17,10 +17,10 @@ class TestFlaskRoutes(unittest.TestCase):
         mock_request_data = json.dumps({
             "productCode": "12345",
             "userID": "1",
-            "productName": "Apple",
+            "productName": "Apfel",
             "expirationDate": "2024-07-10",
             "quantity": "1",
-            "quantityUnit": "Kg",
+            "quantityUnit": "kg",
             "appendDate": "2023-06-26"
         })
         
