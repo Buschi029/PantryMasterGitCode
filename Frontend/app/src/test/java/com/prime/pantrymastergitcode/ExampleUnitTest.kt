@@ -3,31 +3,22 @@ package com.prime.pantrymastergitcode
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.scanner.ScannerViewModel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.Before
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 
 import org.junit.Assert.*
 
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * See [testing documentation](http://d.android.com/tools/testing).
+ */
 class ExampleUnitTest {
-    private lateinit var service: OFFAPIService
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        service = Mockito.mock(OFFAPIService::class.java)
-    }
+    private val service = OFFAPIService.create()
 
     @Test
-    fun getProductDetails() = runBlockingTest {
-        // Assume that the product name would be "Orangina original"
-        `when`(service.postProductDetails(4000140703881)).thenReturn(Product(name = "Orangina original"))
-
+    fun getProductDetails() = runTest {
         val product = service.postProductDetails(4000140703881)
         assertEquals("Produkt wurde aus Backend geladen", product!!.name, "Orangina original")
     }
 }
-
