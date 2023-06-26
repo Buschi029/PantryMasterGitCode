@@ -18,7 +18,7 @@ class TestFlaskRoutes(unittest.TestCase):
 
         data = response.get_json()
 
-        self.assertEqual(data["productcode"], "4103840026417")
+        self.assertEqual(data["productcode"], 4103840026417)
         self.assertEqual(data["carbohydrates"], 3.7)
         self.assertEqual(data["energy-kcal"], 69)
         self.assertEqual(data["fat"], 0.5)
