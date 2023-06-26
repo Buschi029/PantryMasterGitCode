@@ -19,12 +19,12 @@ class TestFlaskRoutes(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual(data["productcode"], 4103840026417)
-        self.assertEqual(data["carbohydrates"], 3.7)
+        self.assertEqual(data["carbohydrates"], 4)
         self.assertEqual(data["energy-kcal"], 69)
-        self.assertEqual(data["fat"], 0.5)
+        self.assertEqual(data["fat"], 1)
         self.assertEqual(data["nutriscore"], "z")
-        self.assertEqual(data["protein"], 12.3)
-        self.assertEqual(data["sugar"], 3.2)
+        self.assertEqual(data["protein"], 12)
+        self.assertEqual(data["sugar"], 3)
         self.assertEqual(data["name"], "High Protein Quark Creme - Pfirsich Maracuja")
         self.assertEqual(data["pictureLink"], "https://images.openfoodfacts.org/images/products/410/384/002/6417/front_de.3.400.jpg")
 
