@@ -8,10 +8,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -59,7 +66,9 @@ fun ScannerView(scannerViewModel: ScannerViewModel) {
                 imeAction = ImeAction.Done
             )
         )
-        Row {
+        Row(modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+        ) {
             TextField(
                 modifier = Modifier
                     .padding(bottom = 10.dp)
@@ -94,12 +103,26 @@ fun ScannerView(scannerViewModel: ScannerViewModel) {
                 )
             )
         }
-
-        
         Button(onClick = {
             dateDialogState.show()
         }) {
-            Text(pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter))
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Icon(
+                    Icons.Default.CalendarToday,
+                    contentDescription = "Calendar",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .fillMaxSize(),
+                    tint = Color.White
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Column() {
+                    Text(text = "Mindesthaltbarkeitsdatum")
+                    Text("${pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter)}")
+                }
+            }
+
         }
 
         Text(text = "OR")

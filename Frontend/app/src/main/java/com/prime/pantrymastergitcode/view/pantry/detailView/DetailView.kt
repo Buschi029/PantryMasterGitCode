@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -18,6 +20,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,11 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.OFFAPIService
@@ -45,7 +50,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
         elevation = 10.dp,
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
-            .size(300.dp)
+            .height(330.dp)
+            .width(300.dp)
     ) {
         Box() {
             Column(
@@ -58,16 +64,13 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                 Button(
                     onClick = { pantryViewModel.setProductDetails(false) },
                     modifier = Modifier
-                        .size(30.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Red
-                    )
+                        .size(40.dp)
                 ) {
                     Icon(
-                        Icons.Outlined.Close,
+                        Icons.Default.Close,
                         contentDescription = "Close",
                         modifier = Modifier
-                            .size(10.dp)
+                            .size(50.dp)
                             .fillMaxSize(),
                         tint = Color.White
                     )
@@ -86,25 +89,32 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                             .padding(top = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        if (product.pictureLink != "") {
-                            AsyncImage(
-                                model = "${product.pictureLink}",
-                                contentDescription = "ProductImage",
-                                modifier = Modifier
-                                    .height(100.dp)
-                                    .clip(
-                                        RoundedCornerShape(10.dp)
-                                    )
+                        Column(modifier = Modifier.weight(5f),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                            if (product.pictureLink != "") {
+                                AsyncImage(
+                                    model = "${product.pictureLink}",
+                                    contentDescription = "ProductImage",
+                                    modifier = Modifier
+                                        .height(150.dp)
+                                        .clip(
+                                            RoundedCornerShape(10.dp)
+                                        )
+                                )
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = "${product.name}",
+                                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)
                             )
                         }
-                        Text(
-                            text = "${product.name}",
-                            style = TextStyle(fontWeight = FontWeight.Bold)
-                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
                         Column(
                             verticalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxSize()
+                                .weight(3f)
                         ) {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
