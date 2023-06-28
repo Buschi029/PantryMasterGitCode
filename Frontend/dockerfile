@@ -1,19 +1,18 @@
 
-FROM openjdk:17-jdk
+FROM ubuntu:latest
 
-RUN apt-get update && apt-get install -y wget unzip
+RUN apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+
 
 ENV ANDROID_SDK_ROOT /opt/android-sdk
 ENV ANDROID_HOME /opt/android-sdk
 ENV PATH ${PATH}:${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin:${ANDROID_SDK_ROOT}/platform-tools
-
 RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools &&\
     wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip &&\
     unzip *tools*linux*.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools &&\
     mv ${ANDROID_SDK_ROOT}/cmdline-tools/cmdline-tools ${ANDROID_SDK_ROOT}/cmdline-tools/latest &&\
     yes | sdkmanager --licenses &&\
     sdkmanager --update
-
 
 RUN sdkmanager "build-tools;30.0.2" "platforms;android-29"
 
