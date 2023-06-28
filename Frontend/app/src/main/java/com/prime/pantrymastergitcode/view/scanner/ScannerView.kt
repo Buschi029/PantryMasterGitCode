@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,12 +27,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -44,15 +46,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
-import com.google.android.gms.common.moduleinstall.ModuleInstall
-import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.R
+import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDate
@@ -69,6 +71,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
     val loading by scannerViewModel.loading.collectAsState()
     val loaded by scannerViewModel.loaded.collectAsState()
     val detailProduct by scannerViewModel.product.collectAsState()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -116,6 +119,24 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             .fillMaxSize()
                             .background(color = MaterialTheme.colors.background)
                         )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Bottom,
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            Box(modifier = Modifier
+                                    .clickable {
+                                        scannerViewModel.setPantryProduct(PantryProductDTO())
+                                        scannerViewModel.setProduct(detailProduct.copy(pictureLink = ""))
+                                        scannerViewModel.setLoaded(false)
+                            }){
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Delete")
+                            }
+
+                        }
                         AsyncImage(
                             model = detailProduct.pictureLink,
                             contentDescription = "ProductImage",
@@ -124,12 +145,11 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                                 .clip(
                                     RoundedCornerShape(10.dp)
                                 )
+
                         )
                     }
                 }
-
             }
-
             Column(
                 modifier = Modifier
                     .weight(4f),
@@ -154,9 +174,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         imeAction = ImeAction.Done
                     )
                 )
-                Row(
-
-                ) {
+                Row{
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
@@ -208,8 +226,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                    dateDialogState.show()
-                }) {
+                        dateDialogState.show()
+                    }) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
@@ -236,49 +254,60 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 }
             }
         }
-            Row(
+
+        Row(
+            modifier = Modifier
+                .weight(2f)
+                .padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
                 modifier = Modifier
-                    .weight(2f)
-                    .padding(start = 10.dp, end = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                    .weight(3f),
+                onClick = {
+                    scanner.startScan()
+                        .addOnSuccessListener { barcode ->
+                            scope.launch {
+                                var failed = scope.async {
+                                    scannerViewModel.getProductFromAPI(
+                                        barcode.rawValue.toString().toLong()
+                                    )
+                                }
+                                    if (failed.await()){
+                                        Log.e("ScannerViewModel", failed.await().toString())
+                                        Toast.makeText(context, "Could not load Product Info", Toast.LENGTH_LONG).show()
+                                    }
+
+                            }
+
+
+
+                        }
+                        .addOnCanceledListener {
+                            // Task canceled
+                            Log.i(tag, "Scanning has been cancelled")
+                        }
+                        .addOnFailureListener { e ->
+                            // Task failed with an exception
+                            Log.e(tag, e.toString())
+                            Toast.makeText(context, "An Error occurred", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                }) {
+                Text(text = "Scan Barcode")
+            }
+            if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
+                Spacer(modifier = Modifier.weight(1f))
                 Button(
                     modifier = Modifier
                         .weight(3f),
-                    onClick = {
-                        scanner.startScan()
-                            .addOnSuccessListener { barcode ->
-                                scannerViewModel.getProductFromAPI(
-                                    barcode.rawValue.toString().toLong()
-                                )
-                            }
-                            .addOnCanceledListener {
-                                // Task canceled
-                                Log.i(tag, "Scanning has been cancelled")
-                            }
-                            .addOnFailureListener { e ->
-                                // Task failed with an exception
-                                Log.e(tag, e.toString())
-                                Toast.makeText(context, "An Error occurred", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                    }) {
-                    Text(text = "Scan Barcode")
+                    onClick = { scannerViewModel.postProductToPantry(pantryProduct) }) {
+                    Text(text = "Add Product")
                 }
-                if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Button(
-                        modifier = Modifier
-                            .weight(3f),
-                        onClick = { scannerViewModel.postProductToPantry(pantryProduct) }) {
-                        Text(text = "Add Product")
-                    }
-                }
-
+            }
         }
     }
-
 
     MaterialDialog(
         dialogState = dateDialogState,
