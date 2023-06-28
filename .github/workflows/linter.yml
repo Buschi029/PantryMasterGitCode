@@ -43,7 +43,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t androidtest ./Frontend -f ./Frontend/Dockerfile
+        docker build -t androidtest ./Frontend -f ./Frontend/dockerfile
     - name: Run tests in Docker
       run: |
         docker run --name androidtestcontainer androidtest
