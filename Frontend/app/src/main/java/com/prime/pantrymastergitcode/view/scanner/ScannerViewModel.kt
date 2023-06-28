@@ -13,14 +13,15 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 
 class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
-    private val _littleInput = MutableStateFlow(false)
-    val littleInput = _littleInput.asStateFlow()
-    val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
     private val _product = MutableStateFlow(ProductDTO())
     val product = _product.asStateFlow()
     private val _pantryProduct = MutableStateFlow(PantryProductDTO())
     val pantryProduct = _pantryProduct.asStateFlow()
+
+    val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+    val _loaded = MutableStateFlow(false)
+    val loaded = _loaded.asStateFlow()
 
 
 
@@ -35,8 +36,15 @@ class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
     fun getProductFromAPI(code: Long) {
         viewModelScope.launch {
             try {
+                _loading.value = true
                 _product.value = service.postProductDetails(code)!!
                 Log.i("SVM", "method called with $code")
+                _pantryProduct.value = _pantryProduct.value.copy(
+                    productCode = _product.value.productcode,
+                    productName = _product.value.name
+                )
+                _loading.value = false
+                _loaded.value = true
             } catch (e: Exception) {
 //                loading = false
 //                errorMessage = e.message.toString()
@@ -47,24 +55,12 @@ class ScannerViewModel(private val service: OFFAPIService): ViewModel() {
     fun postProductToPantry(pantryProduct: PantryProductDTO) {
         val today = java.time.LocalDate.now()
         val appendDate = LocalDate(today.year,today.month,today.dayOfMonth)
-        val defaultExpirationDate = java.time.LocalDate.now().toKotlinLocalDate()
-        if(pantryProduct.productName == ""){
-            _littleInput.value = true
-            return
-        }else if (pantryProduct.expirationDate == defaultExpirationDate){
-            _littleInput.value = true
-            return
-        }else if (pantryProduct.quantity == 0){
-            _littleInput.value = true
-            return
-        }else if (pantryProduct.quantityUnit == ""){
-            _littleInput.value = true
-            return
-        }
         _pantryProduct.value = pantryProduct.copy(appendDate = appendDate)
         viewModelScope.launch {
             service.postPantryEntry(pantryProductDTO = pantryProduct)
         }
         _pantryProduct.value = PantryProductDTO()
+        _product.value = ProductDTO()
+        _loaded.value = false
     }
 }
