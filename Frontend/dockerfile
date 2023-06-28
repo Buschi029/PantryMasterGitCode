@@ -15,9 +15,9 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools &&\
 
 RUN sdkmanager "build-tools;30.0.2" "platforms;android-29"
 
-WORKDIR /app
+WORKDIR /app/Frontend  # Modify this line to change to the Frontend directory
 COPY . /app
 
-RUN chmod +x ./gradlew  # Add this line to modify permissions
+RUN chmod +x ./gradlew  # Modify permissions for gradlew in the Frontend directory
 
 CMD ["./gradlew", "test"]
