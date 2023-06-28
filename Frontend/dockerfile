@@ -1,6 +1,7 @@
 
 FROM openjdk:17-jdk
 
+RUN apt-get update && apt-get install -y wget unzip
 
 ENV ANDROID_SDK_ROOT /opt/android-sdk
 ENV ANDROID_HOME /opt/android-sdk
