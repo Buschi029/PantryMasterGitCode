@@ -33,10 +33,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -53,12 +53,12 @@ import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) {
@@ -109,15 +109,17 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         )
                     }
                     if (loading) {
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .background(color = MaterialTheme.colors.background)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = MaterialTheme.colors.background)
                         )
                         CircularProgressIndicator()
                     } else if (loaded) {
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .background(color = MaterialTheme.colors.background)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = MaterialTheme.colors.background)
                         )
                         Column(
                             modifier = Modifier
@@ -125,17 +127,19 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.End
                         ) {
-                            Box(modifier = Modifier
+                            Box(
+                                modifier = Modifier
                                     .clickable {
                                         scannerViewModel.setPantryProduct(PantryProductDTO())
                                         scannerViewModel.setProduct(detailProduct.copy(pictureLink = ""))
                                         scannerViewModel.setLoaded(false)
-                            }){
+                                    }
+                            ) {
                                 Icon(
                                     Icons.Default.Delete,
-                                    contentDescription = "Delete")
+                                    contentDescription = "Delete"
+                                )
                             }
-
                         }
                         AsyncImage(
                             model = detailProduct.pictureLink,
@@ -174,7 +178,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         imeAction = ImeAction.Done
                     )
                 )
-                Row{
+                Row {
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
@@ -227,10 +231,11 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         dateDialogState.show()
-                    }) {
+                    }
+                ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             Icons.Default.CalendarToday,
@@ -243,18 +248,12 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(verticalArrangement = Arrangement.Center) {
                             Text(text = "Mindesthaltbarkeitsdatum")
-                            Text(
-                                "${
-                                    pantryProduct.expirationDate.toJavaLocalDate()
-                                        .format(dayFormatter)
-                                }"
-                            )
+                            Text(pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter))
                         }
                     }
                 }
             }
         }
-
         Row(
             modifier = Modifier
                 .weight(2f)
@@ -274,13 +273,16 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                                         barcode.rawValue.toString().toLong()
                                     )
                                 }
-                                    if (failed.await()){
-                                        Log.e("ScannerViewModel", failed.await().toString())
-                                        Toast.makeText(context, "Could not load Product Info", Toast.LENGTH_LONG).show()
-                                    }
+                                if (failed.await()) {
+                                    Log.e("ScannerViewModel", failed.await().toString())
+                                    Toast.makeText(
+                                        context,
+                                        "Could not load Product Info",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
 
                             }
-
 
 
                         }
@@ -302,7 +304,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 Button(
                     modifier = Modifier
                         .weight(3f),
-                    onClick = { scannerViewModel.postProductToPantry(pantryProduct) }) {
+                    onClick = { scannerViewModel.postProductToPantry(pantryProduct) }
+                ) {
                     Text(text = "Add Product")
                 }
             }
@@ -325,10 +328,9 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             allowedDateValidator = {
                 it.isAfter(LocalDate.now().minusDays(1))
             }
-        ){
+        ) {
             scannerViewModel.setPantryProduct(pantryProduct.copy(expirationDate = it.toKotlinLocalDate()))
         }
     }
-
 }
 

@@ -1,21 +1,16 @@
 package com.prime.pantrymastergitcode.view.scanner
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.common.internal.FallbackServiceBroker
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
 
 class ScannerViewModel(private val service: OFFAPIService) : ViewModel() {
     private val _product = MutableStateFlow(ProductDTO())
@@ -27,7 +22,6 @@ class ScannerViewModel(private val service: OFFAPIService) : ViewModel() {
     val loading = _loading.asStateFlow()
     val _loaded = MutableStateFlow(false)
     val loaded = _loaded.asStateFlow()
-
 
     fun setProduct(product: ProductDTO) {
         _product.value = product
