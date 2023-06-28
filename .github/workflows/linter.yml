@@ -49,7 +49,9 @@ jobs:
       run: |
         cd Backend
         docker-compose up -d
-        cd ..
+      
+    - name: Run tests in Docker
+      run: |
         cd Frontend
         docker run --name androidtestcontainer androidtest
       
