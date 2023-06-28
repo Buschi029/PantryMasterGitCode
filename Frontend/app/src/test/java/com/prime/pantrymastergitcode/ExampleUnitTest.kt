@@ -17,12 +17,14 @@ class ExampleUnitTest {
     private val service = OFFAPIService.create()
 
     @Test
-    fun getProductDetails() = runBlocking {
+    fun getProductDetails() = runTest {
         val product = service.postProductDetails(4000140703881)
         assertNotNull("Product should not be null", product)
         if (product != null) {
-            assertEquals("Produkt wurde aus Backend geladen", product.name, "Orangina original")
+            assertEquals("Produkt wurde aus Backend geladen", "Orangina original", product.name)
         }
     }
+}
+
 
 }
