@@ -1,22 +1,21 @@
-version: '3'
 services:
   inventory:
     build: /inventoryBackend/
     ports:
       - "8080:5000"
-
+    network_mode: host
   shopping:
     build: /shoppingBackend/
     ports:
       - "8081:5001"
-
-  androidtest:
-    build:
-      context: ./Frontend/
-      dockerfile: ./Frontend/dockerfile
-    depends_on:
-      - inventory
-      - shopping
-    environment:
-      - INVENTORY_URL=http://inventory:5000
-      - SHOPPING_URL=http://shopping:5001
+    network_mode: host
+  backend:
+    image: mybackend
+    ports:
+      - "8080:8080"
+    network_mode: host
+  frontend:
+    image: androidtest
+    ports:
+      - "3000:3000"
+    network_mode: host
