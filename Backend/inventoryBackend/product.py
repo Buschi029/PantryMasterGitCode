@@ -32,20 +32,21 @@ def get_produktinfo(barcode):
     if "product" in abfrage:
         global a
         a[0] = barcode
-        a[1] = abfrage["product"]["nutriments"]["carbohydrates"]
-        a[2] = abfrage["product"]["nutriments"]["energy-kcal"]
-        a[3] = abfrage["product"]["nutriments"]["fat"]
+        a[1] = abfrage["product"]["nutriments"].get("carbohydrates", "Keine Angaben")
+        a[2] = abfrage["product"]["nutriments"].get("energy-kcal", "Keine Angaben")
+        a[3] = abfrage["product"]["nutriments"].get("fat", "Keine Angaben")
         if abfrage["product"]["misc_tags"][0] == "en:nutriscore-not-computed":
             a[4] = "z"
         else:
-            a[4] = abfrage["product"]["nutriscore_grade"]
-        a[5] = abfrage["product"]["nutriments"]["proteins"]
-        a[6] = abfrage["product"]["nutriments"]["sugars"]
-        a[7] = abfrage["product"]["image_front_url"]
-        a[8] = abfrage["product"]["product_name_de"]
+            a[4] = abfrage["product"].get("nutriscore_grade", "Keine Angaben")
+        a[5] = abfrage["product"]["nutriments"].get("proteins", "Keine Angaben")
+        a[6] = abfrage["product"]["nutriments"].get("sugars", "Keine Angaben")
+        a[7] = abfrage["product"].get("image_front_url", "Keine Angaben")
+        a[8] = abfrage["product"].get("product_name_de", "Keine Angaben")
         return a
     else:
         return None
+
 
 
 @app.route("/product", methods=["POST"])
