@@ -46,4 +46,5 @@ jobs:
         docker build -t androidtest ./Frontend -f ./Frontend/dockerfile
     - name: Run tests in Docker
       run: |
+        cd Frontend
         docker run --name androidtestcontainer androidtest
