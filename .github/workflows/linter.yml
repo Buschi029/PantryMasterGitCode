@@ -44,8 +44,12 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t androidtest ./Frontend -f ./Frontend/dockerfile
-    - name: Run tests in Docker
+
+    - name: Run Docker Compose
       run: |
+        cd Backend
+        docker-compose up -d
+        cd ..
         cd Frontend
         docker run --name androidtestcontainer androidtest
       
