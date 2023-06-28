@@ -1,6 +1,5 @@
 package com.prime.pantrymastergitcode.api
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.prime.pantrymastergitcode.api.dto.ProductBarcodeDTO

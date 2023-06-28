@@ -281,13 +281,9 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
-
                             }
-
-
                         }
                         .addOnCanceledListener {
-                            // Task canceled
                             Log.i(tag, "Scanning has been cancelled")
                         }
                         .addOnFailureListener { e ->
@@ -296,7 +292,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             Toast.makeText(context, "An Error occurred", Toast.LENGTH_SHORT)
                                 .show()
                         }
-                }) {
+                }
+            ) {
                 Text(text = "Scan Barcode")
             }
             if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
@@ -333,4 +330,3 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
         }
     }
 }
-
