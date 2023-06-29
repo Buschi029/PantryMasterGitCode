@@ -2,6 +2,7 @@ package com.prime.pantrymastergitcode.api.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class ShoppingItemDTO (
@@ -18,10 +19,10 @@ data class ShoppingItemDTO (
     val userID: String,
 
     @Transient
-    val isChecked: Boolean
+    val isChecked: Boolean = false
     )
     {
-        constructor() : this("",0, "", "",false )
+        constructor() : this("",0, "", "")
     }
 
 
