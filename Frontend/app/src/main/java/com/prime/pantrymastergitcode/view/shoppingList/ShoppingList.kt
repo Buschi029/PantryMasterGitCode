@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.*
@@ -35,18 +34,28 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.client.statement.HttpResponse
-
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
+
     LaunchedEffect(Unit) {
         shoppingListViewModel.getItemsFromDatabase()
     }
+
     ShoppingList(shoppingListViewModel)
 }
 
 data class ShoppingItem(val name: String, var quantity: String,
                         var quantityType: String, var isChecked: Boolean = false)
+
+
 
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
@@ -69,7 +78,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
-
 
 
     /*
@@ -105,6 +113,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     .size(40.dp)
                     .padding(bottom = 10.dp)
             )
+
         }
 
         Divider(color = Color.LightGray, thickness = 1.dp)
@@ -239,6 +248,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
          */
     }
+
 }
 
 // Daten speichern

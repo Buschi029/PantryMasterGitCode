@@ -23,19 +23,19 @@ fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, sca
 
     NavHost(
         navController = navController,
-        startDestination = BottomBarScreen.Home.route
+        startDestination = BottomBarScreen.Pantry.route
     ) {
-        composable(route = BottomBarScreen.Home.route) {
-            HomeScreen()
-        }
+
+        // Reihenfolge der Views wird festgelegt
         composable(route = BottomBarScreen.Scanner.route) {
             ScannerView(scannerViewModel, scanner)
-        }
-        composable(route = BottomBarScreen.ShoppingList.route) {
-            ShoppingListScreen(shoppingListViewModel)
         }
         composable(route = BottomBarScreen.Pantry.route) {
             PantryView(pantryViewModel)
         }
+        composable(route = BottomBarScreen.ShoppingList.route) {
+            ShoppingListScreen(shoppingListViewModel)
+        }
+
     }
 }

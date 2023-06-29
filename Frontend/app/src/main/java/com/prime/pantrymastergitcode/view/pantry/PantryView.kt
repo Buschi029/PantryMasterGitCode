@@ -39,7 +39,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
 
@@ -103,7 +105,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             TextField(
                 value = if (newQuantity != 0) newQuantity.toString() else "",
                 onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity") },
+                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp))},
                 modifier = Modifier
                     .width(100.dp)
                     .height(50.dp)
@@ -114,7 +116,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             TextField(
                 value = newItem,
                 onValueChange = { newItem = it },
-                placeholder = { Text("Element") },
+                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .width(120.dp)
@@ -126,7 +128,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             TextField(
                 value = newDate,
                 onValueChange = { newDate = it },
-                placeholder = { Text("Date") },
+                placeholder = { Text("Date", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .width(80.dp)
@@ -146,7 +148,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     .width(60.dp)
                     .height(50.dp)
             ) {
-                Text("Add", color = Color.Black)
+                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
