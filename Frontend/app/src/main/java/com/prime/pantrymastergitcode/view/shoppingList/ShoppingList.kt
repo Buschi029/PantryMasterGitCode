@@ -118,7 +118,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             TextField(
                 value = if (newQuantity != 0) newQuantity.toString() else "",
                 onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity", style = TextStyle(fontSize = 14.sp)) },
+                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
@@ -129,7 +129,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             TextField(
                 value = newQuantityType,
                 onValueChange = { newQuantityType = it },
-                placeholder = { Text("Type", style = TextStyle(fontSize = 14.sp)) },
+                placeholder = { Text("Type", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
@@ -140,7 +140,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             TextField(
                 value = newItem,
                 onValueChange = { newItem = it },
-                placeholder = { Text("Element", style = TextStyle(fontSize = 14.sp)) },
+                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
@@ -157,7 +157,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     .width(60.dp)
                     .height(50.dp)
             ) {
-                Text("Add", color = Color.Black)
+                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -217,6 +217,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+        /*
         Button(
             onClick = { shoppingListViewModel.getItemsFromDatabase() },
             modifier = Modifier
@@ -235,6 +236,8 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         ) {
             Text("Post", color = Color.Black)
         }
+
+         */
     }
 }
 
