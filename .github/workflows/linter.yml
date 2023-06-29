@@ -49,14 +49,15 @@ jobs:
       run: |
         cd Backend
         docker-compose up -d
+        
+    - name: Set up Emulator
+      uses: ReactiveCircus/android-emulator-runner@v2
+      with:
+          api-level: 29
+          script: ./gradlew 
       
     - name: Run tests in Docker
       run: |
         cd Frontend
         docker run --name androidtestcontainer androidtest
       
-    - name: Set up Emulator
-      uses: ReactiveCircus/android-emulator-runner@v2
-      with:
-          api-level: 29
-          script: ./gradlew 
