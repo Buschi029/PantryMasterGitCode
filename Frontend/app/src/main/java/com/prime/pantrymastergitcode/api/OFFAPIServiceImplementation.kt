@@ -4,8 +4,8 @@ import android.util.Log
 import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.prime.pantrymastergitcode.api.dto.ProductBarcodeDTO
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
-import io.ktor.client.call.body
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -36,14 +36,13 @@ class OFFAPIServiceImplementation(
 
     override suspend fun postPantryEntry(pantryProductDTO: PantryProductDTO) {
         val response: HttpResponse
-        try{
-            response = client.post(HttpRoutes.inventory){
+        try {
+            response = client.post(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
                 setBody(pantryProductDTO)
             }
             Log.i(tag, response.status.toString())
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e(tag, e.toString())
         }
     }

@@ -248,7 +248,9 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(verticalArrangement = Arrangement.Center) {
                             Text(text = "Mindesthaltbarkeitsdatum")
-                            Text(pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter))
+                            Text(
+                                pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter)
+                            )
                         }
                     }
                 }
