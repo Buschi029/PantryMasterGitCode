@@ -55,14 +55,14 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         var newQuantityType: String by remember { mutableStateOf("") }
 
      */
-/*
-    val items = shoppingListViewModel.items
-    var newItem = shoppingListViewModel.newItem
-    var newQuantity = shoppingListViewModel.newQuantity
-    var newQuantityType = shoppingListViewModel.newQuantityType
-    */
+    /*
+        val items = shoppingListViewModel.items
+        var newItem = shoppingListViewModel.newItem
+        var newQuantity = shoppingListViewModel.newQuantity
+        var newQuantityType = shoppingListViewModel.newQuantityType
+        */
 
-
+    var response: String by remember{ mutableStateOf("") }
     val items = remember { mutableStateListOf<ShoppingItem>()}
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
@@ -105,7 +105,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
-        Text(text = response)
+        Text(text = "TEST")
 
 
 
@@ -146,7 +146,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { shoppingListViewModel.addItem() },
+                onClick = { response = shoppingListViewModel.addItemToDatabase(productName = newItem, quantity = newQuantity, quantityUnit = newQuantityType) },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
@@ -195,7 +195,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            shoppingListViewModel.removeItem(item)
+                            // shoppingListViewModel.removeItem(item)
                         }
                     ) {
                         Icon(
@@ -212,7 +212,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { saveShoppingList(items) },
+            onClick = { response = shoppingListViewModel.addItemToDatabase(productName = newItem, quantity = newQuantity, quantityUnit = newQuantityType) },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)
