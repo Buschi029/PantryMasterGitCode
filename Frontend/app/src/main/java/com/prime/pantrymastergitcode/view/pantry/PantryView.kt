@@ -70,9 +70,6 @@ fun PantryList(pantryViewModel: PantryViewModel) {
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newDate: String by remember { mutableStateOf("") }
 
-
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()

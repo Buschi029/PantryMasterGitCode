@@ -18,13 +18,14 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
 import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 
 @Composable
-fun MainScreen(service: OFFAPIService) {
+fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
     val navController = rememberNavController()
     Scaffold(
         topBar = {

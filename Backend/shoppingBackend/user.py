@@ -7,9 +7,10 @@ from app import app
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
-database = "userDB"
+database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
+sslmode="require"
 
 
 def tryConnect():
