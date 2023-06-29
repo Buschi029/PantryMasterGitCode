@@ -201,7 +201,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            // shoppingListViewModel.removeItem(item)
+                            shoppingListViewModel.removeItemFromDatabase(item.productName, item.quantity, item.quantityUnit)
                         }
                     ) {
                         Icon(

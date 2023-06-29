@@ -113,6 +113,16 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         }
     }
 
+    fun removeItemFromDatabase(productName: String, quantity: Int, quantityUnit: String) {
+        viewModelScope.launch {
+            try {
+                items = service.removeFromShoppingList(productName, "")!!
+            } catch(e: Exception) {
+                Log.e("ShoppingListViewModel", e.toString())
+            }
+        }
+    }
+
     fun addItem() {
         val newItem = newItem
         val newQuantity = newQuantity

@@ -9,6 +9,7 @@ import com.prime.pantrymastergitcode.api.dto.ShoppingListDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.call.receive
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -75,6 +76,36 @@ class OFFAPIServiceImplementation(
             null
         }
     }
+
+    override suspend fun removeFromShoppingList(productName: String, userID: String): List<ShoppingItemDTO>? {
+        val response: HttpResponse
+
+        return try {
+            val item = mapOf("userID" to userID, "productName" to productName)
+            response = client.delete("http://192.168.0.234:8081/shoppingList") {
+                contentType(ContentType.Application.Json)
+                setBody(item)
+            }
+
+            Log.i(tag, response.status.toString())
+
+            if (response.status.isSuccess()) {
+                val updatedListResponse: HttpResponse = client.get("http://192.168.0.234:8081/shoppingList") {
+                    contentType(ContentType.Application.Json)
+                }
+                val updatedList: List<ShoppingItemDTO> = updatedListResponse.body()
+                updatedList
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(tag, e.toString())
+            null
+        }
+    }
+
+
+
 
     override suspend fun addToShoppingList(productName: String, quantity: Int, quantityUnit: String, userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
