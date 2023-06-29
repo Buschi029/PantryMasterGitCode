@@ -9,13 +9,3 @@ services:
     ports:
       - "8081:5001"
     network_mode: host
-  backend:
-    image: mybackend
-    ports:
-      - "8080:8080"
-    network_mode: host
-  frontend:
-    image: androidtest
-    ports:
-      - "3000:3000"
-    network_mode: host
