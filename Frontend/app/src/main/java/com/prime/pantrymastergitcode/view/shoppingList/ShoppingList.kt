@@ -39,7 +39,9 @@ import io.ktor.client.statement.HttpResponse
 
 @Composable
 fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
-
+    LaunchedEffect(Unit) {
+        shoppingListViewModel.getItemsFromDatabase()
+    }
     ShoppingList(shoppingListViewModel)
 }
 
@@ -108,9 +110,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
 
-        // TEXT
-        Text(text = response)
-
 
 
         Row(
@@ -150,7 +149,10 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { },
+                onClick = { shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
+                    newItem = ""
+                    newQuantity = 0
+                    newQuantityType = ""},
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
@@ -223,6 +225,15 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         ) {
             Text("Get", color = Color.Black)
+        }
+        Button(
+            onClick = { shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType) },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .width(120.dp)
+
+        ) {
+            Text("Post", color = Color.Black)
         }
     }
 }

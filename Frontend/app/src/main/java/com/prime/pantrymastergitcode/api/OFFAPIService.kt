@@ -20,6 +20,8 @@ interface OFFAPIService {
 
     suspend fun getShoppingList(userID: String): List<ShoppingItemDTO>?
 
+    suspend fun addToShoppingList(productName: String, quantity: Int, quantityUnit: String, userID: String): List<ShoppingItemDTO>?
+
     companion object {
         fun create(): OFFAPIService {
             return OFFAPIServiceImplementation(

@@ -73,8 +73,6 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-
-
     // NEU
 
     val url = "localhost:8081/shoppingList"
@@ -83,25 +81,13 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     fun addItemToDatabase(
         productName: String, quantity: Int,
         quantityUnit: String): String {
-
-
-
         viewModelScope.launch {
-/*
-            val a = ShoppingItemDTO(productName, quantity, quantityUnit, "ABC")
 
-            val json = Json.encodeToString(a)
-*/
             val client = HttpClient(CIO)
             val text: HttpResponse = client.request(url) {
                 method = HttpMethod.Get
             }
             response = text.bodyAsText()
-            //val response: HttpResponse = client.put(url) {
-            //   body = json
-            //}
-
-
 
         }
         return response
@@ -111,6 +97,16 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.getShoppingList("")!!
+            } catch(e: Exception) {
+                Log.e("ShoppingListViewModel", e.toString())
+            }
+        }
+    }
+
+    fun addItemsToDatabase(productName: String, quantity: Int, quantityUnit: String) {
+        viewModelScope.launch {
+            try {
+                items = service.addToShoppingList(productName,quantity, quantityUnit, "")!!
             } catch(e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
