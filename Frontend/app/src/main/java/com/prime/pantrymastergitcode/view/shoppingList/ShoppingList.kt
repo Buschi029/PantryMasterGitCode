@@ -21,6 +21,7 @@ import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.ui.theme.Ebony
 import com.prime.pantrymastergitcode.ui.theme.Olivine
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
+import com.prime.pantrymastergitcode.view.pantry.PantryItem
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.ContentType.Application.Json
@@ -32,6 +33,9 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 
 
 
@@ -46,18 +50,25 @@ data class ShoppingItem(val name: String, var quantity: String,
 
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
+    /*
+        val items = remember { mutableStateListOf<ShoppingItem>() }
+        var newItem: String by remember { mutableStateOf("") }
+        var newQuantity: String by remember { mutableStateOf("") }
+        var newQuantityType: String by remember { mutableStateOf("") }
+
+     */
 /*
-    val items = remember { mutableStateListOf<ShoppingItem>() }
-    var newItem: String by remember { mutableStateOf("") }
-    var newQuantity: String by remember { mutableStateOf("") }
-    var newQuantityType: String by remember { mutableStateOf("") }
-
- */
-
     val items = shoppingListViewModel.items
     var newItem = shoppingListViewModel.newItem
     var newQuantity = shoppingListViewModel.newQuantity
     var newQuantityType = shoppingListViewModel.newQuantityType
+    */
+
+
+    val items = remember { mutableStateListOf<ShoppingItem>()}
+    var newItem: String by remember { mutableStateOf("") }
+    var newQuantity: Int by remember { mutableStateOf(0) }
+    var newQuantityType: String by remember { mutableStateOf("") }
 
     /*
     var items by shoppingListViewModel.items.collectAsState()
@@ -99,15 +110,17 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Row(
             modifier = Modifier.fillMaxWidth()
-        ) { TextField(
-            value = newQuantity,
-            onValueChange = { newQuantity = it },
-            placeholder = { Text("Quantity", style = TextStyle(fontSize = 14.sp)) },
-            modifier = Modifier
-                .weight(1f)
-                .height(50.dp)
-                .background(Timberwolf)
-        )
+        ) {
+            TextField(
+                value = if (newQuantity != 0) newQuantity.toString() else "",
+                onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
+                placeholder = { Text("Quantity", style = TextStyle(fontSize = 14.sp)) },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Timberwolf)
+            )
             Spacer(modifier = Modifier.width(8.dp))
             TextField(
                 value = newQuantityType,
@@ -206,17 +219,14 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         ) {
             Text("Save", color = Color.Black)
         }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-        )
     }
 }
 
 // Daten speichern
 
 fun saveShoppingList(items: List<ShoppingItem>) {
+
+
     /*
     val json = Json.encodeToString(items)
 
@@ -241,5 +251,3 @@ fun saveShoppingList(items: List<ShoppingItem>) {
     */
 
 }
-
-

@@ -3,8 +3,14 @@ package com.prime.pantrymastergitcode.view.shoppingList
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
 
 class ShoppingListViewModel: ViewModel() {
 
@@ -53,3 +59,22 @@ class ShoppingListViewModel: ViewModel() {
         _items.remove(item)
     }
 }
+
+    /*
+    fun fetchShoppingList() {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val response = httpClient.get<List<ShoppingItem>>("http://localhost:8081/shoppingList")
+                withContext(Dispatchers.Main) {
+                    _items.clear()
+                    _items.addAll(response)
+                }
+            } catch (e: Exception) {
+                // Handle error
+                e.printStackTrace()
+            }
+        }
+    }
+}
+
+     */
