@@ -1,13 +1,11 @@
 package com.prime.pantrymastergitcode.view.shoppingList
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -36,7 +34,7 @@ import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-
+import io.ktor.client.statement.HttpResponse
 
 
 @Composable
@@ -107,6 +105,9 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
+        Text(text = response)
+
+
 
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -172,7 +173,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                             .padding(end = 8.dp)
 
                     )
-                    //Spacer(modifier = Modifier.width(8.dp))
+
                     Text(
                         item.name,
                         modifier = Modifier.weight(1f)
@@ -219,6 +220,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         ) {
             Text("Save", color = Color.Black)
         }
+
     }
 }
 
