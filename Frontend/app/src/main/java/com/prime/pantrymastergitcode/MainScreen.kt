@@ -1,12 +1,17 @@
 package com.prime.pantrymastergitcode
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -22,21 +27,23 @@ import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 @Composable
 fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
     val navController = rememberNavController()
-    Scaffold (
+    Scaffold(
         topBar = {
 
-        //TopAppBar(title = {
-         //   Text("Pantry Master")
-        //})
-
         },
-
-
-        bottomBar = { BottomBar(navController = navController)}
-    ){
-    BottomNavGraph(navController = navController, service = service, scanner = scanner)
-    }
+        bottomBar = { BottomBar(navController = navController) },
+        content = { innerPadding ->
+            Box(
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ) {
+                BottomNavGraph(navController = navController, service = service)
+            }
+        }
+    )
 }
+
 
 @Composable
 fun BottomBar(navController: NavHostController) {
