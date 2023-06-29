@@ -44,11 +44,6 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t androidtest ./Frontend -f ./Frontend/dockerfile
-        cd Frontend
+    - name: Run tests in Docker
+      run: |
         docker run --name androidtestcontainer androidtest
-      
-    - name: Set up Emulator
-      uses: ReactiveCircus/android-emulator-runner@v2
-      with:
-          api-level: 29
-          script: ./gradlew 
