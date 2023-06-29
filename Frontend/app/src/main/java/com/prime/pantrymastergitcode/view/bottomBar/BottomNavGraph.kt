@@ -19,7 +19,7 @@ import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, scanner: GmsBarcodeScanner) {
     val pantryViewModel = PantryViewModel(service = service)
     val scannerViewModel = ScannerViewModel(service)
-    val shoppingListViewModel = ShoppingListViewModel()
+    val shoppingListViewModel = ShoppingListViewModel(service = service)
 
     NavHost(
         navController = navController,

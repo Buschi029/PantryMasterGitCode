@@ -16,7 +16,12 @@ data class ShoppingItemDTO (
 
     @SerialName("userID")
     val userID: String,
-    ) {
 
-}
+    @Transient
+    val isChecked: Boolean
+    )
+    {
+        constructor() : this("",0, "", "",false )
+    }
+
 

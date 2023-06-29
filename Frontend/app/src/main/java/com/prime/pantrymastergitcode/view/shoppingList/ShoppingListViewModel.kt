@@ -1,7 +1,10 @@
 package com.prime.pantrymastergitcode.view.shoppingList
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -11,11 +14,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import androidx.lifecycle.viewModelScope
+import com.prime.pantrymastergitcode.api.OFFAPIService
+import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import com.prime.pantrymastergitcode.api.dto.ShoppingItemDTO
+import com.prime.pantrymastergitcode.api.dto.ShoppingListDTO
+import com.prime.pantrymastergitcode.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -23,11 +31,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 
 
-class ShoppingListViewModel: ViewModel() {
+class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
 
-
+/*
     data class ShoppingItem(val name: String, var quantity: String,
                             var quantityType: String, var isChecked: Boolean = false)
+
+ */
     /*
         private val _items = MutableStateFlow(false)
         val items = _items.asStateFlow()
@@ -47,7 +57,7 @@ class ShoppingListViewModel: ViewModel() {
                             var isChecked: Boolean = false)
 */
     private val _items = mutableStateListOf<ShoppingItem>()
-    val items: List<ShoppingItem> get() = _items
+    //val items: List<ShoppingItem> get() = _items
 
     private val _newItem = mutableStateOf("")
     val newItem: String get() = _newItem.value
@@ -58,10 +68,16 @@ class ShoppingListViewModel: ViewModel() {
     private val _newQuantityType = mutableStateOf("")
     val newQuantityType: String get() = _newQuantityType.value
 
+    var items: List<ShoppingItemDTO> by mutableStateOf(mutableListOf())
+
+    val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+
+
 
     // NEU
 
-    val url = "http://127.0.0.1:8081/shoppingList"
+    val url = "localhost:8081/shoppingList"
     var response = ""
 
     fun addItemToDatabase(
@@ -71,16 +87,16 @@ class ShoppingListViewModel: ViewModel() {
 
 
         viewModelScope.launch {
-
+/*
             val a = ShoppingItemDTO(productName, quantity, quantityUnit, "ABC")
 
             val json = Json.encodeToString(a)
-
+*/
             val client = HttpClient(CIO)
             val text: HttpResponse = client.request(url) {
                 method = HttpMethod.Get
             }
-            response = text.toString()
+            response = text.bodyAsText()
             //val response: HttpResponse = client.put(url) {
             //   body = json
             //}
@@ -90,6 +106,17 @@ class ShoppingListViewModel: ViewModel() {
         }
         return response
     }
+
+    fun getItemsFromDatabase() {
+        viewModelScope.launch {
+            try {
+                items = service.getShoppingList("")!!
+            } catch(e: Exception) {
+                Log.e("ShoppingListViewModel", e.toString())
+            }
+        }
+    }
+
     fun addItem() {
         val newItem = newItem
         val newQuantity = newQuantity

@@ -63,10 +63,12 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         */
 
     var response: String by remember{ mutableStateOf("") }
-    val items = remember { mutableStateListOf<ShoppingItem>()}
+
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
+
+
 
     /*
     var items by shoppingListViewModel.items.collectAsState()
@@ -105,7 +107,9 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
-        Text(text = "TEST")
+
+        // TEXT
+        Text(text = response)
 
 
 
@@ -146,7 +150,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { response = shoppingListViewModel.addItemToDatabase(productName = newItem, quantity = newQuantity, quantityUnit = newQuantityType) },
+                onClick = { },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
@@ -157,7 +161,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
         Divider(color = Color.LightGray, thickness = 1.dp)
         Column(modifier = Modifier.fillMaxWidth()) {
-            items.forEachIndexed { index, item ->
+            shoppingListViewModel.items.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
 
@@ -166,7 +170,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         .padding(horizontal = 4.dp)
                 ) {
                     Text(
-                        "${item.quantity} ${item.quantityType}",
+                        "${item.quantity} ${item.quantityUnit}",
 
                         modifier = Modifier
                             .weight(1f)
@@ -175,7 +179,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     )
 
                     Text(
-                        item.name,
+                        item.productName,
                         modifier = Modifier.weight(1f)
                     )
 
@@ -212,15 +216,14 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { response = shoppingListViewModel.addItemToDatabase(productName = newItem, quantity = newQuantity, quantityUnit = newQuantityType) },
+            onClick = { shoppingListViewModel.getItemsFromDatabase() },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)
 
         ) {
-            Text("Save", color = Color.Black)
+            Text("Get", color = Color.Black)
         }
-
     }
 }
 

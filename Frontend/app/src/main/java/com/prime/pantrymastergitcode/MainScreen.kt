@@ -38,7 +38,7 @@ fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                BottomNavGraph(navController = navController, service = service)
+                BottomNavGraph(navController = navController, service = service, scanner = scanner)
             }
         }
     )
