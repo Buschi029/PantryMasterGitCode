@@ -48,6 +48,7 @@ class ShoppingListViewModel: ViewModel() {
         val newItem = newItem
         val newQuantity = newQuantity
         val newQuantityType = newQuantityType
+        //Test
 
         _items.add(ShoppingItem(newItem, newQuantity, newQuantityType))
         _newItem.value = ""
