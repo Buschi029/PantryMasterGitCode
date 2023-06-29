@@ -17,7 +17,7 @@ class ShoppingListViewModel : ViewModel() {
     data class ShoppingItem(val name: String, var quantity: String,
                             var isChecked: Boolean = false)
 
-    val url = "http://82.165.114.121/shoppingList"
+    val url = "http://127.0.0.1:8081/shoppingList"
     var response = ""
 
     fun addItemToDatabase(
