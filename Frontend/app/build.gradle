@@ -8,7 +8,6 @@ android {
     namespace 'com.prime.pantrymastergitcode'
     compileSdk 33
 
-
     defaultConfig {
         applicationId "com.prime.pantrymastergitcode"
         minSdk 21
@@ -29,6 +28,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -72,6 +72,7 @@ dependencies {
 
     //Scanner
     implementation 'com.google.android.gms:play-services-code-scanner:16.0.0'
+    implementation 'com.google.android.gms:play-services-base:18.2.0'
 
     //permissions only needed if we need additional permissions look at: https://google.github.io/accompanist/permissions/#usage
     implementation "com.google.accompanist:accompanist-permissions:0.31.3-beta"
@@ -112,6 +113,13 @@ dependencies {
     // Status Bar
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.3-beta"
 
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-datetime
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
+    //api represent
+    coreLibraryDesugaring'com.android.tools:desugar_jdk_libs:2.0.3'
+
+    //datePicker
+    implementation "io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc"
 
 }

@@ -1,8 +1,6 @@
 package com.prime.pantrymastergitcode.api.dto
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.util.Date
 
 @Serializable
 data class ProductDTO(
@@ -15,6 +13,6 @@ data class ProductDTO(
     val productcode: Long,
     val protein: Int,
     val sugar: Int
-){
-    constructor() : this(0,0,0,"", "", "",0,0,0)
+) {
+    constructor() : this(0, 0, 0, "", "", "", 0, 0, 0)
 }
