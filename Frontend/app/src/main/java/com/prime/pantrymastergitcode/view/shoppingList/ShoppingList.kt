@@ -55,23 +55,8 @@ fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
 data class ShoppingItem(val name: String, var quantity: String,
                         var quantityType: String, var isChecked: Boolean = false)
 
-
-
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
-    /*
-        val items = remember { mutableStateListOf<ShoppingItem>() }
-        var newItem: String by remember { mutableStateOf("") }
-        var newQuantity: String by remember { mutableStateOf("") }
-        var newQuantityType: String by remember { mutableStateOf("") }
-
-     */
-    /*
-        val items = shoppingListViewModel.items
-        var newItem = shoppingListViewModel.newItem
-        var newQuantity = shoppingListViewModel.newQuantity
-        var newQuantityType = shoppingListViewModel.newQuantityType
-        */
 
     var response: String by remember{ mutableStateOf("") }
 
@@ -158,10 +143,12 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
+                onClick = {
+                    shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
                     newItem = ""
                     newQuantity = 0
-                    newQuantityType = ""},
+                    newQuantityType = ""
+                },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
@@ -188,7 +175,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                             .padding(end = 8.dp)
 
                     )
-
                     Text(
                         item.productName,
                         modifier = Modifier.weight(1f)
@@ -198,7 +184,10 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
                     Checkbox(
                         checked = isCheckedState.value,
-                        onCheckedChange = { isChecked -> isCheckedState.value = isChecked},
+                        onCheckedChange = { isChecked ->
+                            shoppingListViewModel.updateItemCheckedState(item.productName, isChecked)
+                            shoppingListViewModel.getItemsFromDatabase()
+                        },
                         modifier = Modifier
                             .clickable { isCheckedState.value = !isCheckedState.value }
                             .clip(RoundedCornerShape(8.dp))
@@ -210,7 +199,11 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            shoppingListViewModel.removeItemFromDatabase(item.productName, item.quantity, item.quantityUnit)
+                            shoppingListViewModel.removeItemFromDatabase(
+                                item.productName,
+                                item.quantity,
+                                item.quantityUnit
+                            )
                         }
                     ) {
                         Icon(
@@ -219,64 +212,11 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                             tint = Color.Black
                         )
                     }
-
                 }
                 Divider(color = Color.LightGray, thickness = 1.dp)
             }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-        /*
-        Button(
-            onClick = { shoppingListViewModel.getItemsFromDatabase() },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(120.dp)
 
-        ) {
-            Text("Get", color = Color.Black)
-        }
-        Button(
-            onClick = { shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType) },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(120.dp)
-
-        ) {
-            Text("Post", color = Color.Black)
-        }
-
-         */
     }
-
-}
-
-// Daten speichern
-
-fun saveShoppingList(items: List<ShoppingItem>) {
-
-
-    /*
-    val json = Json.encodeToString(items)
-
-    // Send the JSON data to the backend endpoint
-    val url = "http:// 82.165.114.121"
-    val client = HttpClient()
-    val request = HttpRequest.newBuilder()
-        .uri(URI.create(url))
-        .header("Content-Type", "application/json")
-        .POST(HttpRequest.BodyPublishers.ofString(json))
-        .build()
-
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
-    if (response.statusCode() == 200) {
-        // Successfully saved the shopping list
-        println("Shopping list saved!")
-    } else {
-        // Error occurred while saving the shopping list
-        println("Failed to save the shopping list. Status code: ${response.statusCode()}")
-    }
-    */
-
 }

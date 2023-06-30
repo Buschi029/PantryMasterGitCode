@@ -70,6 +70,11 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
 
     var items: List<ShoppingItemDTO> by mutableStateOf(mutableListOf())
 
+    fun updateItemCheckedState(productName: String, isChecked: Boolean) {
+        val itemToUpdate = items.find { it.productName == productName }
+        itemToUpdate?.isChecked = isChecked
+    }
+
     val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 

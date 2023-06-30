@@ -19,7 +19,7 @@ data class ShoppingItemDTO (
     val userID: String,
 
     @Transient
-    val isChecked: Boolean = false
+    var isChecked: Boolean = false
     )
     {
         constructor() : this("",0, "", "")
