@@ -53,6 +53,15 @@ jobs:
       
           - name: Set up Android SDK
             uses: android-actions/setup-android@v2
+
+          - name: Set up Emulator
+            uses: ReactiveCircus/android-emulator-runner@v2
+            with:
+                api-level: 29
+                script: |
+                  echo "y" | avdmanager create avd -n test -k "system-images;android-29;default;x86"
+                  ./gradlew connectedCheck
+            
       
           - name: Grant execute permissions for gradlew and run tests
             run: |
