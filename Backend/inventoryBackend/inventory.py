@@ -31,7 +31,7 @@ def get_allInvItem():
 
     results = []
     for row in data:
-        result = {"id": row[0], "name": row[1], "productName": row[2], "expirationDate": row[3], "quantity": row[4], "quantityUnit": row[5]}
+        result = {"id": row[0], "name": row[1], "productName": row[2], "expirationDate": row[3], "quantity": row[4], "quantityUnit": row[5], "appendDate": row[6]}
         results.append(result)
     return jsonify(results)
 
