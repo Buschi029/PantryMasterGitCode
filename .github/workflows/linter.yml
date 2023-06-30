@@ -54,22 +54,14 @@ jobs:
           - name: Set up Android SDK
             uses: android-actions/setup-android@v2
 
-          - name: Start Emulator, Wait for it to boot and Run Tests
-            run: |
-                echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n test -k "system-images;android-29;default;x86"
-                $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-boot-anim -no-window -accel auto &
-                
-                boot_completed=false
-                while [ "$boot_completed" = false ]; do
-                  status=$(adb -e shell getprop sys.boot_completed | tr -d '\r')
-                  if [ "$status" = "1" ]; then
-                    boot_completed=true
-                  else
-                    sleep 1
-                  fi
-                done
-            
-                ./gradlew connectedCheck
+          - name: Run Emulator Tests
+            uses: ReactiveCircus/android-emulator-runner@v2
+            with:
+                api-level: 29
+                target: default
+                arch: x86
+                script: ./gradlew connectedCheck
+          
 
             
             
