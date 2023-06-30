@@ -54,19 +54,6 @@ jobs:
           - name: Set up Android SDK
             uses: android-actions/setup-android@v2
 
-          - name: Set up Emulator
-            uses: ReactiveCircus/android-emulator-runner@v2
-            with:
-                api-level: 29
-                script: |
-                  echo "y" | avdmanager create avd -n test -k "system-images;android-29;default;x86"
-                  ./gradlew connectedCheck
-            
-      
-          - name: Grant execute permissions for gradlew and run tests
-            run: |
-              cd Frontend && chmod +x ./gradlew && ./gradlew clean && ./gradlew test
-      
           - name: Start Emulator, Wait for it to boot and Run Tests
             run: |
                 echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n test -k "system-images;android-29;default;x86"
@@ -84,5 +71,19 @@ jobs:
             
                 ./gradlew connectedCheck
 
+            
+            
+      
+          - name: Grant execute permissions for gradlew and run tests
+            run: |
+              cd Frontend && chmod +x ./gradlew && ./gradlew clean && ./gradlew test
+      
+          - name: Set up Emulator
+            uses: ReactiveCircus/android-emulator-runner@v2
+            with:
+                api-level: 29
+                script: |
+                  echo "y" | avdmanager create avd -n test -k "system-images;android-29;default;x86"
+                  ./gradlew connectedCheck
             
       
