@@ -139,9 +139,32 @@ class OFFAPIServiceImplementation(
 
 
     // Pantry List
-    //override suspend fun addToPantry(productCode: Long, productName: String, userID: String, expirationDate: LocalDate, appendDate: LocalDate, quantity: Int, quantityUnit: String): List<PantryItemDTO>? {
+    override suspend fun addToPantryList(productCode: Long, productName: String, userID: String, expirationDate: LocalDate, quantity: Int, quantityUnit: String): List<PantryItemDTO>? {
+        val response: HttpResponse
 
-    //}
+        return try {
+            val item = PantryItemDTO(productCode,productName,userID,expirationDate.toString(),quantity,quantityUnit)
+            response = client.post(HttpRoutes.inventory) {
+                contentType(ContentType.Application.Json)
+                setBody(item)
+            }
+
+            Log.i(tag, response.status.toString())
+
+            if (response.status.isSuccess()) {
+                val updatedListResponse: HttpResponse = client.get(HttpRoutes.inventory) {
+                    contentType(ContentType.Application.Json)
+                }
+                val updatedList: List<PantryItemDTO> = updatedListResponse.body()
+                updatedList
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(tag, e.toString())
+            null
+        }
+    }
 
     override suspend fun getPantryList(name: String): List<PantryItemDTO>? {
         val response: HttpResponse
@@ -160,8 +183,31 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    //override suspend fun removeFromPantryList(productCode: Long, userID: String): List<PantryItemDTO>? {
+    override suspend fun removeFromPantryList(barcode: Long, userID: String): List<PantryItemDTO>? {
+        val response: HttpResponse
 
-    //}
+        return try {
+            val item = mapOf("barcode" to barcode, "userID" to userID)
+            response = client.delete(HttpRoutes.inventory) {
+                contentType(ContentType.Application.Json)
+                setBody(item)
+            }
+
+            Log.i(tag, response.status.toString())
+
+            if (response.status.isSuccess()) {
+                val updatedListResponse: HttpResponse = client.get(HttpRoutes.inventory) {
+                    contentType(ContentType.Application.Json)
+                }
+                val updatedList: List<PantryItemDTO> = updatedListResponse.body()
+                updatedList
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(tag, e.toString())
+            null
+        }
+    }
 
 }

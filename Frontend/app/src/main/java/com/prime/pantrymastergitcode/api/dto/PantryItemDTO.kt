@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class PantryItemDTO (
+data class PantryItemDTO (
 
 @SerialName("id")
 val id: Long,
@@ -19,6 +19,11 @@ val productName: String,
 
 @SerialName("expirationDate")
 val expirationDate: String,
+
+/*
+@SerialName("appendDate")
+val appendDate: String,
+*/
 
 @SerialName("quantity")
 val quantity: Int,

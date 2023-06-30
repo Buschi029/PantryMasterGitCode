@@ -144,7 +144,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
+                    //shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
                     newItem = ""
                     newQuantity = 0
                     newQuantityType = ""

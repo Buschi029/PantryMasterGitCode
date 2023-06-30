@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 
 
 @Composable
@@ -79,7 +80,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
     val items = remember { mutableStateListOf<PantryItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
-    var newDate: String by remember { mutableStateOf("") }
+    var newUnit: String by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -135,9 +136,9 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             TextField(
-                value = newDate,
-                onValueChange = { newDate = it },
-                placeholder = { Text("Date", style = TextStyle(fontSize = 12.sp)) },
+                value = newUnit,
+                onValueChange = { newUnit = it },
+                placeholder = { Text("Unit", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .width(80.dp)
@@ -148,13 +149,13 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    /*
-                    items.add(PantryItem(newItem, newQuantity, newDate))
+
+                    pantryViewModel.addItemsToDatabase(newItem, newQuantity, newUnit, java.time.LocalDate.now().toKotlinLocalDate())
                     newItem = ""
                     newQuantity = 0
-                    newDate = ""
+                    newUnit = ""
 
-                     */
+
                 },
                 modifier = Modifier
                     .width(60.dp)
@@ -228,7 +229,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            items.removeAt(index)
+                            pantryViewModel.removeItemFromDatabase(item.id, item.name)
                         }
                     ) {
                         Icon(

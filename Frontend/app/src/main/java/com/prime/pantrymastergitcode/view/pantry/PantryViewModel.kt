@@ -18,6 +18,8 @@ import com.prime.pantrymastergitcode.view.shoppingList.ShoppingItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 
 class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
@@ -54,6 +56,26 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.getPantryList("")!!
+            } catch(e: Exception) {
+                com.prime.pantrymastergitcode.util.Log.e("PantryViewModel", e.toString())
+            }
+        }
+    }
+
+    fun removeItemFromDatabase(id: Long, name: String) {
+        viewModelScope.launch {
+            try {
+                items = service.removeFromPantryList(id, "")!!
+            } catch(e: Exception) {
+                com.prime.pantrymastergitcode.util.Log.e("PantryViewModel", e.toString())
+            }
+        }
+    }
+
+    fun addItemsToDatabase(productName: String, quantity: Int, quantityUnit: String, expirationDate: LocalDate) {
+        viewModelScope.launch {
+            try {
+                items = service.addToPantryList(0, productName, "", expirationDate, quantity, quantityUnit)!!
             } catch(e: Exception) {
                 com.prime.pantrymastergitcode.util.Log.e("PantryViewModel", e.toString())
             }
