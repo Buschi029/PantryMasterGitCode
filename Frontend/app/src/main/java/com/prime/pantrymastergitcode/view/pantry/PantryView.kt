@@ -68,7 +68,7 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     }
 }
 
-data class PantryItem(val name: String, var quantity: Int, var date: String)
+data class PantryItem(val id: Long, var name: String, val productName: String,var expirationDate: String,  var quantity: Int, var quantityUnit: String)
 
 data class PantryProduct(val productCode: Long, var productName: String, var userID: String, var expirationDate: LocalDate, var appendDate: LocalDate, var quantity: Int, var quantityUnit: String)
 
@@ -148,10 +148,13 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
+                    /*
                     items.add(PantryItem(newItem, newQuantity, newDate))
                     newItem = ""
                     newQuantity = 0
                     newDate = ""
+
+                     */
                 },
                 modifier = Modifier
                     .width(60.dp)
@@ -180,7 +183,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     IconButton(
                         onClick = {
                             if (item.quantity > 0) {
-                                items[index] = item.copy(quantity = item.quantity - 1)
+                                //items[index] = item.copy(quantity = item.quantity - 1)
                             }
                         }
                     ) {
@@ -192,7 +195,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     }
 
                     Text(
-                        item.quantity.toString(),
+                        "${item.quantity} ${item.quantityUnit}",
                         modifier = Modifier
                         // .width(80.dp)
                         // .padding(end = 8.dp)
@@ -200,7 +203,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            items[index] = item.copy(quantity = item.quantity + 1)
+                            //items[index] = item.copy(quantity = item.quantity + 1)
                         },
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
@@ -243,7 +246,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { var saveButtonClicked = true },
+            onClick = { },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)

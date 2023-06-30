@@ -31,7 +31,7 @@ interface OFFAPIService {
     // Pantry List
     //suspend fun addToPantry(productCode: Long, productName: String, userID: String, expirationDate: LocalDate, appendDate: LocalDate, quantity: Int, quantityUnit: String): List<PantryItemDTO>?
 
-    suspend fun getPantryList(userID: String): List<PantryItemDTO>?
+    suspend fun getPantryList(name: String): List<PantryItemDTO>?
 
     //suspend fun removeFromPantryList(productCode: Long, userID: String): List<PantryItemDTO>?
 

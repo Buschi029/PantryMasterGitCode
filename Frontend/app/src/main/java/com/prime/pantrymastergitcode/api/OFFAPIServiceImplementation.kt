@@ -143,7 +143,7 @@ class OFFAPIServiceImplementation(
 
     //}
 
-    override suspend fun getPantryList(userID: String): List<PantryItemDTO>? {
+    override suspend fun getPantryList(name: String): List<PantryItemDTO>? {
         val response: HttpResponse
         val pantryListDTO: PantryListDTO
         val pantryList: List<PantryItemDTO>
