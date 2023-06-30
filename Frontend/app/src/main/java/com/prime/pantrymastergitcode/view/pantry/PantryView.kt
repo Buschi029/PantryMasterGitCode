@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -44,11 +45,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
+import kotlinx.datetime.LocalDate
 
 
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
     val showProductDetails = pantryViewModel.showProductDetails.collectAsState()
+    LaunchedEffect(Unit) {
+        pantryViewModel.getPantryItemsFromDatabase()
+    }
     Box {
         PantryList(pantryViewModel)
         if (showProductDetails.value) {
@@ -64,6 +69,10 @@ fun PantryView(pantryViewModel: PantryViewModel) {
 }
 
 data class PantryItem(val name: String, var quantity: Int, var date: String)
+
+data class PantryProduct(val productCode: Long, var productName: String, var userID: String, var expirationDate: LocalDate, var appendDate: LocalDate, var quantity: Int, var quantityUnit: String)
+
+
 
 @Composable
 fun PantryList(pantryViewModel: PantryViewModel) {
@@ -156,7 +165,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         // Tabelle
         Column(modifier = Modifier.fillMaxWidth()) {
-            items.forEachIndexed { index, item ->
+            pantryViewModel.items.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -203,13 +212,13 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     }
                     // Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        item.name,
+                        item.productName,
                         modifier = Modifier
                             .weight(1f)
                             .width(100.dp)
                     )
                     Text(
-                        item.date,
+                        item.expirationDate.toString(),
                         modifier = Modifier
                             .weight(1f)
                             .width(100.dp)

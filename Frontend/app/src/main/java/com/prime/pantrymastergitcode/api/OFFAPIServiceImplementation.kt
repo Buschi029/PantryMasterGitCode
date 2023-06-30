@@ -1,6 +1,8 @@
 package com.prime.pantrymastergitcode.api
 
 import android.util.Log
+import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
+import com.prime.pantrymastergitcode.api.dto.PantryListDTO
 import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.prime.pantrymastergitcode.api.dto.ProductBarcodeDTO
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
@@ -19,6 +21,7 @@ import io.ktor.client.utils.EmptyContent.contentType
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
+import kotlinx.datetime.LocalDate
 
 class OFFAPIServiceImplementation(
     private val client: HttpClient
@@ -65,7 +68,7 @@ class OFFAPIServiceImplementation(
         val shoppingListDTO: ShoppingListDTO
         val shoppingList: List<ShoppingItemDTO>
         return try {
-            response = client.get("http://192.168.0.234:8081/shoppingList") {
+            response = client.get(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
 
             }
@@ -82,7 +85,7 @@ class OFFAPIServiceImplementation(
 
         return try {
             val item = mapOf("userID" to userID, "productName" to productName)
-            response = client.delete("http://192.168.0.234:8081/shoppingList") {
+            response = client.delete(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
                 setBody(item)
             }
@@ -90,7 +93,7 @@ class OFFAPIServiceImplementation(
             Log.i(tag, response.status.toString())
 
             if (response.status.isSuccess()) {
-                val updatedListResponse: HttpResponse = client.get("http://192.168.0.234:8081/shoppingList") {
+                val updatedListResponse: HttpResponse = client.get(HttpRoutes.shoppingList) {
                     contentType(ContentType.Application.Json)
                 }
                 val updatedList: List<ShoppingItemDTO> = updatedListResponse.body()
@@ -112,7 +115,7 @@ class OFFAPIServiceImplementation(
 
         return try {
             val item = ShoppingItemDTO(productName, quantity, quantityUnit, userID)
-            response = client.put("http://192.168.0.234:8081/shoppingList") {
+            response = client.put(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
                 setBody(item)
             }
@@ -120,7 +123,7 @@ class OFFAPIServiceImplementation(
             Log.i(tag, response.status.toString())
 
             if (response.status.isSuccess()) {
-                val updatedListResponse: HttpResponse = client.get("http://192.168.0.234:8081/shoppingList") {
+                val updatedListResponse: HttpResponse = client.get(HttpRoutes.shoppingList) {
                     contentType(ContentType.Application.Json)
                 }
                 val updatedList: List<ShoppingItemDTO> = updatedListResponse.body()
@@ -134,5 +137,31 @@ class OFFAPIServiceImplementation(
         }
     }
 
+
+    // Pantry List
+    //override suspend fun addToPantry(productCode: Long, productName: String, userID: String, expirationDate: LocalDate, appendDate: LocalDate, quantity: Int, quantityUnit: String): List<PantryItemDTO>? {
+
+    //}
+
+    override suspend fun getPantryList(userID: String): List<PantryItemDTO>? {
+        val response: HttpResponse
+        val pantryListDTO: PantryListDTO
+        val pantryList: List<PantryItemDTO>
+        return try {
+            response = client.get(HttpRoutes.inventory) {
+                contentType(ContentType.Application.Json)
+
+            }
+            pantryList = response.body()
+            pantryList
+        } catch (e: Exception) {
+            Log.e(tag, e.toString())
+            null
+        }
+    }
+
+    //override suspend fun removeFromPantryList(productCode: Long, userID: String): List<PantryItemDTO>? {
+
+    //}
 
 }
