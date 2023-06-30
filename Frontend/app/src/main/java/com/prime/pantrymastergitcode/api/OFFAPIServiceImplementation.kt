@@ -65,7 +65,7 @@ class OFFAPIServiceImplementation(
         val shoppingListDTO: ShoppingListDTO
         val shoppingList: List<ShoppingItemDTO>
         return try {
-            response = client.get("http://192.168.0.234:8081/shoppingList") {
+            response = client.get(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
 
             }
@@ -82,7 +82,7 @@ class OFFAPIServiceImplementation(
 
         return try {
             val item = mapOf("userID" to userID, "productName" to productName)
-            response = client.delete("http://192.168.0.234:8081/shoppingList") {
+            response = client.delete(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
                 setBody(item)
             }
@@ -90,7 +90,7 @@ class OFFAPIServiceImplementation(
             Log.i(tag, response.status.toString())
 
             if (response.status.isSuccess()) {
-                val updatedListResponse: HttpResponse = client.get("http://192.168.0.234:8081/shoppingList") {
+                val updatedListResponse: HttpResponse = client.get(HttpRoutes.shoppingList) {
                     contentType(ContentType.Application.Json)
                 }
                 val updatedList: List<ShoppingItemDTO> = updatedListResponse.body()
@@ -112,7 +112,7 @@ class OFFAPIServiceImplementation(
 
         return try {
             val item = ShoppingItemDTO(productName, quantity, quantityUnit, userID)
-            response = client.put("http://192.168.0.234:8081/shoppingList") {
+            response = client.put(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
                 setBody(item)
             }
@@ -120,7 +120,7 @@ class OFFAPIServiceImplementation(
             Log.i(tag, response.status.toString())
 
             if (response.status.isSuccess()) {
-                val updatedListResponse: HttpResponse = client.get("http://192.168.0.234:8081/shoppingList") {
+                val updatedListResponse: HttpResponse = client.get(HttpRoutes.shoppingList) {
                     contentType(ContentType.Application.Json)
                 }
                 val updatedList: List<ShoppingItemDTO> = updatedListResponse.body()
