@@ -195,7 +195,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     }
 
                     Text(
-                        "${item.quantity} ${item.quantityUnit}",
+                        "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
                         modifier = Modifier
                         // .width(80.dp)
                         // .padding(end = 8.dp)
@@ -215,13 +215,13 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     }
                     // Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        item.productName,
+                        item.productName,style = TextStyle(fontSize = 12.sp),
                         modifier = Modifier
                             .weight(1f)
                             .width(100.dp)
                     )
                     Text(
-                        item.expirationDate.toString(),
+                        item.expirationDate.toString(),style = TextStyle(fontSize = 10.sp),
                         modifier = Modifier
                             .weight(1f)
                             .width(100.dp)
