@@ -13,6 +13,7 @@ port = "5432"
 database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
+sslmode="require"
 
 def tryConnect():
     conn = psycopg2.connect(
@@ -32,15 +33,15 @@ def get_produktinfo(barcode):
     if "product" in abfrage:
         global a
         a[0] = barcode
-        a[1] = abfrage["product"]["nutriments"].get("carbohydrates", "Keine Angaben")
-        a[2] = abfrage["product"]["nutriments"].get("energy-kcal", "Keine Angaben")
-        a[3] = abfrage["product"]["nutriments"].get("fat", "Keine Angaben")
+        a[1] = abfrage["product"]["nutriments"].get("carbohydrates", 9999)
+        a[2] = abfrage["product"]["nutriments"].get("energy-kcal", 9999)
+        a[3] = abfrage["product"]["nutriments"].get("fat", 9999)
         if abfrage["product"]["misc_tags"][0] == "en:nutriscore-not-computed":
             a[4] = "z"
         else:
-            a[4] = abfrage["product"].get("nutriscore_grade", "Keine Angaben")
-        a[5] = abfrage["product"]["nutriments"].get("proteins", "Keine Angaben")
-        a[6] = abfrage["product"]["nutriments"].get("sugars", "Keine Angaben")
+            a[4] = abfrage["product"].get("nutriscore_grade", "z")
+        a[5] = abfrage["product"]["nutriments"].get("proteins", 9999)
+        a[6] = abfrage["product"]["nutriments"].get("sugars", 9999)
         a[7] = abfrage["product"].get("image_front_url", "Keine Angaben")
         a[8] = abfrage["product"].get("product_name_de", "Keine Angaben")
         return a
