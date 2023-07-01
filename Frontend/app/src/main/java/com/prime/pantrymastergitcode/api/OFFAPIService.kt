@@ -24,11 +24,11 @@ interface OFFAPIService {
 
     suspend fun removeFromShoppingList(productName: String, userID: String): List<ShoppingItemDTO>?
 
-    suspend fun getPantryList(name: String): List<PantryItemDTO>?
+    suspend fun getPantryList(name: String): MutableList<PantryItemDTO>?
 
-    suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): List<PantryItemDTO>?
+    suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>?
 
-    suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): List<PantryItemDTO>?
+    suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>?
 
     companion object {
         fun create(): OFFAPIService {

@@ -134,9 +134,9 @@ class OFFAPIServiceImplementation(
     }
 
 
-    override suspend fun getPantryList(name: String): List<PantryItemDTO>? {
+    override suspend fun getPantryList(name: String): MutableList<PantryItemDTO>? {
         val response: HttpResponse
-        val pantryList: List<PantryItemDTO>
+        val pantryList: MutableList<PantryItemDTO>
         return try {
             response = client.get(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
@@ -149,9 +149,9 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    override suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): List<PantryItemDTO>? {
+    override suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>? {
         val response: HttpResponse
-        val updatedList: List<PantryItemDTO>
+        val updatedList: MutableList<PantryItemDTO>
 
         return try {
             response = client.delete(HttpRoutes.inventory) {
@@ -167,9 +167,9 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    override suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): List<PantryItemDTO>? {
+    override suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>? {
         val response: HttpResponse
-        val updatedList: List<PantryItemDTO>
+        val updatedList: MutableList<PantryItemDTO>
 
         return try {
             response = client.patch(HttpRoutes.inventory) {

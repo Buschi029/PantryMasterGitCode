@@ -13,13 +13,18 @@ import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
     val tag = "PantryViewModel"
-    private val _items = mutableStateListOf<PantryProduct>()
-    var items: List<PantryItemDTO> by mutableStateOf(mutableListOf())
+    val _items = MutableStateFlow(mutableListOf<PantryItemDTO>())
+    val items1 = _items.asStateFlow()
+    val items3 = mutableStateListOf<PantryItemDTO>()
+
+
+    var items: MutableList<PantryItemDTO> by mutableStateOf(mutableListOf())
+
+
 
     var unsortedItems: List<PantryItemDTO> by mutableStateOf(mutableListOf())
 
@@ -55,6 +60,8 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.getPantryList("")!!
+                _items.value = items
+                items3.addAll(items)
             } catch(e: Exception) {
                 com.prime.pantrymastergitcode.util.Log.e("PantryViewModel", e.toString())
             }
@@ -76,8 +83,12 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
     }
 
     fun updatePantryItem(pantryItem: PantryItemDTO){
-        items = runBlocking {
-            service.updatePantryItem(pantryItem)!!
+        viewModelScope.launch {
+            try{
+                items = service.updatePantryItem(pantryItem)!!
+            }catch (e:Exception){
+                Log.e(tag, e.toString())
+            }
         }
     }
 }

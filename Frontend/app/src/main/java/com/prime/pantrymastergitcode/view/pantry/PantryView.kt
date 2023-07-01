@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
+import okhttp3.internal.notifyAll
 import java.time.format.DateTimeFormatter
 
 
@@ -78,6 +79,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
     var newUnit: String by remember { mutableStateOf("") }
     val sorted by pantryViewModel.sorted.collectAsState()
     val dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val items2 by pantryViewModel.items1.collectAsState()
 
     Column(
         modifier = Modifier
@@ -112,7 +114,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         // Tabelle
         Column(modifier = Modifier.fillMaxWidth()) {
-            pantryViewModel.items.forEachIndexed { index, item ->
+            pantryViewModel.items3.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -127,8 +129,11 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     IconButton(
                         onClick = {
                             if (item.quantity > 0) {
-                                item.quantity = item.quantity - 1
-                                pantryViewModel.updatePantryItem(item)
+
+                               pantryViewModel.items3[index] = item.copy(quantity = item.quantity.dec())
+                                pantryViewModel.updatePantryItem(pantryViewModel.items3[index])
+
+
                             }
                         }
                     ) {
@@ -201,15 +206,15 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             }
             Button(
                 onClick = {
-                    if(!sorted){
-                        pantryViewModel.unsortedItems = pantryViewModel.items
-                        pantryViewModel.items = pantryViewModel.items.sortedBy { it.expirationDate }
-                        pantryViewModel.setSorted(true)
-                    }else{
-                        pantryViewModel.items = pantryViewModel.unsortedItems
-                        pantryViewModel.setSorted(false)
-
-                    }
+//                    if(!sorted){
+//                        pantryViewModel.unsortedItems = pantryViewModel.items
+//                        pantryViewModel.items = pantryViewModel.items.sortedBy { it.expirationDate }
+//                        pantryViewModel.setSorted(true)
+//                    }else{
+//                        pantryViewModel.items = pantryViewModel.unsortedItems
+//                        pantryViewModel.setSorted(false)
+//
+//                    }
 
                 }
             ){
