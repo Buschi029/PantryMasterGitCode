@@ -23,7 +23,7 @@ class inventoryItem(Schema):
     productCode = Integer(required=True)
     productName = String(required=True)
     userID = String(required=True)
-    expirationdate = Date(required=True)
+    expirationDate = Date(required=True)
     appendDate = Date(required=True)
     quantity = Integer(required=True)
     quantityUnit = String(required=True)
@@ -102,7 +102,7 @@ def get_oneInvItem():
 #PUT Route um ein Item zur Datenbank hinzuzufügen
 @inventory.route("/inventory", methods=["PUT"])
 @inventory.input(inventoryItem)
-def insert_Item():
+def insert_Item(inventoryItem):
     
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -129,7 +129,7 @@ def insert_Item():
 #DELETE Route um ein Item zu löschen
 @inventory.route("/inventory", methods=["DELETE"])
 @inventory.input(inventoryItem)
-def delete_invItem():
+def delete_invItem(inventoryItem):
     data = request.get_json()
     productCode = data.get("productCode")
     userID = data.get("userID")
