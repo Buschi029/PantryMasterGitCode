@@ -30,7 +30,7 @@ fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
 }
 
 data class ShoppingItem(val name: String, var quantity: String,
-                        var quantityType: String, var isChecked: Boolean = false)
+                        var quantityType: String)
 
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
