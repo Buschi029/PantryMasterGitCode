@@ -13,9 +13,11 @@ import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
+    val tag = "PantryViewModel"
     private val _items = mutableStateListOf<PantryProduct>()
     var items: List<PantryItemDTO> by mutableStateOf(mutableListOf())
 
@@ -71,5 +73,11 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
     fun setSorted(value: Boolean){
         _sorted.value = value
+    }
+
+    fun updatePantryItem(pantryItem: PantryItemDTO){
+        items = runBlocking {
+            service.updatePantryItem(pantryItem)!!
+        }
     }
 }

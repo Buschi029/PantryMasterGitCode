@@ -4,7 +4,7 @@ import psycopg2
 import requests
 from flask import Flask, jsonify, request
 from apiflask import APIBlueprint, Schema
-from apiflask.fields import Integer, String, Date
+from apiflask.fields import Integer, String, Date, DateTime
 from apiflask.validators import Length, OneOf
 from datetime import datetime
 
@@ -24,7 +24,7 @@ class inventoryItem(Schema):
     productName = String(required=True)
     userID = String(required=True)
     expirationDate = Date(required=True)
-    appendDate = Date(required=True)
+    appendDate = DateTime(required=True)
     quantity = Integer(required=True)
     quantityUnit = String(required=True)
 
@@ -51,7 +51,7 @@ def get_allInvItem():
     results = []
     x = 0
     for row in data:
-        apdDate = row[6].strftime("%Y-%m-%d %H:%M:%S:%f")
+        apdDate = row[6].strftime("%Y-%m-%dT%H:%M:%S.%f")
         expDate = row[3].strftime("%Y-%m-%d")
 
         #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
@@ -84,7 +84,7 @@ def get_oneInvItem():
     results = []
     x = 0
     for row in data:
-        apdDate = row[6].strftime("%Y-%m-%d %H:%M:%S:%f")
+        apdDate = row[6].strftime("%Y-%m-%dT%H:%M:%S.%f")
         expDate = row[3].strftime("%Y-%m-%d")
 
         #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
@@ -131,6 +131,7 @@ def insert_Item(inventoryItem):
 @inventory.input(inventoryItem)
 def edit_Item(inventoryItem):
     json_data = request.get_json()
+    print(json_data.get("appendDate"))
 
     productCode = json_data.get("productCode")
     userID = json_data.get("userID")
@@ -142,7 +143,7 @@ def edit_Item(inventoryItem):
     conn = tryConnect() 
     cursor = conn.cursor()
 
-    cursor.execute("UPDATE tbl_pantry SET productCode=%s AND productName=%s AND userID=%s AND expirationDate=%s AND quantity=%s AND quantityUnit=%s WHERE appendDate=%s", (productCode, productName, userID, expirationDate, quantity, quantityUnit, appendDate))
+    cursor.execute("UPDATE tbl_pantry SET productCode=%s, productName=%s, userID=%s, expirationDate=%s, quantity=%s, quantityUnit=%s WHERE appendDate=%s", (productCode, productName, userID, expirationDate, quantity, quantityUnit, appendDate))
     conn.commit()
     cursor.close()
     conn.close()
@@ -166,7 +167,7 @@ def delete_invItem(inventoryItem):
 
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s AND productName=%s AND expirationDate=%s AND quantityUnit=%s AND ", (productCode, userID, productName, expirationDate, quantityUnit))
+    cursor.execute("DELETE FROM tbl_pantry WHERE appendDate = %s ", (appendDate,))
     conn.commit()
     cursor.close()
     conn.close()

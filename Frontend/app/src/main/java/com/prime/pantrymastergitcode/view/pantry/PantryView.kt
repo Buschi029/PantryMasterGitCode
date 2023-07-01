@@ -127,8 +127,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     IconButton(
                         onClick = {
                             if (item.quantity > 0) {
-                                pantryViewModel.items[index].copy(quantity = (item.quantity-1))
-
+                                item.quantity = item.quantity - 1
+                                pantryViewModel.updatePantryItem(item)
                             }
                         }
                     ) {
@@ -148,7 +148,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            //items[index] = item.copy(quantity = item.quantity + 1)
+                            item.quantity = item.quantity + 1
+                            pantryViewModel.updatePantryItem(item)
                         },
                         modifier = Modifier.padding(end = 8.dp)
                     ) {

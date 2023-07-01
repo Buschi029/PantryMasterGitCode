@@ -28,6 +28,8 @@ interface OFFAPIService {
 
     suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): List<PantryItemDTO>?
 
+    suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): List<PantryItemDTO>?
+
     companion object {
         fun create(): OFFAPIService {
             return OFFAPIServiceImplementation(

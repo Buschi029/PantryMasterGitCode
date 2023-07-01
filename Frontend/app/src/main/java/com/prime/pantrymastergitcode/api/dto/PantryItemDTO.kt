@@ -26,7 +26,7 @@ val expirationDate: LocalDate,
 val appendDate: LocalDateTime,
 
     @SerialName("quantity")
-val quantity: Int,
+var quantity: Int,
 
     @SerialName("quantityUnit")
 val quantityUnit: String
