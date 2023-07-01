@@ -51,7 +51,7 @@ def get_allInvItem():
     results = []
     x = 0
     for row in data:
-        apdDate = row[6].strftime("%Y-%m-%d")
+        apdDate = row[6].strftime("%Y-%m-%d %H:%M:%S:%f")
         expDate = row[3].strftime("%Y-%m-%d")
 
         #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
@@ -84,7 +84,7 @@ def get_oneInvItem():
     results = []
     x = 0
     for row in data:
-        apdDate = row[6].strftime("%Y-%m-%d")
+        apdDate = row[6].strftime("%Y-%m-%d %H:%M:%S:%f")
         expDate = row[3].strftime("%Y-%m-%d")
 
         #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
@@ -103,9 +103,7 @@ def get_oneInvItem():
 @inventory.route("/inventory", methods=["PUT"])
 @inventory.input(inventoryItem)
 def insert_Item(inventoryItem):
-    
-    conn = tryConnect() 
-    cursor = conn.cursor()
+
     json_data = request.get_json()
 
     productCode = json_data.get("productCode")
@@ -116,8 +114,10 @@ def insert_Item(inventoryItem):
     quantityUnit = json_data.get("quantityUnit")
     appendDate = json_data.get("appendDate")
 
-    cursor.execute("INSERT INTO tbl_pantry (productCode, productName, userID, expirationDate, appendDate, quantity, quantityUnit) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                (productCode, productName, userID, expirationDate, appendDate, quantity, quantityUnit))
+    conn = tryConnect() 
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO tbl_pantry (productCode, productName, userID, expirationDate, appendDate, quantity, quantityUnit) VALUES (%s, %s, %s, %s, %s, %s, %s)", (productCode, productName, userID, expirationDate, appendDate, quantity, quantityUnit))
     
     conn.commit()
     cursor.close()
@@ -125,6 +125,31 @@ def insert_Item(inventoryItem):
 
     response = {"message": "Data inserted successfully"}
     return jsonify(response)
+
+#PATCH Route um ein Item zu verändern
+@inventory.route("/inventory", methods=["PATCH"])
+@inventory.input(inventoryItem)
+def edit_Item(inventoryItem):
+    json_data = request.get_json()
+
+    productCode = json_data.get("productCode")
+    userID = json_data.get("userID")
+    productName = json_data.get("productName")
+    expirationDate = json_data.get("expirationDate")
+    quantity = json_data.get("quantity")
+    quantityUnit = json_data.get("quantityUnit")
+    appendDate = json_data.get("appendDate")
+    conn = tryConnect() 
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE tbl_pantry SET productCode=%s AND productName=%s AND userID=%s AND expirationDate=%s AND quantity=%s AND quantityUnit=%s WHERE appendDate=%s", (productCode, productName, userID, expirationDate, quantity, quantityUnit, appendDate))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return get_allInvItem()
+
+
 
 #DELETE Route um ein Item zu löschen
 @inventory.route("/inventory", methods=["DELETE"])
@@ -141,7 +166,7 @@ def delete_invItem(inventoryItem):
 
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s AND productName=%s AND expirationDate=%s", (productCode, userID, productName, expirationDate))
+    cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s AND productName=%s AND expirationDate=%s AND quantityUnit=%s AND ", (productCode, userID, productName, expirationDate, quantityUnit))
     conn.commit()
     cursor.close()
     conn.close()
