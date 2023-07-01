@@ -134,4 +134,4 @@ def delete_invItem():
     cursor.close()
     conn.close()
 
-    return "Entfernt"
+    return get_allInvItem()
