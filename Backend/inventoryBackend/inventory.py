@@ -4,6 +4,8 @@ import psycopg2
 import requests
 from flask import Flask, jsonify, request
 from apiflask import APIBlueprint
+from datetime import datetime
+
 
 inventory = APIBlueprint('inventory', __name__)
 
@@ -29,10 +31,24 @@ def get_allInvItem():
     cursor.close()
     conn.close()
 
+    
+
     results = []
+    x = 0
     for row in data:
-        result = {"id": row[0], "name": row[1], "productName": row[2], "expirationDate": row[3], "quantity": row[4], "quantityUnit": row[5], "appendDate": row[6]}
+        apdDate = row[6].strftime("%Y-%m-%d")
+        expDate = row[3].strftime("%Y-%m-%d")
+
+        #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
+        #print[apdDate.year]
+        #expDate = row[3].year + row[3].month + row[3].day
+        #apdDate = row[6].year + row[6].month + row[6].day
+        #expDate = datetime.strptime(row[3],'%Y-%m-%d')
+        #apdDate = datetime.strptime(row[6],'%Y-%m-%d')
+
+        result = {"id": row[0], "name": row[1], "productName": row[2], "expirationDate": expDate, "quantity": row[4], "quantityUnit": row[5], "appendDate": apdDate}
         results.append(result)
+        x = x + 1
     return jsonify(results)
 
 @inventory.route("/inventory", methods=["POST"])
