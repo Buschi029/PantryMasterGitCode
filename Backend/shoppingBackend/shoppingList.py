@@ -1,10 +1,25 @@
 
 import psycopg2
 from flask import Flask, jsonify, request, Blueprint
-from apiflask import APIBlueprint
+from apiflask import APIBlueprint, Schema
+from apiflask.fields import Integer, String
+from apiflask.validators import Length, OneOf
 
 shoppingList = APIBlueprint('shoppingList', __name__)
 
+
+class shoppingItem(Schema):
+    productName = String(required=True)
+    userID = String(required=True)
+    quantity = Integer(required=True)
+    quantityUnit = String(required=True)
+
+class shoppingItemKeyPost(Schema):
+    userID = String(required=True)
+
+class shoppingItemKeyDelete(Schema):
+    productName = String(required=True)
+    userID = String(required=True)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
@@ -18,7 +33,7 @@ def tryConnect():
     )
     return conn
 
-
+@shoppingList.output(shoppingItem)
 @shoppingList.route("/shoppingList", methods=["GET"])
 def get_allItems():
     conn = tryConnect() 
@@ -34,6 +49,8 @@ def get_allItems():
         results.append(result)
     return jsonify(results)
 
+@shoppingList.output(shoppingItem)
+@shoppingList.input(shoppingItemKeyPost)
 @shoppingList.route("/shoppingList", methods=["POST"])
 def get_oneItem():
     data = request.get_json()
@@ -51,7 +68,7 @@ def get_oneItem():
         results.append(result)
     return jsonify(results)
 
-
+@shoppingList.input(shoppingItem)
 @shoppingList.route("/shoppingList", methods=["PUT"])
 def add_item():
     data = request.get_json()
@@ -97,7 +114,7 @@ def addEntry(productName, userID, quantity, quantityUnit):
 
     return "Eintrag angelegt"
 
-
+@shoppingList.input(shoppingItemKeyDelete)
 @shoppingList.route("/shoppingList", methods=["DELETE"])
 def delete_item():
     data = request.get_json()
