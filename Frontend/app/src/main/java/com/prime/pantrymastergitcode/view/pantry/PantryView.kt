@@ -118,8 +118,6 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        // .padding(vertical = 4.dp)
-                        // .padding(horizontal = 4.dp)
                         .background(color = Color.White)
                         .clickable {
                             pantryViewModel.getProductDetails(item.productCode)
@@ -147,14 +145,15 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     Text(
                         "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
                         modifier = Modifier
-                        // .width(80.dp)
-                        // .padding(end = 8.dp)
-                        // .weight(1f)
+
                     )
                     IconButton(
                         onClick = {
-                            item.quantity = item.quantity + 1
-                            pantryViewModel.updatePantryItem(item)
+                            val updatedItem = item.copy(quantity = item.quantity + 1)
+                            val mutableList = pantryViewModel.items.toMutableList()
+                            mutableList[index] = updatedItem
+                            pantryViewModel.items = mutableList
+                            pantryViewModel.updatePantryItem(updatedItem)
                         },
                         modifier = Modifier.padding(end = 8.dp)
                     ) {

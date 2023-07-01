@@ -23,7 +23,7 @@ import io.ktor.http.HttpMethod
 
 class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
 
-/*
+    /*
     data class ShoppingItem(val name: String, var quantity: String,
                             var quantityType: String, var isChecked: Boolean = false)
 
@@ -75,7 +75,8 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
 
     fun addItemToDatabase(
         productName: String, quantity: Int,
-        quantityUnit: String): String {
+        quantityUnit: String
+    ): String {
         viewModelScope.launch {
 
             val client = HttpClient(CIO)
@@ -92,7 +93,7 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.getShoppingList("")!!
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
         }
@@ -101,8 +102,8 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     fun addItemsToDatabase(productName: String, quantity: Int, quantityUnit: String) {
         viewModelScope.launch {
             try {
-                items = service.addToShoppingList(productName,quantity, quantityUnit, "")!!
-            } catch(e: Exception) {
+                items = service.addToShoppingList(productName, quantity, quantityUnit, "")!!
+            } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
         }
@@ -112,47 +113,13 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.removeFromShoppingList(productName, "")!!
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
         }
     }
-
-    fun addItem() {
-        val newItem = newItem
-        val newQuantity = newQuantity
-        val newQuantityType = newQuantityType
-        //Test
-
-        _items.add(ShoppingItem(newItem, newQuantity, newQuantityType))
-        _newItem.value = ""
-        _newQuantity.value = ""
-        _newQuantityType.value = ""
-    }
-
-    fun removeItem(item: ShoppingItem) {
-        _items.remove(item)
-    }
 }
 
-/*
-fun fetchShoppingList() {
-    GlobalScope.launch(Dispatchers.IO) {
-        try {
-            val response = httpClient.get<List<ShoppingItem>>("http://localhost:8081/shoppingList")
-            withContext(Dispatchers.Main) {
-                _items.clear()
-                _items.addAll(response)
-            }
-        } catch (e: Exception) {
-            // Handle error
-            e.printStackTrace()
-        }
-    }
-}
-}
-
- */
 
 
 

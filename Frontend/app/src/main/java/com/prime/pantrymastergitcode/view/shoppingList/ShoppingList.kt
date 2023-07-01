@@ -30,7 +30,7 @@ fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
 }
 
 data class ShoppingItem(val name: String, var quantity: String,
-                        var quantityType: String, var isChecked: Boolean = false)
+                        var quantityType: String)
 
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
@@ -40,16 +40,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
-
-
-    /*
-    var items by shoppingListViewModel.items.collectAsState()
-    var newItem by shoppingListViewModel.newItem.collectAsState()
-    var newQuantity by shoppingListViewModel.newQuantity.collectAsState()
-    var newQuantityType by shoppingListViewModel.newQuantityType.collectAsState()
-
-     */
-
 
     Column(
         modifier = Modifier
@@ -121,7 +111,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    //shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
+                    shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
                     newItem = ""
                     newQuantity = 0
                     newQuantityType = ""
@@ -157,23 +147,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         modifier = Modifier.weight(1f)
                     )
 
-                    val isCheckedState = remember { mutableStateOf(item.isChecked) }
-
-                    Checkbox(
-                        checked = isCheckedState.value,
-                        onCheckedChange = { isChecked ->
-                            shoppingListViewModel.updateItemCheckedState(item.productName, isChecked)
-                            shoppingListViewModel.getItemsFromDatabase()
-                        },
-                        modifier = Modifier
-                            .clickable { isCheckedState.value = !isCheckedState.value }
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(
-                                width = 1.dp,
-                                color = Color.White,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                    )
                     IconButton(
                         onClick = {
                             shoppingListViewModel.removeItemFromDatabase(
