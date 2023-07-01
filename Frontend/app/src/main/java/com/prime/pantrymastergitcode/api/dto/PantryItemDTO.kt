@@ -1,7 +1,9 @@
 package com.prime.pantrymastergitcode.api.dto
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,12 +20,10 @@ val name: String,
 val productName: String,
 
 @SerialName("expirationDate")
-val expirationDate: String,
+val expirationDate: LocalDate,
 
-/*
 @SerialName("appendDate")
-val appendDate: String,
-*/
+val appendDate: LocalDate,
 
 @SerialName("quantity")
 val quantity: Int,
@@ -31,6 +31,5 @@ val quantity: Int,
 @SerialName("quantityUnit")
 val quantityUnit: String
 ) {
-
-    constructor() : this(0,"","",java.time.LocalDate.now().toKotlinLocalDate().toString(), 0, "")
+    constructor() : this(0,"","",java.time.LocalDate.now().toKotlinLocalDate(), java.time.LocalDate.now().toKotlinLocalDate(), 0, "")
 }

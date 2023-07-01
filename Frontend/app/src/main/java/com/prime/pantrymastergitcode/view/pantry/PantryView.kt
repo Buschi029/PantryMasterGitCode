@@ -47,6 +47,7 @@ import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 
 
 @Composable
@@ -69,7 +70,7 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     }
 }
 
-data class PantryItem(val id: Long, var name: String, val productName: String,var expirationDate: String,  var quantity: Int, var quantityUnit: String)
+data class PantryItem(val id: Long, var name: String, val productName: String,var expirationDate: LocalDate,  var quantity: Int, var quantityUnit: String)
 
 data class PantryProduct(val productCode: Long, var productName: String, var userID: String, var expirationDate: LocalDate, var appendDate: LocalDate, var quantity: Int, var quantityUnit: String)
 

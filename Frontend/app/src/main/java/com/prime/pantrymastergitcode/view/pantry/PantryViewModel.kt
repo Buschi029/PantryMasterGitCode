@@ -18,8 +18,9 @@ import com.prime.pantrymastergitcode.view.shoppingList.ShoppingItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalDate as KotlinxDatetimeLocalDate
 
 class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
@@ -72,7 +73,7 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
         }
     }
 
-    fun addItemsToDatabase(productName: String, quantity: Int, quantityUnit: String, expirationDate: LocalDate) {
+    fun addItemsToDatabase(productName: String, quantity: Int, quantityUnit: String, expirationDate: KotlinxDatetimeLocalDate) {
         viewModelScope.launch {
             try {
                 items = service.addToPantryList(0, productName, "", expirationDate, quantity, quantityUnit)!!

@@ -22,6 +22,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 
 class OFFAPIServiceImplementation(
     private val client: HttpClient
@@ -139,11 +142,11 @@ class OFFAPIServiceImplementation(
 
 
     // Pantry List
-    override suspend fun addToPantryList(productCode: Long, productName: String, userID: String, expirationDate: LocalDate, quantity: Int, quantityUnit: String): List<PantryItemDTO>? {
+    override suspend fun addToPantryList(productCode: Long, productName: String, userID: String, expirationDate: LocalDate , quantity: Int, quantityUnit: String): List<PantryItemDTO>? {
         val response: HttpResponse
 
         return try {
-            val item = PantryItemDTO(productCode,productName,userID,expirationDate.toString(),quantity,quantityUnit)
+            val item = PantryItemDTO(productCode,productName,userID,expirationDate,java.time.LocalDate.now().toKotlinLocalDate(),quantity,quantityUnit)
             response = client.post(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
                 setBody(item)
@@ -173,7 +176,6 @@ class OFFAPIServiceImplementation(
         return try {
             response = client.get(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
-
             }
             pantryList = response.body()
             pantryList
