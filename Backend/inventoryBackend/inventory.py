@@ -26,10 +26,6 @@ class inventoryItem(Schema):
     quantity = Integer(required=True)
     quantityUnit = String(required=True)
 
-class inventoryItemKey(Schema):
-    barcode = Integer(required=True)
-    userID = String(required=True)
-
 
 def tryConnect():
     conn = psycopg2.connect(
@@ -63,7 +59,7 @@ def get_allInvItem():
         #expDate = datetime.strptime(row[3],'%Y-%m-%d')
         #apdDate = datetime.strptime(row[6],'%Y-%m-%d')
 
-        result = {"id": row[0], "name": row[1], "productName": row[2], "expirationDate": expDate, "quantity": row[4], "quantityUnit": row[5], "appendDate": apdDate}
+        result = {"productCode": row[0], "userID": row[1], "productName": row[2], "expirationDate": expDate, "quantity": row[4], "quantityUnit": row[5], "appendDate": apdDate}
         results.append(result)
         x = x + 1
     return jsonify(results)
@@ -134,4 +130,4 @@ def delete_invItem():
     cursor.close()
     conn.close()
 
-    return "Entfernt"
+    return get_allInvItem()

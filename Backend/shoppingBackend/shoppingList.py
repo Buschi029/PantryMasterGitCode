@@ -128,5 +128,5 @@ def delete_item():
     cursor.close()
     conn.close()
 
-    return "Entfernt"
+    return get_allItems()
 
