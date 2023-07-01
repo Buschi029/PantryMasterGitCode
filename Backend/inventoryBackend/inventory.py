@@ -3,7 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from apiflask import APIBlueprint
+from apiflask import APIBlueprint, Schema
+from apiflask.fields import Integer, String, Date
+from apiflask.validators import Length, OneOf
 from datetime import datetime
 
 
@@ -15,6 +17,20 @@ database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
+class inventoryItem(Schema):
+    productCode = Integer(required=True)
+    productName = String(required=True)
+    userID = String(required=True)
+    expirationdate = Date(required=True)
+    appendDate = Date(required=True)
+    quantity = Integer(required=True)
+    quantityUnit = String(required=True)
+
+class inventoryItemKey(Schema):
+    barcode = Integer(required=True)
+    userID = String(required=True)
+
+
 def tryConnect():
     conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
@@ -23,6 +39,7 @@ def tryConnect():
 
 
 @inventory.route("/inventory", methods=["GET"])
+@inventory.output(inventoryItem)
 def get_allInvItem():
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -52,6 +69,7 @@ def get_allInvItem():
     return jsonify(results)
 
 @inventory.route("/inventory", methods=["POST"])
+@inventory.input(inventoryItem)
 def insert_Item():
     
     conn = tryConnect() 
@@ -98,14 +116,20 @@ def insert_Item():
 
 
 @inventory.route("/inventory", methods=["DELETE"])
+@inventory.input(inventoryItem)
 def delete_invItem():
     data = request.get_json()
-    userID = data["userID"]
-    barcode = data["barcode"]
+    productCode = data.get("productCode")
+    userID = data.get("userID")
+    productName = data.get("productName")
+    expirationDate = data.get("expirationDate")
+    quantity = data.get("quantity")
+    quantityUnit = data.get("quantityUnit")
+    appendDate = data.get("appendDate")
 
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s", (barcode, userID))
+    cursor.execute("DELETE FROM tbl_pantry WHERE productCode=%s AND userID=%s AND productName=%s AND expirationDate=%s", (productCode, userID, productName, expirationDate))
     conn.commit()
     cursor.close()
     conn.close()

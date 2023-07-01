@@ -3,7 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from apiflask import APIBlueprint
+from apiflask import APIBlueprint, Schema
+from apiflask.fields import Integer, String
+from apiflask.validators import Length, OneOf
 
 product = APIBlueprint('product', __name__)
 
@@ -13,6 +15,20 @@ database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 sslmode="require"
+
+class productItem(Schema):
+    productCode = Integer(required=True)
+    carbohydrates = Integer(required=True)
+    kcal = Integer(required=True)
+    fat = Integer(required=True)
+    nutriscore = String(required=True)
+    protein = Integer(required=True)
+    sugar = Integer(required=True)
+    name = String(required=True)
+    pictureLink = String(required=True)
+
+class productKey(Schema):
+    barcode = Integer(required=True)
 
 def tryConnect():
     conn = psycopg2.connect(
@@ -48,11 +64,12 @@ def get_produktinfo(barcode):
         return None
 
 
-
+@product.output(productItem)
+@product.input(productKey, location='parameters')
 @product.route("/product", methods=["POST"])
 def get_oneProduct():
     data = request.get_json()
-    barcode = data["barcode"]
+    barcode = request.args.get('barcode')
 
     conn = tryConnect() 
     cursor = conn.cursor()

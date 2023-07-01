@@ -1,24 +1,36 @@
 
 import psycopg2
 from flask import Flask, jsonify, request
-from apiflask import APIBlueprint
+from apiflask import APIBlueprint, Schema
+from apiflask.fields import Integer, String
+from apiflask.validators import Length, OneOf
 
 userB = APIBlueprint('user', __name__)
+
+class user(Schema):
+    userID = String(required=True)
+    userName = String(required=True)
+    age = Integer(required=True)
+    gender = String(required=True)
+
+class userKey(Schema):
+    userID = String(required=True)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
 database = "userDB"
-user = "ADMIN"
+userDB = "ADMIN"
 password = "uihkP3cnT0Wo"
 sslmode="require"
 
 
 def tryConnect():
     conn = psycopg2.connect(
-    host=host, port=port, database=database, user=user, password=password
+    host=host, port=port, database=database, user=userDB, password=password
     )
     return conn
 
+@userB.output(user)
 @userB.route("/user", methods=["GET"])
 def get_AllUser():
     conn = tryConnect() 
@@ -35,7 +47,8 @@ def get_AllUser():
         results.append(result)
     return jsonify(results)
 
-
+@userB.input(userKey)
+@userB.output(user)
 @userB.route("/user", methods=["POST"])
 def get_userInfo():
     data = request.get_json()
@@ -54,7 +67,7 @@ def get_userInfo():
         results.append(result)
     return jsonify(results)
 
-
+@userB.output(user)
 @userB.route("/user", methods=["PUT"])
 def add_user():
     data = request.get_json()
@@ -72,6 +85,7 @@ def add_user():
 
     return "User angelegt"
 
+@userB.input(userKey)
 @userB.route("/user", methods=["DELETE"])
 def delete_user():
     data = request.get_json()
