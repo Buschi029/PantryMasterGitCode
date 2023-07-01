@@ -7,8 +7,10 @@ from apiflask import APIBlueprint, Schema
 from apiflask.fields import Integer, String
 from apiflask.validators import Length, OneOf
 
+#Product wird als Blueprint erstellt, damit die app.py darauf zugreifen und nutzen kann
 product = APIBlueprint('product', __name__)
 
+#Anmeldedaten für die Datenbank
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
 database = "pantryDB"
@@ -16,6 +18,7 @@ user = "ADMIN"
 password = "uihkP3cnT0Wo"
 sslmode="require"
 
+#ProductItem Klasse
 class productItem(Schema):
     productCode = Integer(required=True)
     carbohydrates = Integer(required=True)
@@ -27,9 +30,11 @@ class productItem(Schema):
     name = String(required=True)
     pictureLink = String(required=True)
 
+#ProductItemKey Klasse
 class productKey(Schema):
     barcode = Integer(required=True)
 
+#Aufbau einer Connection zur Datenbank
 def tryConnect():
     conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
@@ -38,6 +43,7 @@ def tryConnect():
 
 a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+#API an OpenFoodFact um Produktinfos zu erhalten
 def get_produktinfo(barcode):
 
     url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
@@ -63,13 +69,13 @@ def get_produktinfo(barcode):
     else:
         return None
 
-
+#POST Route um eine Produkt zu erhalten und falls es noch nicht in DB enthalten ist wird die get_produktinfo aufgerufen
 @product.output(productItem)
-@product.input(productKey, location='parameters')
+@product.input(productKey)
 @product.route("/product", methods=["POST"])
 def get_oneProduct():
     data = request.get_json()
-    barcode = request.args.get('barcode')
+    barcode = data["barcode"]
 
     conn = tryConnect() 
     cursor = conn.cursor()

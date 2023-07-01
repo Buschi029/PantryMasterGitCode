@@ -8,15 +8,17 @@ from apiflask.fields import Integer, String, Date
 from apiflask.validators import Length, OneOf
 from datetime import datetime
 
-
+#Inventory wird als Blueprint erstellt, damit die app.py darauf zugreifen und nutzen kann
 inventory = APIBlueprint('inventory', __name__)
 
+#Anmeldedaten für die Datenbank
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
 database = "pantryDB"
 user = "ADMIN"
 password = "uihkP3cnT0Wo"
 
+#InventoryItem Klasse
 class inventoryItem(Schema):
     productCode = Integer(required=True)
     productName = String(required=True)
@@ -26,14 +28,14 @@ class inventoryItem(Schema):
     quantity = Integer(required=True)
     quantityUnit = String(required=True)
 
-
+#Aufbau einer Connection zur Datenbank
 def tryConnect():
     conn = psycopg2.connect(
     host=host, port=port, database=database, user=user, password=password
     )
     return conn
 
-
+#Get Route um alle InventoryItems abzufragen
 @inventory.route("/inventory", methods=["GET"])
 @inventory.output(inventoryItem)
 def get_allInvItem():
@@ -64,7 +66,41 @@ def get_allInvItem():
         x = x + 1
     return jsonify(results)
 
+#POST Route um alle InventoryItems für einen bestimmte User abzufragen
 @inventory.route("/inventory", methods=["POST"])
+@inventory.output(inventoryItem)
+def get_oneInvItem():
+    data = request.get_json()
+    userID = data["userID"]
+    conn = tryConnect() 
+    cursor = conn.cursor()
+    cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate FROM tbl_pantry WHERE userID=%s", (userID,))
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    
+
+    results = []
+    x = 0
+    for row in data:
+        apdDate = row[6].strftime("%Y-%m-%d")
+        expDate = row[3].strftime("%Y-%m-%d")
+
+        #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
+        #print[apdDate.year]
+        #expDate = row[3].year + row[3].month + row[3].day
+        #apdDate = row[6].year + row[6].month + row[6].day
+        #expDate = datetime.strptime(row[3],'%Y-%m-%d')
+        #apdDate = datetime.strptime(row[6],'%Y-%m-%d')
+
+        result = {"productCode": row[0], "userID": row[1], "productName": row[2], "expirationDate": expDate, "quantity": row[4], "quantityUnit": row[5], "appendDate": apdDate}
+        results.append(result)
+        x = x + 1
+    return jsonify(results)
+
+#PUT Route um ein Item zur Datenbank hinzuzufügen
+@inventory.route("/inventory", methods=["PUT"])
 @inventory.input(inventoryItem)
 def insert_Item():
     
@@ -90,27 +126,7 @@ def insert_Item():
     response = {"message": "Data inserted successfully"}
     return jsonify(response)
 
-
-
-# @inventory.route("/inventory", methods=["POST"])
-# def get_oneInvItem():
-#     data = request.get_json()
-#     userID = data["userID"]
-
-#     conn = tryConnect() 
-#     cursor = conn.cursor()
-#     cursor.execute("SELECT * FROM tbl_pantry WHERE userid = %s", (userID))
-#     data = cursor.fetchall()
-#     cursor.close()
-#     conn.close()    
-
-    # results = []
-    #     for row in data:
-    #     result = {"id": row[0], "name": row[1]}
-    #     results.append(result)
-    #return jsonify(cursor)
-
-
+#DELETE Route um ein Item zu löschen
 @inventory.route("/inventory", methods=["DELETE"])
 @inventory.input(inventoryItem)
 def delete_invItem():
