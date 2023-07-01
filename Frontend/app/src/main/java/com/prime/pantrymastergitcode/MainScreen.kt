@@ -38,7 +38,7 @@ fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                BottomNavGraph(navController = navController, service = service)
+                BottomNavGraph(navController = navController, service = service, scanner = scanner)
             }
         }
     )
@@ -48,10 +48,11 @@ fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
-        BottomBarScreen.Home,
+
+        // Festlegung der Reihenfolge in der Navigationsleiste
         BottomBarScreen.Scanner,
-        BottomBarScreen.ShoppingList,
         BottomBarScreen.Pantry,
+        BottomBarScreen.ShoppingList,
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -80,7 +81,7 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = Color(0x70000000),
+        unselectedContentColor = Color(0x50000000),
         selectedContentColor = Color.Black,
         onClick = {
             navController.navigate(screen.route) {

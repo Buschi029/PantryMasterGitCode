@@ -182,13 +182,13 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .weight(2f),
+                            .weight(1f), // Geändert von weight(2f) auf weight(1f)
                         value = if (pantryProduct.quantity != 0) {
                             pantryProduct.quantity.toString()
                         } else {
                             ""
                         },
-                        label = { Text(text = "Qty") },
+                        label = { Text(text = "Quantity") },
                         onValueChange = {
                             if (it != "") {
                                 scannerViewModel.setPantryProduct(pantryProduct.copy(quantity = it.toInt()))
@@ -203,12 +203,12 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     )
                     Spacer(
                         modifier = Modifier
-                            .weight(1f)
+                            .width(8.dp) // Füge einen Abstand von 8dp zwischen den Eingabefeldern hinzu
                     )
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .weight(7f),
+                            .weight(1f), // Geändert von weight(7f) auf weight(1f)
                         value = if (pantryProduct.quantityUnit != "") {
                             pantryProduct.quantityUnit
                         } else {
@@ -228,7 +228,10 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     )
                 }
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(horizontal = 20.dp),
                     onClick = {
                         dateDialogState.show()
                     }
@@ -243,13 +246,17 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             modifier = Modifier
                                 .size(30.dp)
                                 .fillMaxSize(),
-                            tint = Color.White
+                            tint = Color.Black
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Column(verticalArrangement = Arrangement.Center) {
-                            Text(text = "Mindesthaltbarkeitsdatum")
                             Text(
-                                pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter)
+                                text = "Mindesthaltbarkeitsdatum",
+                                style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                            )
+                            Text(
+                                pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter),
+                                style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
                             )
                         }
                     }
@@ -264,8 +271,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                modifier = Modifier
-                    .weight(3f),
+                modifier = Modifier.weight(3f),
                 onClick = {
                     scanner.startScan()
                         .addOnSuccessListener { barcode ->
@@ -296,7 +302,10 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         }
                 }
             ) {
-                Text(text = "Scan Barcode")
+                Text(
+                    text = "Scan Barcode",
+                    style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                )
             }
             if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
                 Spacer(modifier = Modifier.weight(1f))

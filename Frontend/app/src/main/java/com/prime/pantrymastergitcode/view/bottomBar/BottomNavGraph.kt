@@ -19,23 +19,23 @@ import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, scanner: GmsBarcodeScanner) {
     val pantryViewModel = PantryViewModel(service = service)
     val scannerViewModel = ScannerViewModel(service)
-    val shoppingListViewModel = ShoppingListViewModel()
+    val shoppingListViewModel = ShoppingListViewModel(service = service)
 
     NavHost(
         navController = navController,
-        startDestination = BottomBarScreen.Home.route
+        startDestination = BottomBarScreen.Pantry.route
     ) {
-        composable(route = BottomBarScreen.Home.route) {
-            HomeScreen()
-        }
+
+        // Reihenfolge der Views wird festgelegt
         composable(route = BottomBarScreen.Scanner.route) {
             ScannerView(scannerViewModel, scanner)
-        }
-        composable(route = BottomBarScreen.ShoppingList.route) {
-            ShoppingListScreen(shoppingListViewModel)
         }
         composable(route = BottomBarScreen.Pantry.route) {
             PantryView(pantryViewModel)
         }
+        composable(route = BottomBarScreen.ShoppingList.route) {
+            ShoppingListScreen(shoppingListViewModel)
+        }
+
     }
 }

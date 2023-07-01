@@ -1,18 +1,15 @@
 package com.prime.pantrymastergitcode.view.shoppingList
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.*
@@ -36,11 +33,21 @@ import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-
-
+import io.ktor.client.statement.HttpResponse
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
+
+    LaunchedEffect(Unit) {
+        shoppingListViewModel.getItemsFromDatabase()
+    }
 
     ShoppingList(shoppingListViewModel)
 }
@@ -50,25 +57,13 @@ data class ShoppingItem(val name: String, var quantity: String,
 
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
-    /*
-        val items = remember { mutableStateListOf<ShoppingItem>() }
-        var newItem: String by remember { mutableStateOf("") }
-        var newQuantity: String by remember { mutableStateOf("") }
-        var newQuantityType: String by remember { mutableStateOf("") }
 
-     */
-/*
-    val items = shoppingListViewModel.items
-    var newItem = shoppingListViewModel.newItem
-    var newQuantity = shoppingListViewModel.newQuantity
-    var newQuantityType = shoppingListViewModel.newQuantityType
-    */
+    var response: String by remember{ mutableStateOf("") }
 
-
-    val items = remember { mutableStateListOf<ShoppingItem>()}
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
+
 
     /*
     var items by shoppingListViewModel.items.collectAsState()
@@ -103,10 +98,13 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     .size(40.dp)
                     .padding(bottom = 10.dp)
             )
+
         }
 
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
+
+
 
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -114,7 +112,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             TextField(
                 value = if (newQuantity != 0) newQuantity.toString() else "",
                 onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity", style = TextStyle(fontSize = 14.sp)) },
+                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
@@ -125,7 +123,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             TextField(
                 value = newQuantityType,
                 onValueChange = { newQuantityType = it },
-                placeholder = { Text("Type", style = TextStyle(fontSize = 14.sp)) },
+                placeholder = { Text("Type", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
@@ -136,7 +134,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             TextField(
                 value = newItem,
                 onValueChange = { newItem = it },
-                placeholder = { Text("Element", style = TextStyle(fontSize = 14.sp)) },
+                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
@@ -145,18 +143,23 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { shoppingListViewModel.addItem() },
+                onClick = {
+                    //shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
+                    newItem = ""
+                    newQuantity = 0
+                    newQuantityType = ""
+                },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
             ) {
-                Text("Add", color = Color.Black)
+                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
         Divider(color = Color.LightGray, thickness = 1.dp)
         Column(modifier = Modifier.fillMaxWidth()) {
-            items.forEachIndexed { index, item ->
+            shoppingListViewModel.items.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
 
@@ -165,16 +168,15 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         .padding(horizontal = 4.dp)
                 ) {
                     Text(
-                        "${item.quantity} ${item.quantityType}",
+                        "${item.quantity} ${item.quantityUnit}",
 
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 8.dp)
 
                     )
-                    //Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        item.name,
+                        item.productName,
                         modifier = Modifier.weight(1f)
                     )
 
@@ -182,7 +184,10 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
                     Checkbox(
                         checked = isCheckedState.value,
-                        onCheckedChange = { isChecked -> isCheckedState.value = isChecked},
+                        onCheckedChange = { isChecked ->
+                            shoppingListViewModel.updateItemCheckedState(item.productName, isChecked)
+                            shoppingListViewModel.getItemsFromDatabase()
+                        },
                         modifier = Modifier
                             .clickable { isCheckedState.value = !isCheckedState.value }
                             .clip(RoundedCornerShape(8.dp))
@@ -194,7 +199,11 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            shoppingListViewModel.removeItem(item)
+                            shoppingListViewModel.removeItemFromDatabase(
+                                item.productName,
+                                item.quantity,
+                                item.quantityUnit
+                            )
                         }
                     ) {
                         Icon(
@@ -203,51 +212,11 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                             tint = Color.Black
                         )
                     }
-
                 }
                 Divider(color = Color.LightGray, thickness = 1.dp)
             }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { saveShoppingList(items) },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(120.dp)
 
-        ) {
-            Text("Save", color = Color.Black)
-        }
     }
-}
-
-// Daten speichern
-
-fun saveShoppingList(items: List<ShoppingItem>) {
-
-
-    /*
-    val json = Json.encodeToString(items)
-
-    // Send the JSON data to the backend endpoint
-    val url = "http:// 82.165.114.121"
-    val client = HttpClient()
-    val request = HttpRequest.newBuilder()
-        .uri(URI.create(url))
-        .header("Content-Type", "application/json")
-        .POST(HttpRequest.BodyPublishers.ofString(json))
-        .build()
-
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
-    if (response.statusCode() == 200) {
-        // Successfully saved the shopping list
-        println("Shopping list saved!")
-    } else {
-        // Error occurred while saving the shopping list
-        println("Failed to save the shopping list. Status code: ${response.statusCode()}")
-    }
-    */
-
 }

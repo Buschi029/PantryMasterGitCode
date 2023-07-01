@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -39,14 +40,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 
 
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
     val showProductDetails = pantryViewModel.showProductDetails.collectAsState()
+    LaunchedEffect(Unit) {
+        pantryViewModel.getPantryItemsFromDatabase()
+    }
     Box {
         PantryList(pantryViewModel)
         if (showProductDetails.value) {
@@ -61,14 +69,18 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     }
 }
 
-data class PantryItem(val name: String, var quantity: Int, var date: String)
+data class PantryItem(val id: Long, var name: String, val productName: String,var expirationDate: String,  var quantity: Int, var quantityUnit: String)
+
+data class PantryProduct(val productCode: Long, var productName: String, var userID: String, var expirationDate: LocalDate, var appendDate: LocalDate, var quantity: Int, var quantityUnit: String)
+
+
 
 @Composable
 fun PantryList(pantryViewModel: PantryViewModel) {
     val items = remember { mutableStateListOf<PantryItem>() }
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
-    var newDate: String by remember { mutableStateOf("") }
+    var newUnit: String by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -103,7 +115,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             TextField(
                 value = if (newQuantity != 0) newQuantity.toString() else "",
                 onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity") },
+                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp))},
                 modifier = Modifier
                     .width(100.dp)
                     .height(50.dp)
@@ -114,7 +126,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             TextField(
                 value = newItem,
                 onValueChange = { newItem = it },
-                placeholder = { Text("Element") },
+                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .width(120.dp)
@@ -124,9 +136,9 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             TextField(
-                value = newDate,
-                onValueChange = { newDate = it },
-                placeholder = { Text("Date") },
+                value = newUnit,
+                onValueChange = { newUnit = it },
+                placeholder = { Text("Unit", style = TextStyle(fontSize = 12.sp)) },
                 modifier = Modifier
                     .weight(1f)
                     .width(80.dp)
@@ -137,16 +149,19 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    items.add(PantryItem(newItem, newQuantity, newDate))
+
+                    pantryViewModel.addItemsToDatabase(newItem, newQuantity, newUnit, java.time.LocalDate.now().toKotlinLocalDate())
                     newItem = ""
                     newQuantity = 0
-                    newDate = ""
+                    newUnit = ""
+
+
                 },
                 modifier = Modifier
                     .width(60.dp)
                     .height(50.dp)
             ) {
-                Text("Add", color = Color.Black)
+                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -154,7 +169,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         // Tabelle
         Column(modifier = Modifier.fillMaxWidth()) {
-            items.forEachIndexed { index, item ->
+            pantryViewModel.items.forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -169,7 +184,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     IconButton(
                         onClick = {
                             if (item.quantity > 0) {
-                                items[index] = item.copy(quantity = item.quantity - 1)
+                                //items[index] = item.copy(quantity = item.quantity - 1)
                             }
                         }
                     ) {
@@ -181,7 +196,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     }
 
                     Text(
-                        item.quantity.toString(),
+                        "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
                         modifier = Modifier
                         // .width(80.dp)
                         // .padding(end = 8.dp)
@@ -189,7 +204,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            items[index] = item.copy(quantity = item.quantity + 1)
+                            //items[index] = item.copy(quantity = item.quantity + 1)
                         },
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
@@ -201,20 +216,20 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     }
                     // Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        item.name,
+                        item.productName,style = TextStyle(fontSize = 12.sp),
                         modifier = Modifier
                             .weight(1f)
                             .width(100.dp)
                     )
                     Text(
-                        item.date,
+                        item.expirationDate.toString(),style = TextStyle(fontSize = 10.sp),
                         modifier = Modifier
                             .weight(1f)
                             .width(100.dp)
                     )
                     IconButton(
                         onClick = {
-                            items.removeAt(index)
+                            pantryViewModel.removeItemFromDatabase(item.id, item.name)
                         }
                     ) {
                         Icon(
@@ -232,7 +247,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { var saveButtonClicked = true },
+            onClick = { },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(120.dp)
