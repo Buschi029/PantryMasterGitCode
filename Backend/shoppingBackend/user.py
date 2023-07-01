@@ -1,9 +1,9 @@
 
 import psycopg2
 from flask import Flask, jsonify, request
-from app import app
+from apiflask import APIBlueprint
 
-
+userB = APIBlueprint('user', __name__)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
@@ -19,7 +19,7 @@ def tryConnect():
     )
     return conn
 
-@app.route("/user", methods=["GET"])
+@userB.route("/user", methods=["GET"])
 def get_AllUser():
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -36,7 +36,7 @@ def get_AllUser():
     return jsonify(results)
 
 
-@app.route("/user", methods=["POST"])
+@userB.route("/user", methods=["POST"])
 def get_userInfo():
     data = request.get_json()
     userID = data["userID"]
@@ -55,7 +55,7 @@ def get_userInfo():
     return jsonify(results)
 
 
-@app.route("/user", methods=["PUT"])
+@userB.route("/user", methods=["PUT"])
 def add_user():
     data = request.get_json()
     userID = data["userID"]
@@ -72,7 +72,7 @@ def add_user():
 
     return "User angelegt"
 
-@app.route("/user", methods=["DELETE"])
+@userB.route("/user", methods=["DELETE"])
 def delete_user():
     data = request.get_json()
     userID = data["userID"]

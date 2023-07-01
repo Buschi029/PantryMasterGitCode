@@ -1,8 +1,9 @@
 
 import psycopg2
-from flask import Flask, jsonify, request
-from app import app
+from flask import Flask, jsonify, request, Blueprint
+from apiflask import APIBlueprint
 
+shoppingList = APIBlueprint('shoppingList', __name__)
 
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
@@ -18,7 +19,7 @@ def tryConnect():
     return conn
 
 
-@app.route("/shoppingList", methods=["GET"])
+@shoppingList.route("/shoppingList", methods=["GET"])
 def get_allItems():
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -33,7 +34,7 @@ def get_allItems():
         results.append(result)
     return jsonify(results)
 
-@app.route("/shoppingList", methods=["POST"])
+@shoppingList.route("/shoppingList", methods=["POST"])
 def get_oneItem():
     data = request.get_json()
     userID = data["userID"]
@@ -51,7 +52,7 @@ def get_oneItem():
     return jsonify(results)
 
 
-@app.route("/shoppingList", methods=["PUT"])
+@shoppingList.route("/shoppingList", methods=["PUT"])
 def add_item():
     data = request.get_json()
     userID = data["userID"]
@@ -97,7 +98,7 @@ def addEntry(productName, userID, quantity, quantityUnit):
     return "Eintrag angelegt"
 
 
-@app.route("/shoppingList", methods=["DELETE"])
+@shoppingList.route("/shoppingList", methods=["DELETE"])
 def delete_item():
     data = request.get_json()
     userID = data["userID"]

@@ -3,10 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from app import app
+from apiflask import APIBlueprint
 
-
-#app = Flask(__name__)
+product = APIBlueprint('product', __name__)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
@@ -50,7 +49,7 @@ def get_produktinfo(barcode):
 
 
 
-@app.route("/product", methods=["POST"])
+@product.route("/product", methods=["POST"])
 def get_oneProduct():
     data = request.get_json()
     barcode = data["barcode"]

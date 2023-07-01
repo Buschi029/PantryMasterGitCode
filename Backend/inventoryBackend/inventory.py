@@ -3,9 +3,9 @@ import json
 import psycopg2
 import requests
 from flask import Flask, jsonify, request
-from app import app
+from apiflask import APIBlueprint
 
-
+inventory = APIBlueprint('inventory', __name__)
 
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
@@ -20,7 +20,7 @@ def tryConnect():
     return conn
 
 
-@app.route("/inventory", methods=["GET"])
+@inventory.route("/inventory", methods=["GET"])
 def get_allInvItem():
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -35,7 +35,7 @@ def get_allInvItem():
         results.append(result)
     return jsonify(results)
 
-@app.route("/inventory", methods=["POST"])
+@inventory.route("/inventory", methods=["POST"])
 def insert_Item():
     
     conn = tryConnect() 
@@ -62,7 +62,7 @@ def insert_Item():
 
 
 
-# @app.route("/inventory", methods=["POST"])
+# @inventory.route("/inventory", methods=["POST"])
 # def get_oneInvItem():
 #     data = request.get_json()
 #     userID = data["userID"]
@@ -81,7 +81,7 @@ def insert_Item():
     #return jsonify(cursor)
 
 
-@app.route("/inventory", methods=["DELETE"])
+@inventory.route("/inventory", methods=["DELETE"])
 def delete_invItem():
     data = request.get_json()
     userID = data["userID"]
