@@ -10,36 +10,13 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.prime.pantrymastergitcode.R
-import com.prime.pantrymastergitcode.ui.theme.Ebony
-import com.prime.pantrymastergitcode.ui.theme.Olivine
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
-import com.prime.pantrymastergitcode.view.pantry.PantryItem
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.ContentType.Application.Json
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.client.statement.HttpResponse
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -63,15 +40,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
-
-
-    /*
-    var items by shoppingListViewModel.items.collectAsState()
-    var newItem by shoppingListViewModel.newItem.collectAsState()
-    var newQuantity by shoppingListViewModel.newQuantity.collectAsState()
-    var newQuantityType by shoppingListViewModel.newQuantityType.collectAsState()
-
-     */
 
 
     Column(
@@ -144,7 +112,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    //shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
+                    shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
                     newItem = ""
                     newQuantity = 0
                     newQuantityType = ""
@@ -180,23 +148,6 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         modifier = Modifier.weight(1f)
                     )
 
-                    val isCheckedState = remember { mutableStateOf(item.isChecked) }
-
-                    Checkbox(
-                        checked = isCheckedState.value,
-                        onCheckedChange = { isChecked ->
-                            shoppingListViewModel.updateItemCheckedState(item.productName, isChecked)
-                            shoppingListViewModel.getItemsFromDatabase()
-                        },
-                        modifier = Modifier
-                            .clickable { isCheckedState.value = !isCheckedState.value }
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(
-                                width = 1.dp,
-                                color = Color.White,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                    )
                     IconButton(
                         onClick = {
                             shoppingListViewModel.removeItemFromDatabase(

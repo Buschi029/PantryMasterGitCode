@@ -3,21 +3,14 @@ package com.prime.pantrymastergitcode.view.shoppingList
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 import androidx.lifecycle.viewModelScope
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import com.prime.pantrymastergitcode.api.dto.ShoppingItemDTO
-import com.prime.pantrymastergitcode.api.dto.ShoppingListDTO
 import com.prime.pantrymastergitcode.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -25,39 +18,11 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-
-import kotlinx.serialization.encodeToString
-
 
 class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
 
-/*
-    data class ShoppingItem(val name: String, var quantity: String,
-                            var quantityType: String, var isChecked: Boolean = false)
-
- */
-    /*
-        private val _items = MutableStateFlow(false)
-        val items = _items.asStateFlow()
-
-        private val _newItem = MutableStateFlow(false)
-        val newItem = _newItem.asStateFlow()
-
-        private val _newQuantity = MutableStateFlow(false)
-        val newQuantity = _newQuantity.asStateFlow()
-
-        private val _newQuantityType = MutableStateFlow(false)
-        val newQuantityType = _newQuantityType.asStateFlow()
-        */
-
-    /*
-    data class ShoppingItem(val name: String, var quantity: String,
-                            var isChecked: Boolean = false)
-*/
     private val _items = mutableStateListOf<ShoppingItem>()
-    //val items: List<ShoppingItem> get() = _items
+    var items: List<ShoppingItemDTO> by mutableStateOf(mutableListOf())
 
     private val _newItem = mutableStateOf("")
     val newItem: String get() = _newItem.value
@@ -68,8 +33,6 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     private val _newQuantityType = mutableStateOf("")
     val newQuantityType: String get() = _newQuantityType.value
 
-    var items: List<ShoppingItemDTO> by mutableStateOf(mutableListOf())
-
     fun updateItemCheckedState(productName: String, isChecked: Boolean) {
         val itemToUpdate = items.find { it.productName == productName }
         itemToUpdate?.isChecked = isChecked
@@ -78,14 +41,13 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-    // NEU
-
     val url = "localhost:8081/shoppingList"
     var response = ""
 
     fun addItemToDatabase(
         productName: String, quantity: Int,
-        quantityUnit: String): String {
+        quantityUnit: String
+    ): String {
         viewModelScope.launch {
 
             val client = HttpClient(CIO)
@@ -102,7 +64,7 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.getShoppingList("")!!
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
         }
@@ -111,8 +73,8 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     fun addItemsToDatabase(productName: String, quantity: Int, quantityUnit: String) {
         viewModelScope.launch {
             try {
-                items = service.addToShoppingList(productName,quantity, quantityUnit, "")!!
-            } catch(e: Exception) {
+                items = service.addToShoppingList(productName, quantity, quantityUnit, "")!!
+            } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
         }
@@ -122,47 +84,9 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         viewModelScope.launch {
             try {
                 items = service.removeFromShoppingList(productName, "")!!
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
         }
     }
-
-    fun addItem() {
-        val newItem = newItem
-        val newQuantity = newQuantity
-        val newQuantityType = newQuantityType
-        //Test
-
-        _items.add(ShoppingItem(newItem, newQuantity, newQuantityType))
-        _newItem.value = ""
-        _newQuantity.value = ""
-        _newQuantityType.value = ""
-    }
-
-    fun removeItem(item: ShoppingItem) {
-        _items.remove(item)
-    }
 }
-
-/*
-fun fetchShoppingList() {
-    GlobalScope.launch(Dispatchers.IO) {
-        try {
-            val response = httpClient.get<List<ShoppingItem>>("http://localhost:8081/shoppingList")
-            withContext(Dispatchers.Main) {
-                _items.clear()
-                _items.addAll(response)
-            }
-        } catch (e: Exception) {
-            // Handle error
-            e.printStackTrace()
-        }
-    }
-}
-}
-
- */
-
-
-
