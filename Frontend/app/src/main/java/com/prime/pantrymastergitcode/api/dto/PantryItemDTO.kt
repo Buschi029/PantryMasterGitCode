@@ -10,26 +10,26 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PantryItemDTO (
 
-@SerialName("id")
-val id: Long,
+    @SerialName("productCode")
+val productCode: Long,
 
-@SerialName("name")
-val name: String,
+    @SerialName("userID")
+val userID: String,
 
-@SerialName("productName")
+    @SerialName("productName")
 val productName: String,
 
-@SerialName("expirationDate")
+    @SerialName("expirationDate")
 val expirationDate: LocalDate,
 
-@SerialName("appendDate")
-val appendDate: LocalDate,
+    @SerialName("appendDate")
+val appendDate: LocalDateTime,
 
-@SerialName("quantity")
+    @SerialName("quantity")
 val quantity: Int,
 
-@SerialName("quantityUnit")
+    @SerialName("quantityUnit")
 val quantityUnit: String
 ) {
-    constructor() : this(0,"","",java.time.LocalDate.now().toKotlinLocalDate(), java.time.LocalDate.now().toKotlinLocalDate(), 0, "")
+    constructor() : this(0,"","",java.time.LocalDate.now().toKotlinLocalDate(), java.time.LocalDateTime.now().toKotlinLocalDateTime(), 0, "")
 }

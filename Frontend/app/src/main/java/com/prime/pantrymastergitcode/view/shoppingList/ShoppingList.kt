@@ -10,36 +10,13 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.prime.pantrymastergitcode.R
-import com.prime.pantrymastergitcode.ui.theme.Ebony
-import com.prime.pantrymastergitcode.ui.theme.Olivine
 import com.prime.pantrymastergitcode.ui.theme.Timberwolf
-import com.prime.pantrymastergitcode.view.pantry.PantryItem
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.ContentType.Application.Json
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.client.statement.HttpResponse
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
 
 @Composable

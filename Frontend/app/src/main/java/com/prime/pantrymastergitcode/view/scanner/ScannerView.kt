@@ -49,7 +49,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.R
-import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
+import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -130,7 +130,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             Box(
                                 modifier = Modifier
                                     .clickable {
-                                        scannerViewModel.setPantryProduct(PantryProductDTO())
+                                        scannerViewModel.setPantryProduct(PantryItemDTO())
                                         scannerViewModel.setProduct(detailProduct.copy(pictureLink = ""))
                                         scannerViewModel.setLoaded(false)
                                     }
@@ -312,7 +312,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 Button(
                     modifier = Modifier
                         .weight(3f),
-                    onClick = { scannerViewModel.postProductToPantry(pantryProduct) }
+                    onClick = { scannerViewModel.addProductToPantry(pantryProduct) }
                 ) {
                     Text(text = "Add Product")
                 }

@@ -3,21 +3,15 @@ package com.prime.pantrymastergitcode.view.shoppingList
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 import androidx.lifecycle.viewModelScope
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import com.prime.pantrymastergitcode.api.dto.ShoppingItemDTO
-import com.prime.pantrymastergitcode.api.dto.ShoppingListDTO
 import com.prime.pantrymastergitcode.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -25,10 +19,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-
-import kotlinx.serialization.encodeToString
 
 
 class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {

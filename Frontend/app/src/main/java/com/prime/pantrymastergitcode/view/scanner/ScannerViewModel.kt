@@ -4,18 +4,18 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
+import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 
 class ScannerViewModel(private val service: OFFAPIService) : ViewModel() {
     private val _product = MutableStateFlow(ProductDTO())
     val product = _product.asStateFlow()
-    private val _pantryProduct = MutableStateFlow(PantryProductDTO())
+    private val _pantryProduct = MutableStateFlow(PantryItemDTO())
     val pantryProduct = _pantryProduct.asStateFlow()
 
     val _loading = MutableStateFlow(false)
@@ -27,7 +27,7 @@ class ScannerViewModel(private val service: OFFAPIService) : ViewModel() {
         _product.value = product
     }
 
-    fun setPantryProduct(pantryProduct: PantryProductDTO) {
+    fun setPantryProduct(pantryProduct: PantryItemDTO) {
         _pantryProduct.value = pantryProduct
     }
 
@@ -52,14 +52,14 @@ class ScannerViewModel(private val service: OFFAPIService) : ViewModel() {
         return@coroutineScope failed
     }
 
-    fun postProductToPantry(pantryProduct: PantryProductDTO) {
-        val today = java.time.LocalDate.now()
-        val appendDate = LocalDate(today.year, today.month, today.dayOfMonth)
-        _pantryProduct.value = pantryProduct.copy(appendDate = appendDate)
+    fun addProductToPantry(pantryProduct: PantryItemDTO) {
+        val today = java.time.LocalDateTime.now()
+        val appendDate = today.toKotlinLocalDateTime()
+        _pantryProduct.value = pantryProduct.copy(appendDate = appendDate, userID = "ABC")
         viewModelScope.launch {
-            service.postPantryEntry(pantryProductDTO = pantryProduct)
+            service.postPantryEntry(pantryItemDTO = pantryProduct)
         }
-        _pantryProduct.value = PantryProductDTO()
+        _pantryProduct.value = PantryItemDTO()
         _product.value = ProductDTO()
         _loaded.value = false
     }
