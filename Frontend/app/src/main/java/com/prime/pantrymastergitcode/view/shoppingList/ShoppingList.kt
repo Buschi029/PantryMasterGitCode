@@ -34,12 +34,10 @@ data class ShoppingItem(val name: String, var quantity: String,
 
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
-
-    var response: String by remember{ mutableStateOf("") }
-
     var newItem: String by remember { mutableStateOf("") }
     var newQuantity: Int by remember { mutableStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
+    val loading by shoppingListViewModel.loading.collectAsState()
 
     Column(
         modifier = Modifier
@@ -71,102 +69,113 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
 
-
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            TextField(
-                value = if (newQuantity != 0) newQuantity.toString() else "",
-                onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            TextField(
-                value = newQuantityType,
-                onValueChange = { newQuantityType = it },
-                placeholder = { Text("Type", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            TextField(
-                value = newItem,
-                onValueChange = { newItem = it },
-                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                onClick = {
-                    shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
-                    newItem = ""
-                    newQuantity = 0
-                    newQuantityType = ""
-                },
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(50.dp)
+        if (loading) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
+                CircularProgressIndicator()
             }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Divider(color = Color.LightGray, thickness = 1.dp)
-        Column(modifier = Modifier.fillMaxWidth()) {
-            shoppingListViewModel.items.forEachIndexed { index, item ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TextField(
+                    value = if (newQuantity != 0) newQuantity.toString() else "",
+                    onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
+                    placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .padding(horizontal = 4.dp)
+                        .weight(1f)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Timberwolf)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                TextField(
+                    value = newQuantityType,
+                    onValueChange = { newQuantityType = it },
+                    placeholder = { Text("Type", style = TextStyle(fontSize = 12.sp)) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Timberwolf)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                TextField(
+                    value = newItem,
+                    onValueChange = { newItem = it },
+                    placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Timberwolf)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = {
+                        shoppingListViewModel.addItemsToDatabase(
+                            newItem,
+                            newQuantity,
+                            newQuantityType
+                        )
+                        newItem = ""
+                        newQuantity = 0
+                        newQuantityType = ""
+                    },
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(50.dp)
                 ) {
-                    Text(
-                        "${item.quantity} ${item.quantityUnit}",
+                    Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Divider(color = Color.LightGray, thickness = 1.dp)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                shoppingListViewModel.items.forEachIndexed { index, item ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
 
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
+                            .padding(vertical = 4.dp)
+                            .padding(horizontal = 4.dp)
+                    ) {
+                        Text(
+                            "${item.quantity} ${item.quantityUnit}",
 
-                    )
-                    Text(
-                        item.productName,
-                        modifier = Modifier.weight(1f)
-                    )
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp)
 
-                    IconButton(
-                        onClick = {
-                            shoppingListViewModel.removeItemFromDatabase(
-                                item.productName,
-                                item.quantity,
-                                item.quantityUnit
+                        )
+                        Text(
+                            item.productName,
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        IconButton(
+                            onClick = {
+                                shoppingListViewModel.removeItemFromDatabase(
+                                    item.productName,
+                                    item.quantity,
+                                    item.quantityUnit
+                                )
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.Black
                             )
                         }
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = Color.Black
-                        )
                     }
+                    Divider(color = Color.LightGray, thickness = 1.dp)
                 }
-                Divider(color = Color.LightGray, thickness = 1.dp)
             }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+        }
     }
 }

@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -76,7 +77,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 60.dp, start = 20.dp, end = 20.dp),
+            .padding(start = 20.dp, end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
@@ -230,7 +231,6 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
                         .padding(horizontal = 20.dp),
                     onClick = {
                         dateDialogState.show()
@@ -245,11 +245,15 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             contentDescription = "Calendar",
                             modifier = Modifier
                                 .size(30.dp)
-                                .fillMaxSize(),
+                                .fillMaxSize()
+                                .weight(2f),
                             tint = Color.Black
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column(verticalArrangement = Arrangement.Center) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Column(
+                            modifier = Modifier
+                                .weight(7f),
+                            verticalArrangement = Arrangement.Center) {
                             Text(
                                 text = "Mindesthaltbarkeitsdatum",
                                 style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
@@ -312,7 +316,27 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 Button(
                     modifier = Modifier
                         .weight(3f),
-                    onClick = { scannerViewModel.addProductToPantry(pantryProduct) }
+                    onClick = {
+                        scope.launch {
+                            var failed = scope.async {
+                                scannerViewModel.addProductToPantry(pantryProduct)
+                            }
+                            if (failed.await()) {
+                                Log.e("ScannerViewModel", failed.await().toString())
+                                Toast.makeText(
+                                    context,
+                                    "Could not add Product to Pantry",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }else{
+                                Toast.makeText(
+                                    context,
+                                    "Product successfully added to pantry!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
                 ) {
                     Text(text = "Add Product")
                 }

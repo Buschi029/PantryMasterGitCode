@@ -27,6 +27,7 @@ import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 @Composable
 fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
     val navController = rememberNavController()
+    val mainViewModel = MainViewModel()
     Scaffold(
         topBar = {
 
@@ -38,29 +39,28 @@ fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                BottomNavGraph(navController = navController, service = service, scanner = scanner)
+                BottomNavGraph(navController = navController, service = service, scanner = scanner, mainViewModel = mainViewModel )
             }
         }
     )
 }
 
-
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
-
         // Festlegung der Reihenfolge in der Navigationsleiste
         BottomBarScreen.Scanner,
         BottomBarScreen.Pantry,
         BottomBarScreen.ShoppingList,
     )
 
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation {
         screens.forEach { screen->
-            AddItem(screen = screen, currentDestination = currentDestination , navController = navController )
+            AddItem(screen = screen, currentDestination = currentDestination , navController = navController)
         }
     }
 }

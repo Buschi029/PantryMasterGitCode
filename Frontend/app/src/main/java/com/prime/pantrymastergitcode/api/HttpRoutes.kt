@@ -1,7 +1,7 @@
 package com.prime.pantrymastergitcode.api
 
 object HttpRoutes {
-    private const val BASE_URL = "http://192.168.0.234:"
+    private const val BASE_URL = "http://192.168.188.20:"
     private const val BASE_URL_PRODUCT = "${BASE_URL}8080/"
     private const val BASE_URL_SHOPPING = "${BASE_URL}8081/"
     const val product = "${BASE_URL_PRODUCT}product"

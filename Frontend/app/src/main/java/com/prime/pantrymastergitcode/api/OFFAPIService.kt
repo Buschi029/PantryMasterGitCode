@@ -14,7 +14,8 @@ import kotlinx.serialization.json.Json
 
 interface OFFAPIService {
     suspend fun postProductDetails(code: Long): ProductDTO?
-    suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO)
+    suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO): Boolean
+
     // Shopping List
     suspend fun httpRequestShopping(shoppingItemDTO: ShoppingItemDTO)
 

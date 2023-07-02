@@ -42,16 +42,18 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    override suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO) {
+    override suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO): Boolean {
         val response: HttpResponse
-        try {
+        return try {
             response = client.put(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
                 setBody(pantryItemDTO)
             }
             Log.i(tag, response.status.toString())
+            false
         } catch (e: Exception) {
             Log.e(tag, e.toString())
+            true
         }
     }
 
@@ -103,12 +105,8 @@ class OFFAPIServiceImplementation(
         }
     }
 
-
-
-
     override suspend fun addToShoppingList(productName: String, quantity: Int, quantityUnit: String, userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
-
         return try {
             val item = ShoppingItemDTO(productName, quantity, quantityUnit, userID)
             response = client.put(HttpRoutes.shoppingList) {

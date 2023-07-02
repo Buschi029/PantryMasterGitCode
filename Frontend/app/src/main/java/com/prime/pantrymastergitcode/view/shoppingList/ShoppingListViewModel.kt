@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 import androidx.lifecycle.viewModelScope
+import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.api.dto.ShoppingItemDTO
 import com.prime.pantrymastergitcode.util.Log
@@ -21,8 +22,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
 
 
-class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
-
+class ShoppingListViewModel(private val service: OFFAPIService, private val mainViewModel: MainViewModel): ViewModel() {
     private val _items = mutableStateListOf<ShoppingItem>()
     var items: List<ShoppingItemDTO> by mutableStateOf(mutableListOf())
 
@@ -35,17 +35,15 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
     private val _newQuantityType = mutableStateOf("")
     val newQuantityType: String get() = _newQuantityType.value
 
-
-
-    fun updateItemCheckedState(productName: String, isChecked: Boolean) {
-        val itemToUpdate = items.find { it.productName == productName }
-        itemToUpdate?.isChecked = isChecked
-    }
+    private val _loading = MutableStateFlow(true)
+    val loading = _loading.asStateFlow()
 
     fun getItemsFromDatabase() {
+        _loading.value = true
         viewModelScope.launch {
             try {
                 items = service.getShoppingList("")!!
+                _loading.value = false
             } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
@@ -72,7 +70,3 @@ class ShoppingListViewModel(private val service: OFFAPIService): ViewModel() {
         }
     }
 }
-
-
-
-

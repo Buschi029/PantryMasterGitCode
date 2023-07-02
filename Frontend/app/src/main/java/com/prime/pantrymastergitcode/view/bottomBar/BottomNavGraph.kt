@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.HomeScreen
 import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
@@ -16,10 +17,11 @@ import com.prime.pantrymastergitcode.view.scanner.ScannerViewModel
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 
 @Composable
-fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, scanner: GmsBarcodeScanner) {
-    val pantryViewModel = PantryViewModel(service = service)
-    val scannerViewModel = ScannerViewModel(service)
-    val shoppingListViewModel = ShoppingListViewModel(service = service)
+fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, scanner: GmsBarcodeScanner, mainViewModel: MainViewModel) {
+    val pantryViewModel = PantryViewModel(service = service, mainViewModel = mainViewModel)
+    val scannerViewModel = ScannerViewModel(service = service, mainViewModel = mainViewModel)
+    val shoppingListViewModel = ShoppingListViewModel(service = service, mainViewModel = mainViewModel)
+    val mainViewModel = mainViewModel
 
     NavHost(
         navController = navController,

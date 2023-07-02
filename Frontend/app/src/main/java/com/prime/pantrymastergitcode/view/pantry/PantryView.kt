@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -68,20 +69,12 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     }
 }
 
-data class PantryItem(val id: Long, var name: String, val productName: String,var expirationDate: LocalDate,  var quantity: Int, var quantityUnit: String)
-
-data class PantryProduct(val productCode: Long, var productName: String, var userID: String, var expirationDate: LocalDate, var appendDate: LocalDate, var quantity: Int, var quantityUnit: String)
-
-
 
 @Composable
 fun PantryList(pantryViewModel: PantryViewModel) {
-    var newItem: String by remember { mutableStateOf("") }
-    var newQuantity: Int by remember { mutableStateOf(0) }
-    var newUnit: String by remember { mutableStateOf("") }
-    val sorted by pantryViewModel.sorted.collectAsState()
     val dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val context = LocalContext.current
+    val loading by pantryViewModel.loadingPantry.collectAsState()
 
     Column(
         modifier = Modifier
@@ -112,110 +105,119 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         Divider(color = Color.LightGray, thickness = 1.dp)
         Spacer(modifier = Modifier.height(12.dp))
 
-
-
-        // Tabelle
-        Column(modifier = Modifier.fillMaxWidth()) {
-            pantryViewModel.getPantryList().forEachIndexed { index, item ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .background(color = Color.White)
-                        .clickable {
-                            if(!item.productCode.equals(0)){
-                                pantryViewModel.getProductDetails(item.productCode)
-                                pantryViewModel.setProductDetails(true)
-                            }else if(item.productCode.equals(0)){
-                                Toast.makeText(context,"There are no Product Details available", Toast.LENGTH_SHORT).show()
-                            }
-
-                        }
-                ) {
-                    IconButton(
-                        onClick = {
-                            if (item.quantity > 0) {
-                                pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.dec()), index = index)
-                            }
-                        }
-                    ) {
-                        Icon(
-                            Icons.Default.Remove,
-                            contentDescription = "Decrease",
-                            tint = Color.Black
-                        )
-                    }
-
-                    Text(
-                        "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
-                        modifier = Modifier
-
-                    )
-                    IconButton(
-                        onClick = {
-                            pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.inc()), index = index)
-                        },
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "Increase",
-                            tint = Color.Black
-                        )
-                    }
-                    // Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        item.productName,style = TextStyle(fontSize = 12.sp),
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(100.dp)
-                    )
-                    Text(
-                        item.expirationDate.toJavaLocalDate().format(dayFormatter).toString(),style = TextStyle(fontSize = 10.sp),
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(100.dp)
-                    )
-                    IconButton(
-                        onClick = {
-                            pantryViewModel.removeItemFromDatabase(item)
-                        }
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = Color.Black
-                        )
-                    }
-                }
-                Divider(color = Color.LightGray, thickness = 1.dp)
-            }
-        }
-
-        // speichern
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Row{
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .width(120.dp)
+        if (loading) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text("Save", color = Color.Black)
+                CircularProgressIndicator()
             }
-            Button(
-                onClick = {
-                    pantryViewModel.sortList()
+        }else{
+            // Tabelle
+            Column(modifier = Modifier.fillMaxWidth()) {
+                pantryViewModel.getPantryList().forEachIndexed { index, item ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .background(color = Color.White)
+                            .clickable {
+                                if (item.productCode != 0L) {
+                                    pantryViewModel.getProductDetails(
+                                        item.productCode,
+                                        item.productName
+                                    )
+                                    pantryViewModel.setProductDetails(true)
+                                } else {
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "There are no Product Details available",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                }
+
+                            }
+                    ) {
+                        IconButton(
+                            onClick = {
+                                if (item.quantity > 0) {
+                                    pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.dec()), index = index)
+                                }
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Remove,
+                                contentDescription = "Decrease",
+                                tint = Color.Black
+                            )
+                        }
+
+                        Text(
+                            "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
+                            modifier = Modifier
+
+                        )
+                        IconButton(
+                            onClick = {
+                                pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.inc()), index = index)
+                            },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Increase",
+                                tint = Color.Black
+                            )
+                        }
+                        // Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            item.productName,style = TextStyle(fontSize = 12.sp),
+                            modifier = Modifier
+                                .weight(1f)
+                                .width(100.dp)
+                        )
+                        Text(
+                            item.expirationDate.toJavaLocalDate().format(dayFormatter).toString(),style = TextStyle(fontSize = 10.sp),
+                            modifier = Modifier
+                                .weight(1f)
+                                .width(100.dp)
+                        )
+                        IconButton(
+                            onClick = {
+                                pantryViewModel.removeItemFromDatabase(item)
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.Black
+                            )
+                        }
+                    }
+                    Divider(color = Color.LightGray, thickness = 1.dp)
                 }
-            ){
-                Text(text = "sortieren")
+            }
+
+            // speichern
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Row{
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .width(120.dp)
+                ) {
+                    Text("Save", color = Color.Black)
+                }
+                Button(
+                    onClick = {
+                        pantryViewModel.sortList()
+                    }
+                ){
+                    Text(text = "sortieren")
+                }
             }
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-        )
-
     }
 }
