@@ -54,13 +54,6 @@ def get_allInvItem():
         apdDate = row[6].strftime("%Y-%m-%dT%H:%M:%S.%f")
         expDate = row[3].strftime("%Y-%m-%d")
 
-        #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
-        #print[apdDate.year]
-        #expDate = row[3].year + row[3].month + row[3].day
-        #apdDate = row[6].year + row[6].month + row[6].day
-        #expDate = datetime.strptime(row[3],'%Y-%m-%d')
-        #apdDate = datetime.strptime(row[6],'%Y-%m-%d')
-
         result = {"productCode": row[0], "userID": row[1], "productName": row[2], "expirationDate": expDate, "quantity": row[4], "quantityUnit": row[5], "appendDate": apdDate}
         results.append(result)
         x = x + 1
@@ -85,13 +78,6 @@ def get_oneInvItem():
     for row in data:
         apdDate = row[6].strftime("%Y-%m-%dT%H:%M:%S.%f")
         expDate = row[3].strftime("%Y-%m-%d")
-
-        #apdDate = datetime.strptime(row[3],'%Y-%m-%d')
-        #print[apdDate.year]
-        #expDate = row[3].year + row[3].month + row[3].day
-        #apdDate = row[6].year + row[6].month + row[6].day
-        #expDate = datetime.strptime(row[3],'%Y-%m-%d')
-        #apdDate = datetime.strptime(row[6],'%Y-%m-%d')
 
         result = {"productCode": row[0], "userID": row[1], "productName": row[2], "expirationDate": expDate, "quantity": row[4], "quantityUnit": row[5], "appendDate": apdDate}
         results.append(result)
