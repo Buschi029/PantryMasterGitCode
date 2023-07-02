@@ -18,7 +18,7 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
     val tag = "PantryViewModel"
 
-    private val items = mutableStateListOf<PantryItemDTO>()
+    val items = mutableStateListOf<PantryItemDTO>()
 
     private val unsortedItems = mutableStateListOf<PantryItemDTO>()
 
