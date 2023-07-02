@@ -1,5 +1,6 @@
 package com.prime.pantrymastergitcode.view.pantry
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,7 +81,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
     var newUnit: String by remember { mutableStateOf("") }
     val sorted by pantryViewModel.sorted.collectAsState()
     val dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    val items2 by pantryViewModel.items1.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -114,24 +116,25 @@ fun PantryList(pantryViewModel: PantryViewModel) {
 
         // Tabelle
         Column(modifier = Modifier.fillMaxWidth()) {
-            pantryViewModel.items3.forEachIndexed { index, item ->
+            pantryViewModel.getPantryList().forEachIndexed { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .background(color = Color.White)
                         .clickable {
-                            pantryViewModel.getProductDetails(item.productCode)
-                            pantryViewModel.setProductDetails(true)
+                            if(!item.productCode.equals(0)){
+                                pantryViewModel.getProductDetails(item.productCode)
+                                pantryViewModel.setProductDetails(true)
+                            }else if(item.productCode.equals(0)){
+                                Toast.makeText(context,"There are no Product Details available", Toast.LENGTH_SHORT).show()
+                            }
+
                         }
                 ) {
                     IconButton(
                         onClick = {
                             if (item.quantity > 0) {
-
-                               pantryViewModel.items3[index] = item.copy(quantity = item.quantity.dec())
-                                pantryViewModel.updatePantryItem(pantryViewModel.items3[index])
-
-
+                                pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.dec()), index = index)
                             }
                         }
                     ) {
@@ -149,11 +152,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                     )
                     IconButton(
                         onClick = {
-                            val updatedItem = item.copy(quantity = item.quantity + 1)
-                            val mutableList = pantryViewModel.items.toMutableList()
-                            mutableList[index] = updatedItem
-                            pantryViewModel.items = mutableList
-                            pantryViewModel.updatePantryItem(updatedItem)
+                            pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.inc()), index = index)
                         },
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
@@ -205,16 +204,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             }
             Button(
                 onClick = {
-//                    if(!sorted){
-//                        pantryViewModel.unsortedItems = pantryViewModel.items
-//                        pantryViewModel.items = pantryViewModel.items.sortedBy { it.expirationDate }
-//                        pantryViewModel.setSorted(true)
-//                    }else{
-//                        pantryViewModel.items = pantryViewModel.unsortedItems
-//                        pantryViewModel.setSorted(false)
-//
-//                    }
-
+                    pantryViewModel.sortList()
                 }
             ){
                 Text(text = "sortieren")

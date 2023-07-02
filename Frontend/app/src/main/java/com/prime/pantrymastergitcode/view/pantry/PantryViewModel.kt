@@ -17,19 +17,16 @@ import kotlinx.coroutines.launch
 class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
 
     val tag = "PantryViewModel"
-    val _items = MutableStateFlow(mutableListOf<PantryItemDTO>())
-    val items1 = _items.asStateFlow()
-    val items3 = mutableStateListOf<PantryItemDTO>()
 
+    private val items = mutableStateListOf<PantryItemDTO>()
 
-    var items: MutableList<PantryItemDTO> by mutableStateOf(mutableListOf())
-
-
-
-    var unsortedItems: List<PantryItemDTO> by mutableStateOf(mutableListOf())
+    private val unsortedItems = mutableStateListOf<PantryItemDTO>()
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
+
+    private val _loadingPantry = MutableStateFlow(false)
+    val loadingPantry = _loadingPantry.asStateFlow()
 
     private val _showProductDetails = MutableStateFlow(false)
     val showProductDetails = _showProductDetails.asStateFlow()
@@ -59,9 +56,9 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
     fun getPantryItemsFromDatabase() {
         viewModelScope.launch {
             try {
-                items = service.getPantryList("")!!
-                _items.value = items
-                items3.addAll(items)
+                items.clear()
+                items.addAll(service.getPantryList("")!!)
+                _sorted.value = false
             } catch(e: Exception) {
                 com.prime.pantrymastergitcode.util.Log.e("PantryViewModel", e.toString())
             }
@@ -71,24 +68,38 @@ class PantryViewModel(private val service: OFFAPIService, ): ViewModel() {
     fun removeItemFromDatabase(pantryItem: PantryItemDTO) {
         viewModelScope.launch {
             try {
-                items = service.removeFromPantryList(pantryItemDTO = pantryItem)!!
+                items.remove(pantryItem)
+                service.removeFromPantryList(pantryItemDTO = pantryItem)!!
             } catch(e: Exception) {
                 com.prime.pantrymastergitcode.util.Log.e("PantryViewModel", e.toString())
             }
         }
     }
 
-    fun setSorted(value: Boolean){
-        _sorted.value = value
-    }
-
-    fun updatePantryItem(pantryItem: PantryItemDTO){
+    fun updatePantryItem(pantryItem: PantryItemDTO, index: Int){
         viewModelScope.launch {
             try{
-                items = service.updatePantryItem(pantryItem)!!
+                items[index] = pantryItem
+                service.updatePantryItem(pantryItem)!!
             }catch (e:Exception){
                 Log.e(tag, e.toString())
             }
+        }
+    }
+    fun getPantryList(): List<PantryItemDTO>{
+        return items
+    }
+    fun sortList(){
+        if(!sorted.value) {
+            items.sortBy {
+                it.expirationDate
+            }
+            _sorted.value = true
+        }else if(sorted.value){
+            items.sortBy {
+                it.appendDate
+            }
+            _sorted.value = false
         }
     }
 }
