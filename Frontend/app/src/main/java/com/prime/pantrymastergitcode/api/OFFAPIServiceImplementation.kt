@@ -20,11 +20,13 @@ import io.ktor.http.isSuccess
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 
+// Klasse, welche die HTTP-Request beinhaltet
 class OFFAPIServiceImplementation(
     private val client: HttpClient
 ) : OFFAPIService {
     private val tag = "APIService"
 
+    // Funktion zum Hinzufügen von Produktdetails
     override suspend fun postProductDetails(code: Long): ProductDTO? {
         val response: HttpResponse
         val body: ProductDTO
@@ -42,6 +44,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zum Hinzufügen von Produkteinträgen
     override suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO): Boolean {
         val response: HttpResponse
         return try {
@@ -57,18 +60,18 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zur HTTP-Anfrage von ShoppingItems
     override suspend fun httpRequestShopping(shoppingItemDTO: ShoppingItemDTO) {
         val response: HttpResponse
-
     }
 
+    // Funktion zur Abfrage von ShoppingListItems
     override suspend fun getShoppingList(userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
         val shoppingList: List<ShoppingItemDTO>
         return try {
             response = client.get(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
-
             }
             shoppingList = response.body()
             shoppingList
@@ -78,6 +81,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zum Entfernen von ShoppingList-Einträgen
     override suspend fun removeFromShoppingList(productName: String, userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
 
@@ -105,6 +109,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zum Hinzufügen von ShoppingItems
     override suspend fun addToShoppingList(productName: String, quantity: Int, quantityUnit: String, userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
         return try {
@@ -131,7 +136,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
-
+    // Funktion zum Abrufen der PantryList
     override suspend fun getPantryList(name: String): MutableList<PantryItemDTO>? {
         val response: HttpResponse
         val pantryList: MutableList<PantryItemDTO>
@@ -147,6 +152,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zum Entfernen von Pantry-Einträgen
     override suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>? {
         val response: HttpResponse
         val updatedList: MutableList<PantryItemDTO>
@@ -165,6 +171,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zun Updaten von PantryItems
     override suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>? {
         val response: HttpResponse
         val updatedList: MutableList<PantryItemDTO>

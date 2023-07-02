@@ -32,7 +32,7 @@ class ShoppingListUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = ShoppingListViewModel(service)
+        val viewModel = ShoppingListViewModel(service, mainViewModel = MainViewModel())
         val productName = "Milch"
         val quantity = 300
         val quantityUnit = "ml"
@@ -63,7 +63,7 @@ class ShoppingListUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = ShoppingListViewModel(service)
+        val viewModel = ShoppingListViewModel(service, mainViewModel = MainViewModel())
 
         // Mocking des Verhaltens von service.getShoppingList
         coEvery { service.getShoppingList("") } returns listOf(
@@ -94,15 +94,13 @@ class ShoppingListUnitTests {
         Dispatchers.resetMain()
     }
 
-
-
     @Test
     fun `removeItemFromDatabase should invoke removeFromShoppingList`() {
 
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = ShoppingListViewModel(service)
+        val viewModel = ShoppingListViewModel(service, mainViewModel = MainViewModel())
         val productName = "Milch"
         val quantity = 300
         val quantityUnit = "ml"

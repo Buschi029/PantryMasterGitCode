@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+// Festlegung der Eigenschaften eines ShoppingItemDTOs
 @Serializable
 data class ShoppingItemDTO (
     val productName: String,

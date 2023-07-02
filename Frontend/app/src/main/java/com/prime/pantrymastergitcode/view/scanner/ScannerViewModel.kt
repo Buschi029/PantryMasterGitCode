@@ -22,21 +22,23 @@ class ScannerViewModel(private val service: OFFAPIService, private val mainViewM
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
+
     private val _loaded = MutableStateFlow(false)
     val loaded = _loaded.asStateFlow()
-    private val _successful = MutableStateFlow(false)
-    val successfull = _successful.asStateFlow()
+
     private val tag = "ScannerViewModel"
 
-
+    // Funktion zum Setzen der Produkte
     fun setProduct(product: ProductDTO) {
         _product.value = product
     }
 
+    // Funktion zum Setzen der Produkte
     fun setPantryProduct(pantryProduct: PantryItemDTO) {
         _pantryProduct.value = pantryProduct
     }
 
+    // Funktion zur API-Abfrage anhand der Barcodes
     suspend fun getProductFromAPI(code: Long): Boolean = coroutineScope {
         var failed = false
         try {
@@ -58,6 +60,7 @@ class ScannerViewModel(private val service: OFFAPIService, private val mainViewM
         return@coroutineScope failed
     }
 
+    // Funktion zum Hinzufügen des Produkts in die digitale Speisekammer
     suspend fun addProductToPantry(pantryProduct: PantryItemDTO): Boolean = coroutineScope {
         val today = java.time.LocalDateTime.now()
         val appendDate = today.toKotlinLocalDateTime()
@@ -69,6 +72,8 @@ class ScannerViewModel(private val service: OFFAPIService, private val mainViewM
         val failed = async { service.postPantryEntry(pantryItemDTO = pantryEntry) }
         return@coroutineScope failed.await()
     }
+
+    // Funktion zum Setzen der Loaded-Variable
     fun setLoaded(value: Boolean) {
         _loaded.value = value
     }

@@ -35,11 +35,13 @@ import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 
+// View zur Darstellung der Produktinformationen
 @Composable
 fun DetailView(pantryViewModel: PantryViewModel) {
     val product by pantryViewModel.product.collectAsState()
     val loading by pantryViewModel.loading.collectAsState()
 
+    // Karte, in der die Produktinformationen stehen
     Card(
         elevation = 10.dp,
         shape = RoundedCornerShape(8.dp),

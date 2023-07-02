@@ -5,59 +5,40 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+// Festlegung, von Farbpaletten
 private val DarkColorPalette = darkColors(
-    //primary = Purple200,
-    //primaryVariant = Purple700,
-    //secondary = Teal200
 
-    primary = Timberwolf,
-    primaryVariant = Ebony,
-    secondary = Olivine
-
+    primary = mainColor,
+    primaryVariant = secondaryColor,
+    secondary = secondaryColor
 )
 
 private val LightColorPalette = lightColors(
-    //primary = Purple500,
-    //primaryVariant = Purple700,
-    //secondary = Teal200
 
-    primary = Timberwolf,
-    primaryVariant = Ebony,
-    secondary = Olivine
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    primary = mainColor,
+    primaryVariant = secondaryColor,
+    secondary = secondaryColor
 )
 
-
-
-
+// Festlegung von weiteren optischen Elementen
 @Composable
 fun PantryMasterGitCodeTheme(
-
-
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
 
+    // Farbliche Gestaltung der SystemBars
     val colors = if (darkTheme) {
         systemUiController.setSystemBarsColor(
-            color = Timberwolf
+            color = mainColor
         )
         DarkColorPalette
     } else {
         systemUiController.setSystemBarsColor(
-            color = Timberwolf
+            color = mainColor
         )
         LightColorPalette
     }

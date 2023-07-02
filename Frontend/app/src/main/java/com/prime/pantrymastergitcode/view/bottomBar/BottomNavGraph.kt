@@ -7,8 +7,6 @@ import androidx.navigation.compose.composable
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.view.HomeScreen
-import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListScreen
 import com.prime.pantrymastergitcode.view.pantry.PantryView
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
@@ -16,6 +14,7 @@ import com.prime.pantrymastergitcode.view.scanner.ScannerView
 import com.prime.pantrymastergitcode.view.scanner.ScannerViewModel
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
 
+// Methode zur Navigation innerhalb der Navigationsleiste
 @Composable
 fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, scanner: GmsBarcodeScanner, mainViewModel: MainViewModel) {
     val pantryViewModel = PantryViewModel(service = service, mainViewModel = mainViewModel)
@@ -28,7 +27,6 @@ fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, sca
         startDestination = BottomBarScreen.Pantry.route
     ) {
 
-        // Reihenfolge der Views wird festgelegt
         composable(route = BottomBarScreen.Scanner.route) {
             ScannerView(scannerViewModel, scanner)
         }
@@ -38,6 +36,5 @@ fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, sca
         composable(route = BottomBarScreen.ShoppingList.route) {
             ShoppingListScreen(shoppingListViewModel)
         }
-
     }
 }
