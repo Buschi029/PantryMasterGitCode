@@ -52,7 +52,7 @@ jobs:
             distribution: 'temurin'
 
         - name: "Set execute permission on Gradle script"
-          run: cd Frontend && chmod +x ./gradlew
+          run: cd Frontend && chmod +x ./gradlew && ./gradlew connectedCheck
 
         - name: "Run UI-Test"
           uses: reactivecircus/android-emulator-runner@v2
