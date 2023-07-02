@@ -9,3 +9,9 @@ PantryMaster ist eine digitale Speisekammer-App, die es ermöglicht, Lebensmitte
 3. Inventar: Behalte den Überblick über alle deinen Lebensmittel.
 4. Ablaufdaten-Verwaltung: Trage die Ablaufdaten deiner Produkte ein, um einen Überblick über ihre Haltbarkeit zu haben und rechtzeitig auf ablaufende Produkte aufmerksam zu werden.
 5. Einkaufsliste: Erstelle eine Einkaufsliste und füge Produkte hinzu, die du beim nächsten Einkauf benötigst.
+
+## Starten des Backends
+Um das Backend zu starten muss in der Kommandozeile oder PowerShell in den "Backend"-Ordner navigiert (PantryMasterGitCide/Backend) und der Befehl "docker-compose up --build" ausgeführt werden.
+
+## Starten des Frontends
+Um das Frontend im Emulator oder auf einem Android-Gerät starten zu können, muss im File "HttpRoutes.kt" (PantryMasterGitCode\Frontend\app\src\main\java\com\prime\pantrymastergitcode\api\HttpRoutes.kt) die BASE_URL zur eigenen IP-Adresse geändert werden. Dies ist notwendig, damit die HTTP Requests im Frontend getätigt werden können.
