@@ -116,7 +116,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 CircularProgressIndicator(
                     modifier = Modifier.testTag("ProgressIndicator")
                 )
-            }else{
+            }
+        }else{
             
             // Schleife zur Anzeige der Pantry Items in einer Tabelle
             Column(modifier = Modifier

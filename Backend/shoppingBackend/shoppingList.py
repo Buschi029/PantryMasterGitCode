@@ -15,10 +15,6 @@ class shoppingItem(Schema):
     quantity = Integer(required=True)
     quantityUnit = String(required=True)
 
-#ShoppingItem Klasse für die POST Anfrage
-class shoppingItemKeyPost(Schema):
-    userID = String(required=True)
-
 #ShoppingItem Klasse zum löschen
 class shoppingItemKeyDelete(Schema):
     productName = String(required=True)
@@ -57,12 +53,11 @@ def get_allItems():
 
 #Post Route um alle Items für einen bestimmte User zu erhalten
 @shoppingList.output(shoppingItem)
-@shoppingList.input(shoppingItemKeyPost)
 @shoppingList.route("/shoppingList", methods=["POST"])
 def get_oneItem():
-    data = request.get_json()
-    userID = data["userID"]
+    userID = request.args.get('userID')
     conn = tryConnect() 
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tbl_shoppingList WHERE userID=%s", (userID,))
     data = cursor.fetchall()

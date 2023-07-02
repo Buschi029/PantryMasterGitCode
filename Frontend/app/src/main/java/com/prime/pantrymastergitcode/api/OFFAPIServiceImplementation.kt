@@ -60,10 +60,6 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    // Funktion zur HTTP-Anfrage von ShoppingItems
-    override suspend fun httpRequestShopping(shoppingItemDTO: ShoppingItemDTO) {
-        val response: HttpResponse
-    }
 
     // Funktion zur Abfrage von ShoppingListItems
     override suspend fun getShoppingList(userID: String): List<ShoppingItemDTO>? {
@@ -72,6 +68,9 @@ class OFFAPIServiceImplementation(
         return try {
             response = client.get(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
+                url {
+                    parameters.append("userID", userID)
+                }
             }
             shoppingList = response.body()
             shoppingList
@@ -137,12 +136,15 @@ class OFFAPIServiceImplementation(
     }
 
     // Funktion zum Abrufen der PantryList
-    override suspend fun getPantryList(name: String): MutableList<PantryItemDTO>? {
+    override suspend fun getPantryList(userID: String): MutableList<PantryItemDTO>? {
         val response: HttpResponse
         val pantryList: MutableList<PantryItemDTO>
         return try {
             response = client.get(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
+                url {
+                    parameters.append("userID", userID)
+                }
             }
             pantryList = response.body()
             pantryList

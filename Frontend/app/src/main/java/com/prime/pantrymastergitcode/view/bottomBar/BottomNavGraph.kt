@@ -20,7 +20,6 @@ fun BottomNavGraph(navController: NavHostController, service: OFFAPIService, sca
     val pantryViewModel = PantryViewModel(service = service, mainViewModel = mainViewModel)
     val scannerViewModel = ScannerViewModel(service = service, mainViewModel = mainViewModel)
     val shoppingListViewModel = ShoppingListViewModel(service = service, mainViewModel = mainViewModel)
-    val mainViewModel = mainViewModel
 
     NavHost(
         navController = navController,
