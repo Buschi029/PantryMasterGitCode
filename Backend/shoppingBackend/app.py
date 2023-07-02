@@ -10,14 +10,11 @@ from apiflask import APIFlask, Schema, abort
 from apiflask.fields import Integer, String
 from apiflask.validators import Length, OneOf
 
-app = APIFlask(__name__)
+app = APIFlask(__name__, docs_path="/")
 app.register_blueprint(shoppingList)
 app.register_blueprint(userB)
 
 
-@app.route("/")
-def empty():
-    return "leerer Pfad!"
 
 if __name__ == '__main__':
     app.run()
