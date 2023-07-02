@@ -113,6 +113,4 @@ class ScannerUnitTests {
         // Überprüfen des aktualisierten Werts
         assertEquals(false, viewModel.loaded.value)
     }
-
-
 }

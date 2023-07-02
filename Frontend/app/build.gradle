@@ -48,8 +48,6 @@ android {
     }
 }
 
-
-
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -77,16 +75,6 @@ dependencies {
     //permissions only needed if we need additional permissions look at: https://google.github.io/accompanist/permissions/#usage
     implementation "com.google.accompanist:accompanist-permissions:0.31.3-beta"
 
-    //Camera only needed if we change the scanner
-    /*def camerax_version = "1.2.2"
-    implementation "androidx.camera:camera-core:${camerax_version}"
-    implementation "androidx.camera:camera-camera2:${camerax_version}"
-    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
-    implementation "androidx.camera:camera-video:${camerax_version}"
-
-    implementation "androidx.camera:camera-view:${camerax_version}"
-    implementation "androidx.camera:camera-extensions:${camerax_version}"*/
-
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
 
@@ -100,9 +88,7 @@ dependencies {
 
     //Coroutines
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1"
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     testImplementation("org.slf4j:slf4j-simple:2.0.7")
-
 
     //Load Images
     implementation("io.coil-kt:coil-compose:2.4.0")

@@ -62,6 +62,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 
+// View, welche den Produktscanner beinhaltet
 @Composable
 fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) {
     val tag = "Scanner"
@@ -156,6 +157,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     }
                 }
             }
+            // Eingabefeld für den Produktnamen
             Column(
                 modifier = Modifier
                     .weight(4f),
@@ -181,6 +183,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         imeAction = ImeAction.Done
                     )
                 )
+                // Eingabefelder für die Quantität und Einheit des Produkts
                 Row {
                     TextField(
                         modifier = Modifier
@@ -234,6 +237,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         )
                     )
                 }
+
+                // Button zur Auswahl des Mindesthaltbarkeitsdatums
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -261,12 +266,12 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                                 .weight(7f),
                             verticalArrangement = Arrangement.Center) {
                             Text(
-                                text = "Mindesthaltbarkeitsdatum",
-                                style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                                text = "Expiration Date",
+                                style = TextStyle(color = Color.Black)
                             )
                             Text(
                                 pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter),
-                                style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                                style = TextStyle(color = Color.Black)
                             )
                         }
                     }
@@ -280,6 +285,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            // Button, welcher den Barcodescanner aufruft
             Button(
                 modifier = Modifier.weight(3f),
                 onClick = {
@@ -319,6 +326,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             }
             if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
                 Spacer(modifier = Modifier.weight(1f))
+
+                // Button zum Hinzufügen des Produkts in die digitale Speisekammer
                 Button(
                     modifier = Modifier
                         .weight(3f),

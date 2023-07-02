@@ -282,8 +282,6 @@ class PantryUnitTests {
         test = viewModel.checkAvailability(value)
         assertEquals(expected, test)
     }
-
-
 }
 
 

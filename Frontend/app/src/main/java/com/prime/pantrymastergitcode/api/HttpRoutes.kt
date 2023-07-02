@@ -1,6 +1,9 @@
 package com.prime.pantrymastergitcode.api
 
+// Festlegung der HTTP-Routen für den Backendzugriff
 object HttpRoutes {
+
+    // Zugrundeliegende Basis-URL für den Backendzugriff
     private const val BASE_URL = "http://192.168.0.234:"
     private const val BASE_URL_PRODUCT = "${BASE_URL}8080/"
     private const val BASE_URL_SHOPPING = "${BASE_URL}8081/"

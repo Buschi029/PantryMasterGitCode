@@ -12,7 +12,10 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
 
+// Festlegung der Interfaces
 interface OFFAPIService {
+
+    // Initialisierung der Funktionen
     suspend fun postProductDetails(code: Long): ProductDTO?
     suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO): Boolean
     suspend fun httpRequestShopping(shoppingItemDTO: ShoppingItemDTO)
@@ -29,6 +32,7 @@ interface OFFAPIService {
 
     suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>?
 
+    // Erstellung des OFFAPIServices
     companion object {
         fun create(): OFFAPIService {
             return OFFAPIServiceImplementation(

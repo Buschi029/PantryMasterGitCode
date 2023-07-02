@@ -2,6 +2,7 @@ package com.prime.pantrymastergitcode.api.dto
 
 import kotlinx.serialization.Serializable
 
+// Festlegung der Eigenschaften eines ProductDTOs
 @Serializable
 data class ProductDTO(
     val carbohydrates: Int,

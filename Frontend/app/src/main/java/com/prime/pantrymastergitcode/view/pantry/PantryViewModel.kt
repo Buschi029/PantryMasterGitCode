@@ -16,8 +16,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+// ViewModel, welches die Logik der digitalen Speisekammer beinhaltet
 class PantryViewModel(private val service: OFFAPIService, private val mainViewModel: MainViewModel): ViewModel() {
 
+    // Initialisierung der Variablen
     val tag = "PantryViewModel"
 
     val items = mutableStateListOf<PantryItemDTO>()
@@ -37,6 +39,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
     val _sorted = MutableStateFlow(false)
     val sorted = _sorted.asStateFlow()
 
+    // Funktion zum Abrufen der Produktdetails
     fun getProductDetails(code:Long, productName: String){
         _loading.value = false
         viewModelScope.launch {
@@ -50,10 +53,13 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
             }
         }
     }
+
+    // Funktion zum Setzen der Produktdetails
     fun setProductDetails(value: Boolean){
         _showProductDetails.value = value
     }
 
+    // Funktion zur Abfrage der Produkte der digitalen Speisekammer
     fun getPantryItemsFromDatabase() {
         _loadingPantry.value = true
         viewModelScope.launch {
@@ -68,6 +74,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
         }
     }
 
+    // Funktion zum Entfernen der Produkte der digitalen Speisekammer
     fun removeItemFromDatabase(pantryItem: PantryItemDTO) {
         viewModelScope.launch {
             try {
@@ -79,6 +86,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
         }
     }
 
+    // Funktion zum Updaten der Produkte der digitalen Speisekammer
     fun updatePantryItem(pantryItem: PantryItemDTO, index: Int){
         viewModelScope.launch {
             try{
@@ -89,9 +97,13 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
             }
         }
     }
+
+    // Funktion zum Abruf der PantryList
     fun getPantryList(): List<PantryItemDTO>{
         return items
     }
+
+    // Funktion zum Sortieren der Liste nach Mindesthaltbarkeitsdatum
     fun sortList(){
         if(!sorted.value) {
             items.sortBy {
@@ -106,6 +118,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
         }
     }
 
+    // Funktion zum Überprüfen der Verfügbarkeit (String)
     fun checkAvailability(value:String): String{
         return if (value == "z"){
             "N/A"
@@ -114,6 +127,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
         }
     }
 
+    // Funktion zum Überprüfen der Verfügbarkeit (Int)
     fun checkAvailability(value: Int): String{
         return if (value == 9999){
             "N/A"

@@ -32,9 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,17 +40,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
-import okhttp3.internal.notifyAll
 import java.time.format.DateTimeFormatter
 import com.prime.pantrymastergitcode.ui.theme.mainColor
 import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 
-
+// View, welche die digitale Speisekammer beinhaltet
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
     val showProductDetails = pantryViewModel.showProductDetails.collectAsState()
+
+    // Durchführung einer GET-Anfrage beim Start des Views
     LaunchedEffect(Unit) {
         pantryViewModel.getPantryItemsFromDatabase()
     }
@@ -71,13 +68,14 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     }
 }
 
-
+// Darstellung der digitalen Speisekammer
 @Composable
 fun PantryList(pantryViewModel: PantryViewModel) {
     val dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val context = LocalContext.current
     val loading by pantryViewModel.loadingPantry.collectAsState()
 
+    // Überschrift der Seite
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -105,7 +103,6 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         }
 
         Divider(color = Color.LightGray, thickness = 3.dp)
-        //Spacer(modifier = Modifier.height(12.dp))
 
         if (loading) {
             Box(
@@ -114,9 +111,9 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             ) {
                 CircularProgressIndicator()
             }
-        }else{
+        } else {
 
-            // Tabelle
+            // Schleife zur Anzeige der Pantry Items in einer Tabelle
             Column(modifier = Modifier.fillMaxWidth()) {
                 pantryViewModel.getPantryList().forEachIndexed { index, item ->
                     Row(
@@ -145,6 +142,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                             }
                     ) {
                         IconButton(
+                            // Erhöhung der Quantität
                             onClick = {
                                 if (item.quantity > 0) {
                                     pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.dec()), index = index)
@@ -159,6 +157,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                             )
                         }
                         IconButton(
+                            // Verringerung der Quantität
                             onClick = {
                                 pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.inc()), index = index)
                             }, modifier = Modifier.size(30.dp)
@@ -215,10 +214,11 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             ) {
                 Button(
                     onClick = {
+                        // Sortierung der Liste
                         pantryViewModel.sortList()
                     }
                 ) {
-                    Text(text = "Liste sortieren", color = Color.Black)
+                    Text(text = "Sort list", color = Color.Black)
                 }
             }
         }

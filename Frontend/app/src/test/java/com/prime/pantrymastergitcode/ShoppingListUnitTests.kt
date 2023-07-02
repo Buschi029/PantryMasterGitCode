@@ -94,8 +94,6 @@ class ShoppingListUnitTests {
         Dispatchers.resetMain()
     }
 
-
-
     @Test
     fun `removeItemFromDatabase should invoke removeFromShoppingList`() {
 

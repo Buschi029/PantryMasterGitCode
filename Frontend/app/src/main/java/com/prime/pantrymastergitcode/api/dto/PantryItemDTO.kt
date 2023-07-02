@@ -7,6 +7,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// Festlegung der Eigenschaften eines PantryItemDTOs
 @Serializable
 data class PantryItemDTO (
 val productCode: Long,
