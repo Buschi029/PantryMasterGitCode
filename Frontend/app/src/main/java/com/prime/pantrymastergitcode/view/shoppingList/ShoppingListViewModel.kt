@@ -39,7 +39,7 @@ class ShoppingListViewModel(private val service: OFFAPIService, private val main
         _loading.value = true
         viewModelScope.launch {
             try {
-                items = service.getShoppingList("")!!
+                items = service.getShoppingList(mainViewModel.getUserID())!!
                 _loading.value = false
             } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())

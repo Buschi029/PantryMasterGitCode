@@ -190,7 +190,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .testTag("QuantityInput"),
+                            .testTag("QuantityInput")
                             .background(color = secondaryColor)
                             .weight(1f),
                         value = if (pantryProduct.quantity != 0) {

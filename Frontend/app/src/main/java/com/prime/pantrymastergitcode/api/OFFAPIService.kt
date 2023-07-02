@@ -18,7 +18,6 @@ interface OFFAPIService {
     // Initialisierung der Funktionen
     suspend fun postProductDetails(code: Long): ProductDTO?
     suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO): Boolean
-    suspend fun httpRequestShopping(shoppingItemDTO: ShoppingItemDTO)
 
     suspend fun getShoppingList(userID: String): List<ShoppingItemDTO>?
 
@@ -26,7 +25,7 @@ interface OFFAPIService {
 
     suspend fun removeFromShoppingList(productName: String, userID: String): List<ShoppingItemDTO>?
 
-    suspend fun getPantryList(name: String): MutableList<PantryItemDTO>?
+    suspend fun getPantryList(userID: String): MutableList<PantryItemDTO>?
 
     suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>?
 

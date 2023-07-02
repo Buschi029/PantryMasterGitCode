@@ -65,7 +65,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
         viewModelScope.launch {
             try {
                 items.clear()
-                items.addAll(service.getPantryList("")!!)
+                items.addAll(service.getPantryList(mainViewModel.getUserID())!!)
                 _loadingPantry.value = false
                 _sorted.value = false
             } catch(e: Exception) {
