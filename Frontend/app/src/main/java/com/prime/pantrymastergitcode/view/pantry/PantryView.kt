@@ -37,9 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
 import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
@@ -89,7 +91,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Pantry List",
+                text = stringResource(R.string.pantry_list),
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier
                     .padding(bottom = 12.dp)
@@ -107,6 +109,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
         }
 
         Divider(color = Color.LightGray, thickness = 3.dp)
+        Spacer(modifier = Modifier.height(12.dp))
 
         if (loading) {
             Box(
@@ -226,7 +229,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                         pantryViewModel.sortList()
                     }
                 ) {
-                    Text(text = "Sort list", color = Color.Black)
+                    Text(text = stringResource(R.string.sort_list), color = Color.Black)
                 }
             }
         }
