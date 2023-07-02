@@ -1,5 +1,6 @@
 package com.prime.pantrymastergitcode.view.pantry
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,15 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -32,27 +32,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.pantry.detailView.DetailView
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.datetime.toJavaLocalDate
+import java.time.format.DateTimeFormatter
+import com.prime.pantrymastergitcode.ui.theme.mainColor
+import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 
-
+// View, welche die digitale Speisekammer beinhaltet
 @Composable
 fun PantryView(pantryViewModel: PantryViewModel) {
     val showProductDetails = pantryViewModel.showProductDetails.collectAsState()
+
+    // Durchführung einer GET-Anfrage beim Start des Views
     LaunchedEffect(Unit) {
         pantryViewModel.getPantryItemsFromDatabase()
     }
@@ -70,19 +69,14 @@ fun PantryView(pantryViewModel: PantryViewModel) {
     }
 }
 
-data class PantryItem(val id: Long, var name: String, val productName: String,var expirationDate: LocalDate,  var quantity: Int, var quantityUnit: String)
-
-data class PantryProduct(val productCode: Long, var productName: String, var userID: String, var expirationDate: LocalDate, var appendDate: LocalDate, var quantity: Int, var quantityUnit: String)
-
-
-
+// Darstellung der digitalen Speisekammer
 @Composable
 fun PantryList(pantryViewModel: PantryViewModel) {
-    val items = remember { mutableStateListOf<PantryItem>() }
-    var newItem: String by remember { mutableStateOf("") }
-    var newQuantity: Int by remember { mutableStateOf(0) }
-    var newUnit: String by remember { mutableStateOf("") }
+    val dayFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val context = LocalContext.current
+    val loading by pantryViewModel.loadingPantry.collectAsState()
 
+    // Überschrift der Seite
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +91,9 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             Text(
                 text = "Pantry List",
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .padding(bottom = 12.dp)
+                    .testTag("Headline")
             )
             Icon(
                 imageVector = Icons.Default.Fastfood,
@@ -106,160 +102,132 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 modifier = Modifier
                     .size(40.dp)
                     .padding(bottom = 10.dp)
+                    .testTag("HeadlineIcon")
             )
         }
 
-        Divider(color = Color.LightGray, thickness = 1.dp)
-        Spacer(modifier = Modifier.height(12.dp))
+        Divider(color = Color.LightGray, thickness = 3.dp)
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            TextField(
-                value = if (newQuantity != 0) newQuantity.toString() else "",
-                onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp))},
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(50.dp)
-                    .weight(1f)
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            TextField(
-                value = newItem,
-                onValueChange = { newItem = it },
-                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .width(120.dp)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            TextField(
-                value = newUnit,
-                onValueChange = { newUnit = it },
-                placeholder = { Text("Unit", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .width(80.dp)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                onClick = {
-
-                    pantryViewModel.addItemsToDatabase(newItem, newQuantity, newUnit, java.time.LocalDate.now().toKotlinLocalDate())
-                    newItem = ""
-                    newQuantity = 0
-                    newUnit = ""
-
-
-                },
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(50.dp)
+        if (loading) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Divider(color = Color.LightGray, thickness = 1.dp)
-
-        // Tabelle
-        Column(modifier = Modifier.fillMaxWidth()) {
-            pantryViewModel.items.forEachIndexed { index, item ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        // .padding(vertical = 4.dp)
-                        // .padding(horizontal = 4.dp)
-                        .background(color = Color.White)
-                        .clickable {
-                            pantryViewModel.getProductDetails(4000140703881)
-                            pantryViewModel.setProductDetails(true)
-                        }
-                ) {
-                    IconButton(
-                        onClick = {
-                            if (item.quantity > 0) {
-                                //items[index] = item.copy(quantity = item.quantity - 1)
+                CircularProgressIndicator(
+                    modifier = Modifier.testTag("ProgressIndicator")
+                )
+            }else{
+            
+            // Schleife zur Anzeige der Pantry Items in einer Tabelle
+            Column(modifier = Modifier
+                .testTag("PantryList") 
+                .fillMaxWidth()) {
+                pantryViewModel.getPantryList().forEachIndexed { index, item ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .background(color = Color.White)
+                            .padding(horizontal = 1.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                if (item.productCode != 0L) {
+                                    pantryViewModel.getProductDetails(
+                                        item.productCode,
+                                        item.productName
+                                    )
+                                    pantryViewModel.setProductDetails(true)
+                                } else {
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "There are no Product Details available",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                }
                             }
+                    ) {
+                        IconButton(
+                            // Erhöhung der Quantität
+                            onClick = {
+                                if (item.quantity > 0) {
+                                    pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.dec()), index = index)
+                                }
+                            }, modifier = Modifier.size(30.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.Remove,
+                                contentDescription = "Decrease",
+                                tint = mainColor,
+                                modifier = Modifier.width(20.dp)
+                            )
                         }
-                    ) {
-                        Icon(
-                            Icons.Default.Remove,
-                            contentDescription = "Decrease",
-                            tint = Color.Black
-                        )
-                    }
-
-                    Text(
-                        "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
-                        modifier = Modifier
-                        // .width(80.dp)
-                        // .padding(end = 8.dp)
-                        // .weight(1f)
-                    )
-                    IconButton(
-                        onClick = {
-                            //items[index] = item.copy(quantity = item.quantity + 1)
-                        },
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "Increase",
-                            tint = Color.Black
-                        )
-                    }
-                    // Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        item.productName,style = TextStyle(fontSize = 12.sp),
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(100.dp)
-                    )
-                    Text(
-                        item.expirationDate.toString(),style = TextStyle(fontSize = 10.sp),
-                        modifier = Modifier
-                            .weight(1f)
-                            .width(100.dp)
-                    )
-                    IconButton(
-                        onClick = {
-                            pantryViewModel.removeItemFromDatabase(item.id, item.name)
+                        IconButton(
+                            // Verringerung der Quantität
+                            onClick = {
+                                pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.inc()), index = index)
+                            }, modifier = Modifier.size(30.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Increase",
+                                tint = mainColor,
+                                modifier = Modifier
+                                    .width(20.dp)
+                                    .padding(end = 2.dp)
+                            )
                         }
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = Color.Black
+                        Text(
+                            "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 14.sp),
+                            modifier = Modifier
+                                .width(50.dp)
+                                .weight(2f)
                         )
+                        Text(
+                            item.productName,style = TextStyle(fontSize = 14.sp),
+                            modifier = Modifier
+                                .weight(5f)
+                                .width(100.dp)
+                        )
+                        Text(
+                            item.expirationDate.toJavaLocalDate().format(dayFormatter).toString(),style = TextStyle(fontSize = 12.sp),
+                            modifier = Modifier
+                                .weight(3f)
+                                .width(100.dp)
+                                .padding(start = 4.dp)
+                        )
+                        IconButton(
+                            onClick = {
+                                pantryViewModel.removeItemFromDatabase(item)
+                            }, modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = secondaryColor
+                            )
+                        }
                     }
+                    Divider(color = secondaryColor, thickness = 1.dp)
                 }
-                Divider(color = Color.LightGray, thickness = 1.dp)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .weight(2f),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Button(
+                    onClick = {
+                        // Sortierung der Liste
+                        pantryViewModel.sortList()
+                    }
+                ) {
+                    Text(text = "Sort list", color = Color.Black)
+                }
             }
         }
-
-        // speichern
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(120.dp)
-        ) {
-            Text("Save", color = Color.Black)
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-        )
-
     }
 }

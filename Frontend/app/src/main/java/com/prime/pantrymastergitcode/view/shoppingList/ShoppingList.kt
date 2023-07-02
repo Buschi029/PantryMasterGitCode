@@ -10,69 +10,39 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.prime.pantrymastergitcode.R
-import com.prime.pantrymastergitcode.ui.theme.Ebony
-import com.prime.pantrymastergitcode.ui.theme.Olivine
-import com.prime.pantrymastergitcode.ui.theme.Timberwolf
-import com.prime.pantrymastergitcode.view.pantry.PantryItem
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.ContentType.Application.Json
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListViewModel
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.client.statement.HttpResponse
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.prime.pantrymastergitcode.ui.theme.mainColor
+import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 
 @Composable
 fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
 
+    // GET-Request beim Start der App
     LaunchedEffect(Unit) {
         shoppingListViewModel.getItemsFromDatabase()
     }
-
+    // Aufruf der Shopping List
     ShoppingList(shoppingListViewModel)
 }
 
+// Datenklasse eines ShoppingItems
 data class ShoppingItem(val name: String, var quantity: String,
-                        var quantityType: String, var isChecked: Boolean = false)
+                        var quantityType: String)
 
+// Die tatsächliche Shopping List
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
-
-    var response: String by remember{ mutableStateOf("") }
-
     var newItem: String by remember { mutableStateOf("") }
-    var newQuantity: Int by remember { mutableStateOf(0) }
+    var newQuantity: Int by remember { mutableIntStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
-
-
-    /*
-    var items by shoppingListViewModel.items.collectAsState()
-    var newItem by shoppingListViewModel.newItem.collectAsState()
-    var newQuantity by shoppingListViewModel.newQuantity.collectAsState()
-    var newQuantityType by shoppingListViewModel.newQuantityType.collectAsState()
-
-     */
-
+    val loading by shoppingListViewModel.loading.collectAsState()
 
     Column(
         modifier = Modifier
@@ -80,6 +50,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        // Überschrift
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth(),
@@ -88,7 +59,9 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             Text(
                 text = "Shopping List",
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .padding(bottom = 12.dp)
+                    .testTag("Headline")
             )
             Icon(
                 imageVector = Icons.Default.ShoppingCart,
@@ -97,126 +70,132 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                 modifier = Modifier
                     .size(40.dp)
                     .padding(bottom = 10.dp)
+                    .testTag("HeadlineIcon")
             )
 
         }
 
-        Divider(color = Color.LightGray, thickness = 1.dp)
+        Divider(color = Color.LightGray, thickness = 3.dp)
         Spacer(modifier = Modifier.height(12.dp))
 
-
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            TextField(
-                value = if (newQuantity != 0) newQuantity.toString() else "",
-                onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            TextField(
-                value = newQuantityType,
-                onValueChange = { newQuantityType = it },
-                placeholder = { Text("Type", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            TextField(
-                value = newItem,
-                onValueChange = { newItem = it },
-                placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Timberwolf)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                onClick = {
-                    //shoppingListViewModel.addItemsToDatabase(newItem, newQuantity, newQuantityType)
-                    newItem = ""
-                    newQuantity = 0
-                    newQuantityType = ""
-                },
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(50.dp)
+        if (loading) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
+                CircularProgressIndicator(
+                    modifier = Modifier.testTag("ProgressIndicator")
+                )
             }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Divider(color = Color.LightGray, thickness = 1.dp)
-        Column(modifier = Modifier.fillMaxWidth()) {
-            shoppingListViewModel.items.forEachIndexed { index, item ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-
+        } else {
+            // Eingabefenster
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Eingabe der Quantität
+                TextField(
+                    value = if (newQuantity != 0) newQuantity.toString() else "",
+                    onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
+                    placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .padding(horizontal = 4.dp)
+                        .weight(4f)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(secondaryColor)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                // Eingabe der Unit
+                TextField(
+                    value = newQuantityType,
+                    onValueChange = { newQuantityType = it },
+                    placeholder = { Text("Unit", style = TextStyle(fontSize = 12.sp)) },
+                    modifier = Modifier
+                        .weight(3f)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(secondaryColor)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                // Eingabe des Elements
+                TextField(
+                    value = newItem,
+                    onValueChange = { newItem = it },
+                    placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
+                    modifier = Modifier
+                        .weight(5f)
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(secondaryColor)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = {
+                        // Hinzufügen der Einträge zur Datenbank
+                        shoppingListViewModel.addItemsToDatabase(
+                            newItem,
+                            newQuantity,
+                            newQuantityType
+                        )
+                        newItem = ""
+                        newQuantity = 0
+                        newQuantityType = ""
+                    },
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(50.dp)
+                        .background(color = mainColor)
                 ) {
-                    Text(
-                        "${item.quantity} ${item.quantityUnit}",
+                    Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Divider(color = Color.LightGray, thickness = 1.dp)
+            // Schleife, welche die Einträge aus der Datenbank in Form einer Tabelle darstellt
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("ShoppingList")
+            ) {
+                shoppingListViewModel.items.forEach { item ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
 
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
+                            .padding(vertical = 4.dp)
+                            .padding(horizontal = 4.dp)
+                    ) {
+                        Text(
+                            "${item.quantity} ${item.quantityUnit}",
 
-                    )
-                    Text(
-                        item.productName,
-                        modifier = Modifier.weight(1f)
-                    )
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp)
+                        )
+                        Text(
+                            item.productName,
+                            modifier = Modifier.weight(2f)
+                        )
 
-                    val isCheckedState = remember { mutableStateOf(item.isChecked) }
-
-                    Checkbox(
-                        checked = isCheckedState.value,
-                        onCheckedChange = { isChecked ->
-                            shoppingListViewModel.updateItemCheckedState(item.productName, isChecked)
-                            shoppingListViewModel.getItemsFromDatabase()
-                        },
-                        modifier = Modifier
-                            .clickable { isCheckedState.value = !isCheckedState.value }
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(
-                                width = 1.dp,
-                                color = Color.White,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                    )
-                    IconButton(
-                        onClick = {
-                            shoppingListViewModel.removeItemFromDatabase(
-                                item.productName,
-                                item.quantity,
-                                item.quantityUnit
+                        IconButton(
+                            onClick = {
+                                shoppingListViewModel.removeItemFromDatabase(
+                                    item.productName,
+                                    item.quantity,
+                                    item.quantityUnit
+                                )
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = secondaryColor
                             )
                         }
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = Color.Black
-                        )
                     }
+                    Divider(color = secondaryColor, thickness = 1.dp)
                 }
-                Divider(color = Color.LightGray, thickness = 1.dp)
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        Spacer(modifier = Modifier.height(16.dp))
-
     }
 }

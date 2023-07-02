@@ -4,23 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+// Festlegung der Eigenschaften eines ShoppingItemDTOs
 @Serializable
 data class ShoppingItemDTO (
-    @SerialName("productName")
     val productName: String,
-
-    @SerialName("quantity")
     val quantity: Int,
-
-    @SerialName("quantityUnit")
     val quantityUnit: String,
-
-    @SerialName("userID")
-    val userID: String,
-
-    @Transient
-    var isChecked: Boolean = false
-    )
+    val userID: String)
     {
         constructor() : this("",0, "", "")
     }

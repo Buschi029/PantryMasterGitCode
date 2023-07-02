@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,8 +49,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.R
-import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
+import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
+import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -60,6 +63,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 
+// View, welche den Produktscanner beinhaltet
 @Composable
 fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) {
     val tag = "Scanner"
@@ -76,7 +80,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 60.dp, start = 20.dp, end = 20.dp),
+            .padding(start = 20.dp, end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
@@ -130,7 +134,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             Box(
                                 modifier = Modifier
                                     .clickable {
-                                        scannerViewModel.setPantryProduct(PantryProductDTO())
+                                        scannerViewModel.setPantryProduct(PantryItemDTO())
                                         scannerViewModel.setProduct(detailProduct.copy(pictureLink = ""))
                                         scannerViewModel.setLoaded(false)
                                     }
@@ -154,6 +158,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     }
                 }
             }
+            // Eingabefeld für den Produktnamen
             Column(
                 modifier = Modifier
                     .weight(4f),
@@ -163,7 +168,9 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 TextField(
                     modifier = Modifier
                         .padding(bottom = 10.dp)
-                        .fillMaxWidth(),
+                        .testTag("ProductNameInput")
+                        .fillMaxWidth()
+                        .background(color = secondaryColor),
                     value = if (pantryProduct.productName != "") {
                         pantryProduct.productName
                     } else {
@@ -178,11 +185,14 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         imeAction = ImeAction.Done
                     )
                 )
+                // Eingabefelder für die Quantität und Einheit des Produkts
                 Row {
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .weight(1f), // Geändert von weight(2f) auf weight(1f)
+                            .testTag("QuantityInput"),
+                            .background(color = secondaryColor)
+                            .weight(1f),
                         value = if (pantryProduct.quantity != 0) {
                             pantryProduct.quantity.toString()
                         } else {
@@ -203,20 +213,24 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     )
                     Spacer(
                         modifier = Modifier
-                            .width(8.dp) // Füge einen Abstand von 8dp zwischen den Eingabefeldern hinzu
+                            .width(8.dp)
                     )
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .weight(1f), // Geändert von weight(7f) auf weight(1f)
+                            .testTag("UnitInput")
+                            .weight(1f)
+                            .background(color = secondaryColor),
                         value = if (pantryProduct.quantityUnit != "") {
                             pantryProduct.quantityUnit
                         } else {
                             ""
                         },
                         label = { Text(text = "Unit") },
-                        onValueChange = {
-                            scannerViewModel.setPantryProduct(pantryProduct.copy(quantityUnit = it))
+                        onValueChange = { newValue ->
+                            if (newValue.length <= 3) {
+                                scannerViewModel.setPantryProduct(pantryProduct.copy(quantityUnit = newValue))
+                            }
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -227,10 +241,11 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         )
                     )
                 }
+
+                // Button zur Auswahl des Mindesthaltbarkeitsdatums
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
                         .padding(horizontal = 20.dp),
                     onClick = {
                         dateDialogState.show()
@@ -245,18 +260,23 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                             contentDescription = "Calendar",
                             modifier = Modifier
                                 .size(30.dp)
-                                .fillMaxSize(),
+                                .fillMaxSize()
+                                .weight(2f),
                             tint = Color.Black
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column(verticalArrangement = Arrangement.Center) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Column(
+                            modifier = Modifier
+                                .weight(7f),
+                            verticalArrangement = Arrangement.Center) {
                             Text(
-                                text = "Mindesthaltbarkeitsdatum",
-                                style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                                text = "Expiration Date",
+                                style = TextStyle(color = Color.Black)
                             )
                             Text(
                                 pantryProduct.expirationDate.toJavaLocalDate().format(dayFormatter),
-                                style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                                style = TextStyle(color = Color.Black),
+                                modifier = Modifier.testTag("ExpirationDate")
                             )
                         }
                     }
@@ -270,8 +290,11 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            // Button, welcher den Barcodescanner aufruft
             Button(
-                modifier = Modifier.weight(3f),
+                modifier = Modifier
+                    .weight(3f),
                 onClick = {
                     scanner.startScan()
                         .addOnSuccessListener { barcode ->
@@ -304,17 +327,40 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             ) {
                 Text(
                     text = "Scan Barcode",
-                    style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                    style = TextStyle(color = Color.Black, fontSize = 16.sp)
                 )
             }
             if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
                 Spacer(modifier = Modifier.weight(1f))
+
+                // Button zum Hinzufügen des Produkts in die digitale Speisekammer
                 Button(
                     modifier = Modifier
-                        .weight(3f),
-                    onClick = { scannerViewModel.postProductToPantry(pantryProduct) }
+                        .weight(3f)
+                        .testTag("AddToPantryButton"),
+                    onClick = {
+                        scope.launch {
+                            var failed = scope.async {
+                                scannerViewModel.addProductToPantry(pantryProduct)
+                            }
+                            if (failed.await()) {
+                                Log.e("ScannerViewModel", failed.await().toString())
+                                Toast.makeText(
+                                    context,
+                                    "Could not add Product to Pantry",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }else{
+                                Toast.makeText(
+                                    context,
+                                    "Product successfully added to pantry!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
                 ) {
-                    Text(text = "Add Product")
+                    Text(text = "Add Product", color = Color.Black, fontSize = 16.sp)
                 }
             }
         }

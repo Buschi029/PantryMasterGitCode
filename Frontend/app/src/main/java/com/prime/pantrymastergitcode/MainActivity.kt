@@ -15,14 +15,13 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.ui.theme.PantryMasterGitCodeTheme
 
-
+// MainActivity-Klasse, welche beim Start der App aufgerufen wird
 class MainActivity : ComponentActivity() {
     private val service = OFFAPIService.create()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PantryMasterGitCodeTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     color = MaterialTheme.colors.background
                 ) {
@@ -38,10 +37,12 @@ class MainActivity : ComponentActivity() {
                     val scanner = GmsBarcodeScanning.getClient(context,options)
                     val moduleInstallRequest =
                         ModuleInstallRequest.newBuilder()
-                            .addApi(scanner) //Add the scanner client to the module install request
+                            .addApi(scanner)
                             .build()
 
                     val moduleInstallClient = ModuleInstall.getClient(context)
+
+                    // Aufruf des MainScreens
                     MainScreen(service = service, scanner)
                     moduleInstallClient
                         .installModules(moduleInstallRequest)
@@ -54,28 +55,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Composable
-//fun PantryMaster(service: OFFAPIService) {
-//    val navController = rememberNavController()
-//    val pantryViewModel = PantryViewModel(service)
-//    NavHost(navController, startDestination = "PantryView") {
-//        composable("PantryView") {
-//            PantryView(
-//                navController = navController,
-//                pantryViewModel = pantryViewModel
-//            )
-//        }
-//    }
-//
-//}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    PantryMasterGitCodeTheme {
-//        PantryMaster(service = OFFAPIService.create())
-//    }
-//}
 
 
 

@@ -7,29 +7,16 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// Festlegung der Eigenschaften eines PantryItemDTOs
 @Serializable
 data class PantryItemDTO (
-
-@SerialName("id")
-val id: Long,
-
-@SerialName("name")
-val name: String,
-
-@SerialName("productName")
+val productCode: Long,
+val userID: String,
 val productName: String,
-
-@SerialName("expirationDate")
 val expirationDate: LocalDate,
-
-@SerialName("appendDate")
-val appendDate: LocalDate,
-
-@SerialName("quantity")
-val quantity: Int,
-
-@SerialName("quantityUnit")
+val appendDate: LocalDateTime,
+var quantity: Int,
 val quantityUnit: String
 ) {
-    constructor() : this(0,"","",java.time.LocalDate.now().toKotlinLocalDate(), java.time.LocalDate.now().toKotlinLocalDate(), 0, "")
+    constructor() : this(0,"","",java.time.LocalDate.now().toKotlinLocalDate(), java.time.LocalDateTime.now().toKotlinLocalDateTime(), 0, "")
 }

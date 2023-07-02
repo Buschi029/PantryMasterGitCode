@@ -2,17 +2,16 @@ package com.prime.pantrymastergitcode
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -20,16 +19,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
 import com.prime.pantrymastergitcode.view.bottomBar.BottomNavGraph
 
+// MainScreen, welcher die Struktur der Navigationsleisten festlegt
 @Composable
 fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
     val navController = rememberNavController()
+    val mainViewModel = MainViewModel()
     Scaffold(
         topBar = {
-
         },
         bottomBar = { BottomBar(navController = navController) },
         content = { innerPadding ->
@@ -38,13 +37,13 @@ fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                BottomNavGraph(navController = navController, service = service, scanner = scanner)
+                BottomNavGraph(navController = navController, service = service, scanner = scanner, mainViewModel = mainViewModel )
             }
         }
     )
 }
 
-
+// Funktion zur Darstellung der BottomBar
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
@@ -59,19 +58,23 @@ fun BottomBar(navController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation {
-        screens.forEach { screen->
-            AddItem(screen = screen, currentDestination = currentDestination , navController = navController )
+        screens.forEachIndexed { index, screen ->
+            AddItem(screen = screen, currentDestination = currentDestination , navController = navController, index = index)
         }
     }
 }
 
+// Hinzufügen der Views zur Navigationsleiste
 @Composable
 fun RowScope.AddItem(
     screen: BottomBarScreen,
     currentDestination: NavDestination?,
-    navController: NavHostController
+    navController: NavHostController,
+    index: Int
 ) {
     BottomNavigationItem(
+        modifier = Modifier
+            .testTag("Icon${index}"),
         label = {
            Text(text = screen.title)
         },
@@ -81,7 +84,7 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = Color(0x50000000),
+        unselectedContentColor = Color(0x70000000),
         selectedContentColor = Color.Black,
         onClick = {
             navController.navigate(screen.route) {

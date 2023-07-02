@@ -2,35 +2,31 @@ package com.prime.pantrymastergitcode.api
 
 import android.util.Log
 import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
-import com.prime.pantrymastergitcode.api.dto.PantryListDTO
-import com.prime.pantrymastergitcode.api.dto.PantryProductDTO
 import com.prime.pantrymastergitcode.api.dto.ProductBarcodeDTO
 import com.prime.pantrymastergitcode.api.dto.ProductDTO
 import com.prime.pantrymastergitcode.api.dto.ShoppingItemDTO
-import com.prime.pantrymastergitcode.api.dto.ShoppingListDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.call.receive
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.utils.EmptyContent.contentType
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
 
+// Klasse, welche die HTTP-Request beinhaltet
 class OFFAPIServiceImplementation(
     private val client: HttpClient
 ) : OFFAPIService {
     private val tag = "APIService"
 
+    // Funktion zum Hinzufügen von Produktdetails
     override suspend fun postProductDetails(code: Long): ProductDTO? {
         val response: HttpResponse
         val body: ProductDTO
@@ -48,32 +44,34 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    override suspend fun postPantryEntry(pantryProductDTO: PantryProductDTO) {
+    // Funktion zum Hinzufügen von Produkteinträgen
+    override suspend fun postPantryEntry(pantryItemDTO: PantryItemDTO): Boolean {
         val response: HttpResponse
-        try {
-            response = client.post(HttpRoutes.inventory) {
+        return try {
+            response = client.put(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
-                setBody(pantryProductDTO)
+                setBody(pantryItemDTO)
             }
             Log.i(tag, response.status.toString())
+            false
         } catch (e: Exception) {
             Log.e(tag, e.toString())
+            true
         }
     }
 
+    // Funktion zur HTTP-Anfrage von ShoppingItems
     override suspend fun httpRequestShopping(shoppingItemDTO: ShoppingItemDTO) {
         val response: HttpResponse
-
     }
 
+    // Funktion zur Abfrage von ShoppingListItems
     override suspend fun getShoppingList(userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
-        val shoppingListDTO: ShoppingListDTO
         val shoppingList: List<ShoppingItemDTO>
         return try {
             response = client.get(HttpRoutes.shoppingList) {
                 contentType(ContentType.Application.Json)
-
             }
             shoppingList = response.body()
             shoppingList
@@ -83,6 +81,7 @@ class OFFAPIServiceImplementation(
         }
     }
 
+    // Funktion zum Entfernen von ShoppingList-Einträgen
     override suspend fun removeFromShoppingList(productName: String, userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
 
@@ -110,12 +109,9 @@ class OFFAPIServiceImplementation(
         }
     }
 
-
-
-
+    // Funktion zum Hinzufügen von ShoppingItems
     override suspend fun addToShoppingList(productName: String, quantity: Int, quantityUnit: String, userID: String): List<ShoppingItemDTO>? {
         val response: HttpResponse
-
         return try {
             val item = ShoppingItemDTO(productName, quantity, quantityUnit, userID)
             response = client.put(HttpRoutes.shoppingList) {
@@ -140,39 +136,10 @@ class OFFAPIServiceImplementation(
         }
     }
 
-
-    // Pantry List
-    override suspend fun addToPantryList(productCode: Long, productName: String, userID: String, expirationDate: LocalDate , quantity: Int, quantityUnit: String): List<PantryItemDTO>? {
+    // Funktion zum Abrufen der PantryList
+    override suspend fun getPantryList(name: String): MutableList<PantryItemDTO>? {
         val response: HttpResponse
-
-        return try {
-            val item = PantryItemDTO(productCode,productName,userID,expirationDate,java.time.LocalDate.now().toKotlinLocalDate(),quantity,quantityUnit)
-            response = client.post(HttpRoutes.inventory) {
-                contentType(ContentType.Application.Json)
-                setBody(item)
-            }
-
-            Log.i(tag, response.status.toString())
-
-            if (response.status.isSuccess()) {
-                val updatedListResponse: HttpResponse = client.get(HttpRoutes.inventory) {
-                    contentType(ContentType.Application.Json)
-                }
-                val updatedList: List<PantryItemDTO> = updatedListResponse.body()
-                updatedList
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            Log.e(tag, e.toString())
-            null
-        }
-    }
-
-    override suspend fun getPantryList(name: String): List<PantryItemDTO>? {
-        val response: HttpResponse
-        val pantryListDTO: PantryListDTO
-        val pantryList: List<PantryItemDTO>
+        val pantryList: MutableList<PantryItemDTO>
         return try {
             response = client.get(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
@@ -185,31 +152,41 @@ class OFFAPIServiceImplementation(
         }
     }
 
-    override suspend fun removeFromPantryList(barcode: Long, userID: String): List<PantryItemDTO>? {
+    // Funktion zum Entfernen von Pantry-Einträgen
+    override suspend fun removeFromPantryList(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>? {
         val response: HttpResponse
+        val updatedList: MutableList<PantryItemDTO>
 
         return try {
-            val item = mapOf("barcode" to barcode, "userID" to userID)
             response = client.delete(HttpRoutes.inventory) {
                 contentType(ContentType.Application.Json)
-                setBody(item)
+                setBody(pantryItemDTO)
             }
-
             Log.i(tag, response.status.toString())
-
-            if (response.status.isSuccess()) {
-                val updatedListResponse: HttpResponse = client.get(HttpRoutes.inventory) {
-                    contentType(ContentType.Application.Json)
-                }
-                val updatedList: List<PantryItemDTO> = updatedListResponse.body()
-                updatedList
-            } else {
-                null
-            }
-        } catch (e: Exception) {
+            updatedList = response.body()
+            updatedList
+            } catch (e: Exception) {
             Log.e(tag, e.toString())
             null
         }
     }
 
+    // Funktion zun Updaten von PantryItems
+    override suspend fun updatePantryItem(pantryItemDTO: PantryItemDTO): MutableList<PantryItemDTO>? {
+        val response: HttpResponse
+        val updatedList: MutableList<PantryItemDTO>
+
+        return try {
+            response = client.patch(HttpRoutes.inventory) {
+                contentType(ContentType.Application.Json)
+                setBody(pantryItemDTO)
+            }
+            Log.i(tag, response.status.toString())
+            updatedList = response.body()
+            updatedList
+        } catch (e: Exception) {
+            Log.e(tag, e.toString())
+            null
+        }
+    }
 }

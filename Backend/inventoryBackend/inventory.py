@@ -130,6 +130,7 @@ def insert_Item(inventoryItem):
 @inventory.input(inventoryItem)
 def edit_Item(inventoryItem):
     json_data = request.get_json()
+    print(json_data.get("appendDate"))
 
     productCode = json_data.get("productCode")
     userID = json_data.get("userID")
