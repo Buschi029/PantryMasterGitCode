@@ -16,12 +16,12 @@ class TestFlaskRoutes(unittest.TestCase):
         mock_request_headers = {'Content-Type': 'application/json'}
         mock_request_data = json.dumps({
             "productCode": "12345",
-            "userID": "1",
+            "userID": "z",
             "productName": "Apfel",
-            "expirationDate": "2024-07-10",
+            "expirationDate": "2023-07-02 00:00:00",
             "quantity": "1",
             "quantityUnit": "kg",
-            "appendDate": "2023-06-26 00:00:00"
+            "appendDate": "2023-07-02 09:45:40.405"
         })
         
         response = self.app.post('/inventory', headers=mock_request_headers, data=mock_request_data)
@@ -31,7 +31,7 @@ class TestFlaskRoutes(unittest.TestCase):
     def test_delete_invItem(self):
         mock_request_headers = {'Content-Type': 'application/json'}
         mock_request_data = json.dumps({
-            "appendTime": "2023-06-26 00:00:00",
+            "appendTime": "2023-07-02 09:45:40.405",
         })
         
         response = self.app.delete('/inventory', headers=mock_request_headers, data=mock_request_data)
