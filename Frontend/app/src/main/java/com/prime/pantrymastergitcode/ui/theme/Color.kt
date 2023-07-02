@@ -11,3 +11,6 @@ val Olivine = Color(0xFFBACB95)
 val Champagne = Color(0xFFF7E6CA)
 val Timberwolf = Color(0xFFEBEBEB)
 val Ebony = Color(0xFFB6D3B0)
+
+val mainColor = Color(0xFFD4A9E6)
+val secondaryColor = Color(0xFFE4CBEF)

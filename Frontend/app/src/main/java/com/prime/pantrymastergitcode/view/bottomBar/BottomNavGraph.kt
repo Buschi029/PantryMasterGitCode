@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.api.OFFAPIService
-import com.prime.pantrymastergitcode.view.bottomBar.BottomBarScreen
 import com.prime.pantrymastergitcode.view.shoppingList.ShoppingListScreen
 import com.prime.pantrymastergitcode.view.pantry.PantryView
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel

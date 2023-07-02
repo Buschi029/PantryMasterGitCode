@@ -9,24 +9,18 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    //primary = Purple200,
-    //primaryVariant = Purple700,
-    //secondary = Teal200
 
-    primary = Timberwolf,
-    primaryVariant = Ebony,
-    secondary = Olivine
+    primary = mainColor,
+    primaryVariant = secondaryColor,
+    secondary = secondaryColor
 
 )
 
 private val LightColorPalette = lightColors(
-    //primary = Purple500,
-    //primaryVariant = Purple700,
-    //secondary = Teal200
 
-    primary = Timberwolf,
-    primaryVariant = Ebony,
-    secondary = Olivine
+    primary = mainColor,
+    primaryVariant = secondaryColor,
+    secondary = secondaryColor
 
     /* Other default colors to override
     background = Color.White,
@@ -52,12 +46,12 @@ fun PantryMasterGitCodeTheme(
 
     val colors = if (darkTheme) {
         systemUiController.setSystemBarsColor(
-            color = Timberwolf
+            color = mainColor
         )
         DarkColorPalette
     } else {
         systemUiController.setSystemBarsColor(
-            color = Timberwolf
+            color = mainColor
         )
         LightColorPalette
     }

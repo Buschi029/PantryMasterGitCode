@@ -36,7 +36,7 @@ class PantryUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         coEvery { service.getPantryList("") } returns mutableListOf(
             PantryItemDTO(
@@ -69,7 +69,7 @@ class PantryUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         coEvery { service.postProductDetails(123) } returns ProductDTO(
             5, 2, 50, "Produkt", "A", "", 123, 5, 2
@@ -77,7 +77,7 @@ class PantryUnitTests {
 
         // Ausführung des Tests
         runBlocking {
-            viewModel.getProductDetails(123)
+            viewModel.getProductDetails(123, "Produkt")
         }
 
         // Verifizierung des Aufrufs
@@ -103,7 +103,7 @@ class PantryUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         // Festlegung der Variablen für das PantryItemDTO
         val productCode: Long = 123
@@ -144,7 +144,7 @@ class PantryUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         // Festlegung des Booleans der übergeben wird
         val expectedValue = true
@@ -164,7 +164,7 @@ class PantryUnitTests {
         // Festlegung des Dispatchers für den Main Thread
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         // Erstellen von zwei Beispiel-PantryItemDTOs
 
@@ -212,7 +212,7 @@ class PantryUnitTests {
 
     @Test
     fun `getPantryList should return the correct items`() {
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         // Erstellen von Beispiel-PantryItemDTOs
         val pantryItem1 = PantryItemDTO(12345678, "ABC", "Apfel",
@@ -234,7 +234,7 @@ class PantryUnitTests {
 
     @Test
     fun `sortList should sort items by expirationDate`() {
-        val viewModel = PantryViewModel(service)
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
         // Erstellen von Beispiel-PantryItemDTOs mit unterschiedlichen expirationDate und appendDate
         val pantryItem1 = PantryItemDTO(1, "ABC", "Apfel", LocalDate(2023, 7, 1), LocalDateTime(2023, 7, 1, 10, 0), 1, "g")
@@ -250,6 +250,39 @@ class PantryUnitTests {
         // Überprüfung der sortierten Reihenfolge nach expirationDate
         assertEquals(listOf(pantryItem1, pantryItem3, pantryItem2), viewModel.items)
     }
+
+    // Test ob der String verfügbar ist
+    @Test
+    fun `checkAvailability with any String `() {
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
+
+        var value = "z"
+        var expected = "N/A"
+        var test = viewModel.checkAvailability(value)
+        assertEquals(expected, test)
+
+        value = "y"
+        expected = value
+        test = viewModel.checkAvailability(value)
+        assertEquals(expected, test)
+    }
+
+    // Test ob der Int verfügbar ist
+    @Test
+    fun `checkAvailability with any Int`() {
+        val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
+
+        var value = 9999
+        var expected = "N/A"
+        var test = viewModel.checkAvailability(value)
+        assertEquals(expected, test)
+
+        value = 1234
+        expected = value.toString()
+        test = viewModel.checkAvailability(value)
+        assertEquals(expected, test)
+    }
+
 
 }
 

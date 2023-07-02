@@ -51,6 +51,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
+import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -164,6 +165,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 TextField(
                     modifier = Modifier
                         .padding(bottom = 10.dp)
+                        .background(color = secondaryColor)
                         .fillMaxWidth(),
                     value = if (pantryProduct.productName != "") {
                         pantryProduct.productName
@@ -183,7 +185,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .weight(1f), // Geändert von weight(2f) auf weight(1f)
+                            .background(color = secondaryColor)
+                            .weight(1f),
                         value = if (pantryProduct.quantity != 0) {
                             pantryProduct.quantity.toString()
                         } else {
@@ -204,20 +207,23 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     )
                     Spacer(
                         modifier = Modifier
-                            .width(8.dp) // Füge einen Abstand von 8dp zwischen den Eingabefeldern hinzu
+                            .width(8.dp)
                     )
                     TextField(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .weight(1f), // Geändert von weight(7f) auf weight(1f)
+                            .background(color = secondaryColor)
+                            .weight(1f),
                         value = if (pantryProduct.quantityUnit != "") {
                             pantryProduct.quantityUnit
                         } else {
                             ""
                         },
                         label = { Text(text = "Unit") },
-                        onValueChange = {
-                            scannerViewModel.setPantryProduct(pantryProduct.copy(quantityUnit = it))
+                        onValueChange = { newValue ->
+                            if (newValue.length <= 3) {
+                                scannerViewModel.setPantryProduct(pantryProduct.copy(quantityUnit = newValue))
+                            }
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -308,7 +314,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             ) {
                 Text(
                     text = "Scan Barcode",
-                    style = TextStyle(color = Color.Black) // Schriftfarbe auf Schwarz setzen
+                    style = TextStyle(color = Color.Black, fontSize = 16.sp)
                 )
             }
             if (pantryProduct.productName != "" && pantryProduct.quantity != 0 && pantryProduct.quantityUnit != "") {
@@ -338,7 +344,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         }
                     }
                 ) {
-                    Text(text = "Add Product")
+                    Text(text = "Add Product", color = Color.Black, fontSize = 16.sp)
                 }
             }
         }

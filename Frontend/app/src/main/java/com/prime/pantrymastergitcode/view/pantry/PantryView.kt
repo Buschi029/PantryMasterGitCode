@@ -47,6 +47,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import okhttp3.internal.notifyAll
 import java.time.format.DateTimeFormatter
+import com.prime.pantrymastergitcode.ui.theme.mainColor
+import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 
 
 @Composable
@@ -102,8 +104,8 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             )
         }
 
-        Divider(color = Color.LightGray, thickness = 1.dp)
-        Spacer(modifier = Modifier.height(12.dp))
+        Divider(color = Color.LightGray, thickness = 3.dp)
+        //Spacer(modifier = Modifier.height(12.dp))
 
         if (loading) {
             Box(
@@ -113,13 +115,17 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 CircularProgressIndicator()
             }
         }else{
+
             // Tabelle
             Column(modifier = Modifier.fillMaxWidth()) {
                 pantryViewModel.getPantryList().forEachIndexed { index, item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .background(color = Color.White)
+                            .padding(horizontal = 1.dp)
+                            .fillMaxWidth()
                             .clickable {
                                 if (item.productCode != 0L) {
                                     pantryViewModel.getProductDetails(
@@ -136,7 +142,6 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                                         )
                                         .show()
                                 }
-
                             }
                     ) {
                         IconButton(
@@ -144,78 +149,76 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                                 if (item.quantity > 0) {
                                     pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.dec()), index = index)
                                 }
-                            }
+                            }, modifier = Modifier.size(30.dp)
                         ) {
                             Icon(
                                 Icons.Default.Remove,
                                 contentDescription = "Decrease",
-                                tint = Color.Black
+                                tint = mainColor,
+                                modifier = Modifier.width(20.dp)
                             )
                         }
-
-                        Text(
-                            "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 12.sp),
-                            modifier = Modifier
-
-                        )
                         IconButton(
                             onClick = {
                                 pantryViewModel.updatePantryItem(item.copy(quantity = item.quantity.inc()), index = index)
-                            },
-                            modifier = Modifier.padding(end = 8.dp)
+                            }, modifier = Modifier.size(30.dp)
                         ) {
                             Icon(
                                 Icons.Default.Add,
                                 contentDescription = "Increase",
-                                tint = Color.Black
+                                tint = mainColor,
+                                modifier = Modifier
+                                    .width(20.dp)
+                                    .padding(end = 2.dp)
                             )
                         }
-                        // Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            item.productName,style = TextStyle(fontSize = 12.sp),
+                            "${item.quantity} ${item.quantityUnit}", style = TextStyle(fontSize = 14.sp),
                             modifier = Modifier
-                                .weight(1f)
+                                .width(50.dp)
+                                .weight(2f)
+                        )
+                        Text(
+                            item.productName,style = TextStyle(fontSize = 14.sp),
+                            modifier = Modifier
+                                .weight(5f)
                                 .width(100.dp)
                         )
                         Text(
-                            item.expirationDate.toJavaLocalDate().format(dayFormatter).toString(),style = TextStyle(fontSize = 10.sp),
+                            item.expirationDate.toJavaLocalDate().format(dayFormatter).toString(),style = TextStyle(fontSize = 12.sp),
                             modifier = Modifier
-                                .weight(1f)
+                                .weight(3f)
                                 .width(100.dp)
+                                .padding(start = 4.dp)
                         )
                         IconButton(
                             onClick = {
                                 pantryViewModel.removeItemFromDatabase(item)
-                            }
+                            }, modifier = Modifier.weight(1f)
                         ) {
                             Icon(
                                 Icons.Default.Delete,
                                 contentDescription = "Delete",
-                                tint = Color.Black
+                                tint = secondaryColor
                             )
                         }
                     }
-                    Divider(color = Color.LightGray, thickness = 1.dp)
+                    Divider(color = secondaryColor, thickness = 1.dp)
                 }
             }
 
-            // speichern
-
             Spacer(modifier = Modifier.height(16.dp))
-            Row{
-                Button(
-                    onClick = { },
-                    modifier = Modifier
-                        .width(120.dp)
-                ) {
-                    Text("Save", color = Color.Black)
-                }
+            Row(
+                modifier = Modifier
+                    .weight(2f),
+                horizontalArrangement = Arrangement.Center,
+            ) {
                 Button(
                     onClick = {
                         pantryViewModel.sortList()
                     }
-                ){
-                    Text(text = "sortieren")
+                ) {
+                    Text(text = "Liste sortieren", color = Color.Black)
                 }
             }
         }

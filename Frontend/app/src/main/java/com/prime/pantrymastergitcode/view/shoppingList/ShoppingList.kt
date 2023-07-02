@@ -12,12 +12,13 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
-import com.prime.pantrymastergitcode.ui.theme.Timberwolf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.prime.pantrymastergitcode.ui.theme.mainColor
+import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 
 @Composable
 fun ShoppingListScreen(shoppingListViewModel: ShoppingListViewModel) {
@@ -66,7 +67,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
 
         }
 
-        Divider(color = Color.LightGray, thickness = 1.dp)
+        Divider(color = Color.LightGray, thickness = 3.dp)
         Spacer(modifier = Modifier.height(12.dp))
 
         if (loading) {
@@ -85,21 +86,21 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
                     placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(4f)
                         .height(50.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(Timberwolf)
+                        .background(secondaryColor)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 TextField(
                     value = newQuantityType,
                     onValueChange = { newQuantityType = it },
-                    placeholder = { Text("Type", style = TextStyle(fontSize = 12.sp)) },
+                    placeholder = { Text("Unit", style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(3f)
                         .height(50.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(Timberwolf)
+                        .background(secondaryColor)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 TextField(
@@ -107,10 +108,10 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     onValueChange = { newItem = it },
                     placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(5f)
                         .height(50.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(Timberwolf)
+                        .background(secondaryColor)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
@@ -127,6 +128,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                     modifier = Modifier
                         .width(60.dp)
                         .height(50.dp)
+                        .background(color = mainColor)
                 ) {
                     Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
                 }
@@ -152,7 +154,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         )
                         Text(
                             item.productName,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(2f)
                         )
 
                         IconButton(
@@ -167,11 +169,11 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                             Icon(
                                 Icons.Default.Delete,
                                 contentDescription = "Delete",
-                                tint = Color.Black
+                                tint = secondaryColor
                             )
                         }
                     }
-                    Divider(color = Color.LightGray, thickness = 1.dp)
+                    Divider(color = secondaryColor, thickness = 1.dp)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))

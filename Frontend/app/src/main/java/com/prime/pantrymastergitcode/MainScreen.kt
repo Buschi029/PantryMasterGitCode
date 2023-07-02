@@ -48,6 +48,7 @@ fun MainScreen(service:OFFAPIService, scanner: GmsBarcodeScanner) {
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
+
         // Festlegung der Reihenfolge in der Navigationsleiste
         BottomBarScreen.Scanner,
         BottomBarScreen.Pantry,
@@ -81,7 +82,7 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = Color(0x50000000),
+        unselectedContentColor = Color(0x70000000),
         selectedContentColor = Color.Black,
         onClick = {
             navController.navigate(screen.route) {
