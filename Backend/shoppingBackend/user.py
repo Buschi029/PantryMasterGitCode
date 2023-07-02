@@ -5,17 +5,18 @@ from apiflask import APIBlueprint, Schema
 from apiflask.fields import Integer, String
 from apiflask.validators import Length, OneOf
 
+#userB wird als Blueprint erstellt, damit die app.py darauf zugreifen und nutzen kann
 userB = APIBlueprint('user', __name__)
 
+#user Klasse
 class user(Schema):
     userID = String(required=True)
     userName = String(required=True)
     age = Integer(required=True)
     gender = String(required=True)
 
-class userKey(Schema):
-    userID = String(required=True)
 
+#Anmeldedaten für die Datenbank
 host = "ep-old-rice-105179.eu-central-1.aws.neon.tech"
 port = "5432"
 database = "userDB"
@@ -23,13 +24,14 @@ userDB = "ADMIN"
 password = "uihkP3cnT0Wo"
 sslmode="require"
 
-
+#Aufbau einer Connection zur Datenbank
 def tryConnect():
     conn = psycopg2.connect(
     host=host, port=port, database=database, user=userDB, password=password
     )
     return conn
 
+#Get Route um alle User mit allen Informationen zu erhalten
 @userB.output(user)
 @userB.route("/user", methods=["GET"])
 def get_AllUser():
@@ -47,12 +49,11 @@ def get_AllUser():
         results.append(result)
     return jsonify(results)
 
-@userB.input(userKey)
+#Post Route um die Informationen für einen bestimmten Nutzer zu erhalten
 @userB.output(user)
 @userB.route("/user", methods=["POST"])
 def get_userInfo():
-    data = request.get_json()
-    userID = data["userID"]
+    userID = request.args.get('userID')
 
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -67,6 +68,7 @@ def get_userInfo():
         results.append(result)
     return jsonify(results)
 
+#Post Route um die Informationen für einen bestimmten Nutzer zu erhalten
 @userB.output(user)
 @userB.route("/user", methods=["PUT"])
 def add_user():
@@ -83,13 +85,12 @@ def add_user():
     cursor.close()
     conn.close()
 
-    return "User angelegt"
+    return "User inserted successfully"
 
-@userB.input(userKey)
+#DELETE Route um Nutzer mit bestimmter userID zu entfernen
 @userB.route("/user", methods=["DELETE"])
 def delete_user():
-    data = request.get_json()
-    userID = data["userID"]
+    userID = request.args.get('userID')
 
     conn = tryConnect() 
     cursor = conn.cursor()
@@ -98,4 +99,4 @@ def delete_user():
     cursor.close()
     conn.close()
 
-    return "User entfernt"
+    return "User deleted"

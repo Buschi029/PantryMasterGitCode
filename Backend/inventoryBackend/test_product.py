@@ -6,10 +6,12 @@ from app import app
 
 class TestFlaskRoutes(unittest.TestCase):
     
+
     def setUp(self):
         self.app = app.test_client()
         self.app.testing = True
 
+#Testet die post Route
     def test_get_oneProduct(self):
         mock_request_headers = {"Content-Type": "application/json"}
         mock_request_data = json.dumps({"barcode": "4103840026417"})

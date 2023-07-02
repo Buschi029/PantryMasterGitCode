@@ -8,6 +8,7 @@ class TestFlaskRoutes(unittest.TestCase):
         self.app = app.test_client()
         self.app.testing = True 
 
+#Testet die put Route
     def test_insert_Item(self):
         mock_request_headers = {'Content-Type': 'application/json'}
         mock_request_data = json.dumps({
@@ -24,14 +25,17 @@ class TestFlaskRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json(), {"message": "Data inserted successfully"})
 
+#Testet die get Route
     def test_get_allInvItem(self):
         response = self.app.get('/inventory')
         self.assertEqual(response.status_code, 200)
 
-    def test_get_allInvItem(self):
+#Testet post Route
+    def test_get_oneInvItem(self):
         response = self.app.post('/inventory', query_string=dict(userID='z'))
         self.assertEqual(response.status_code, 200)
 
+#Testet patch route
     def test_edit_Item(self):
         mock_request_headers = {'Content-Type': 'application/json'}
         mock_request_data = json.dumps({
@@ -47,6 +51,7 @@ class TestFlaskRoutes(unittest.TestCase):
         response = self.app.patch('/inventory', headers=mock_request_headers, data=mock_request_data)
         self.assertEqual(response.status_code, 200)
 
+#Testet die delete Route
     def test_delete_invItem(self):
         mock_request_headers = {'Content-Type': 'application/json'}
         mock_request_data = json.dumps({
