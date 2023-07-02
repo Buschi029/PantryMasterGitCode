@@ -14,8 +14,8 @@ PantryMaster ist eine digitale Speisekammer-App, die es ermöglicht, Lebensmitte
 Um das Backend zu starten muss in der Kommandozeile oder PowerShell in den "Backend"-Ordner navigiert (PantryMasterGitCode/Backend) und der Befehl "docker-compose up --build" ausgeführt werden.
 
 ## Starten des Frontends
-Um die bereits kompillierte APK zu starten, muss diese auf einen Emulator installieret werden, auf wessen Computer auch das Backend gehostet wird.
-Soll die App auf einem externen Android Gerät oder auf in einem Emulator gestartet werden, auf wessen Computer nicht das Backend gehostet wird, so muss die zuerst die URL zum Backend angepasst werden.
-Dazu muss im File "HttpRoutes.kt" (PantryMasterGitCode\Frontend\app\src\main\java\com\prime\pantrymastergitcode\api\HttpRoutes.kt) die BASE_URL zur IP-Adresse des Computers welcher das Backend hostet, geändert werden. Zusätzlich müssen sich die Geräte selben Wlan-Netz befinden.
-Sollte eine Änderung der BASE_URL erfolgt sein muss die App vor Ausführung neu kompiliert werden. Dazu kann Android Studio genutzt werden.
-Um die App neu zu kompilieren muss der Ordner "PantryMasterGitCode\Frontend" in Android Studio geöffet werden. Nach Auswahl des gewünschten Gerätes oder Emulators (oben rechts) auf dem die App installiert werden soll, wird durch betätigen des Run-Knopf (neben der Geräte-Auswahl) die App kompiliert und auf dem ausgewählten Gerät installiert.
+Um die bereits kompillierte APK zu starten, muss diese auf einem Emulator installiert werden, auf dessen Computer auch das Backend gehostet wird.
+Soll die App auf einem externen Android-Gerät oder in einem Emulator gestartet werden, auf dessen Computer nicht das Backend gehostet wird, so muss zuerst die URL zum Backend angepasst werden.
+Dazu muss im File "HttpRoutes.kt" (PantryMasterGitCode\Frontend\app\src\main\java\com\prime\pantrymastergitcode\api\HttpRoutes.kt) die BASE_URL zur IP-Adresse des Computers welcher das Backend hostet, geändert werden. Zusätzlich müssen sich die Geräte im selben WLAN-Netz befinden.
+Sollte eine Änderung der BASE_URL erfolgt sein, muss die App vor Ausführung neu kompiliert werden. Dazu kann Android Studio genutzt werden.
+Um die App neu zu kompilieren muss der Ordner "PantryMasterGitCode\Frontend" in Android Studio geöffet werden. Nach Auswahl des gewünschten Gerätes oder Emulators (oben rechts) auf dem die App installiert werden soll, wird durch betätigen des Run-Knopfes (neben der Geräte-Auswahl) die App kompiliert und auf dem ausgewählten Gerät installiert.
