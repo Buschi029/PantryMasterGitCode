@@ -41,7 +41,7 @@ class ScannerViewUITest {
         //eingabe von variablen in die textfelder
         productNameInput.performTextInput("Maggi")
         quantityInput.performTextInput("2")
-        unitInput.performTextInput("Flaschen")
+        unitInput.performTextInput("Btl")
         //sicherstellen dass button zum hinzufügen in pantry angezeigt wird
         addToPantryButton.assertIsDisplayed()
         //klicken des Buttons
