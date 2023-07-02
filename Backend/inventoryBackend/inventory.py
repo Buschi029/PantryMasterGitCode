@@ -70,8 +70,7 @@ def get_allInvItem():
 @inventory.route("/inventory", methods=["POST"])
 @inventory.output(inventoryItem)
 def get_oneInvItem():
-    data = request.get_json()
-    userID = data["userID"]
+    userID = request.args.get('userID')
     conn = tryConnect() 
     cursor = conn.cursor()
     cursor.execute("SELECT productCode, userID, productName, expirationDate, quantity, quantityUnit, appendDate FROM tbl_pantry WHERE userID=%s", (userID,))
