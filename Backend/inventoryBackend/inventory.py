@@ -165,7 +165,7 @@ def delete_invItem(inventoryItem):
 
     conn = tryConnect() 
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM tbl_pantry WHERE appendDate=%s", (appendDate))
+    cursor.execute("DELETE FROM tbl_pantry WHERE appendDate=%s", (appendDate,))
     conn.commit()
     cursor.close()
     conn.close()
