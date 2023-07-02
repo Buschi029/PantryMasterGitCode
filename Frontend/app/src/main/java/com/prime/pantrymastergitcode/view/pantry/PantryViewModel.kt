@@ -20,7 +20,7 @@ class PantryViewModel(private val service: OFFAPIService, private val mainViewMo
 
     val tag = "PantryViewModel"
 
-    private val items = mutableStateListOf<PantryItemDTO>()
+    val items = mutableStateListOf<PantryItemDTO>()
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
