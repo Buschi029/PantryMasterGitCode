@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,7 +91,9 @@ fun PantryList(pantryViewModel: PantryViewModel) {
             Text(
                 text = "Pantry List",
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .padding(bottom = 12.dp)
+                    .testTag("Headline")
             )
             Icon(
                 imageVector = Icons.Default.Fastfood,
@@ -99,6 +102,7 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 modifier = Modifier
                     .size(40.dp)
                     .padding(bottom = 10.dp)
+                    .testTag("HeadlineIcon")
             )
         }
 
@@ -110,11 +114,15 @@ fun PantryList(pantryViewModel: PantryViewModel) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.testTag("ProgressIndicator")
+                )
             }
         }else{
             // Tabelle
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .testTag("PantryList")) {
                 pantryViewModel.getPantryList().forEachIndexed { index, item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

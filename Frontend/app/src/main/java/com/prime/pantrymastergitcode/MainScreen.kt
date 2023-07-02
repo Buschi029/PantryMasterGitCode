@@ -13,6 +13,7 @@ import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -59,8 +60,8 @@ fun BottomBar(navController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation {
-        screens.forEach { screen->
-            AddItem(screen = screen, currentDestination = currentDestination , navController = navController)
+        screens.forEachIndexed { index, screen ->
+            AddItem(screen = screen, currentDestination = currentDestination , navController = navController, index = index)
         }
     }
 }
@@ -69,9 +70,12 @@ fun BottomBar(navController: NavHostController) {
 fun RowScope.AddItem(
     screen: BottomBarScreen,
     currentDestination: NavDestination?,
-    navController: NavHostController
+    navController: NavHostController,
+    index: Int
 ) {
     BottomNavigationItem(
+        modifier = Modifier
+            .testTag("Icon${index}"),
         label = {
            Text(text = screen.title)
         },

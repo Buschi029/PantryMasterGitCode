@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -35,7 +36,7 @@ data class ShoppingItem(val name: String, var quantity: String,
 @Composable
 fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
     var newItem: String by remember { mutableStateOf("") }
-    var newQuantity: Int by remember { mutableStateOf(0) }
+    var newQuantity: Int by remember { mutableIntStateOf(0) }
     var newQuantityType: String by remember { mutableStateOf("") }
     val loading by shoppingListViewModel.loading.collectAsState()
 
@@ -53,7 +54,9 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             Text(
                 text = "Shopping List",
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .padding(bottom = 12.dp)
+                    .testTag("Headline")
             )
             Icon(
                 imageVector = Icons.Default.ShoppingCart,
@@ -62,6 +65,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                 modifier = Modifier
                     .size(40.dp)
                     .padding(bottom = 10.dp)
+                    .testTag("HeadlineIcon")
             )
 
         }
@@ -74,7 +78,9 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.testTag("ProgressIndicator")
+                )
             }
         } else {
             Row(
@@ -133,8 +139,12 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             }
             Spacer(modifier = Modifier.height(16.dp))
             Divider(color = Color.LightGray, thickness = 1.dp)
-            Column(modifier = Modifier.fillMaxWidth()) {
-                shoppingListViewModel.items.forEachIndexed { index, item ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("ShoppingList")
+            ) {
+                shoppingListViewModel.items.forEach { item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
 
