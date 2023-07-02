@@ -38,13 +38,13 @@ class PantryUnitTests {
 
         val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
-        coEvery { service.getPantryList("") } returns mutableListOf(
+        coEvery { service.getPantryList("ABC") } returns mutableListOf(
             PantryItemDTO(
-                123, "", "Apfel", java.time.LocalDate.now().toKotlinLocalDate(),
+                123, "ABC", "Apfel", java.time.LocalDate.now().toKotlinLocalDate(),
                 java.time.LocalDateTime.now().toKotlinLocalDateTime(), 1, "Stck"
             ),
             PantryItemDTO(
-                456, "", "Banane", java.time.LocalDate.now().toKotlinLocalDate(),
+                456, "ABC", "Banane", java.time.LocalDate.now().toKotlinLocalDate(),
                 java.time.LocalDateTime.now().toKotlinLocalDateTime(), 2, "Stck"
             )
         )
@@ -55,7 +55,7 @@ class PantryUnitTests {
         }
 
         // Verifizierung des Aufrufs
-        coVerify { service.getPantryList("") }
+        coVerify { service.getPantryList("ABC") }
 
         assertEquals(123, viewModel.items[0].productCode)
         assertEquals(2, viewModel.items[1].quantity)

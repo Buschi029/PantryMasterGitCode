@@ -66,10 +66,10 @@ class ShoppingListUnitTests {
         val viewModel = ShoppingListViewModel(service, mainViewModel = MainViewModel())
 
         // Mocking des Verhaltens von service.getShoppingList
-        coEvery { service.getShoppingList("") } returns listOf(
-            ShoppingItemDTO("Apfel", 3, "Stk", ""),
-            ShoppingItemDTO("Banane", 2, "Stk", ""),
-            ShoppingItemDTO("Milch", 300, "ml", "")
+        coEvery { service.getShoppingList("ABC") } returns listOf(
+            ShoppingItemDTO("Apfel", 3, "Stk", "ABC"),
+            ShoppingItemDTO("Banane", 2, "Stk", "ABC"),
+            ShoppingItemDTO("Milch", 300, "ml", "ABC")
         )
 
         // Ausführung des Tests
@@ -78,7 +78,7 @@ class ShoppingListUnitTests {
         }
 
         // Verifizierung des Aufrufs
-        coVerify { service.getShoppingList("") }
+        coVerify { service.getShoppingList("ABC") }
 
         // Überprüfung, ob die GET-Methode die richtigen Elemente ausgibt
         assertEquals("Apfel", viewModel.items[0].productName)
