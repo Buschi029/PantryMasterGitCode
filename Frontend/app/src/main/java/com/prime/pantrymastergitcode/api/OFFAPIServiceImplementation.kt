@@ -17,8 +17,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
 
 // Klasse, welche die HTTP-Request beinhaltet
 class OFFAPIServiceImplementation(
