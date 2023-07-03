@@ -27,7 +27,7 @@ jobs:
           steps:
             #Code wird ausgecheckt
           - uses: actions/checkout@v2
-            #Docker wird eingerichtet, Backend-Container erzeugen und Container starten
+            #Docker wird eingerichtet, Backend-Container wird erzeugt und Container gestartet
           - name: Set up Docker
             run: |
               docker build -t mybackendinventorybackend ./Backend/inventoryBackend
