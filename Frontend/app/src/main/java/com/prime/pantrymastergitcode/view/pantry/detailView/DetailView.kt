@@ -92,7 +92,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                         horizontalAlignment = Alignment.CenterHorizontally) {
                             if (product.pictureLink != "") {
                                 AsyncImage(
-                                    model = "${product.pictureLink}",
+                                    model = product.pictureLink,
                                     contentDescription = "ProductImage",
                                     modifier = Modifier
                                         .height(150.dp)
@@ -103,7 +103,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "${pantryViewModel.checkAvailability(product.name)}",
+                                text = pantryViewModel.checkAvailability(product.name),
                                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)
                             )
                         }

@@ -17,7 +17,6 @@ import org.junit.Test
 
 class ShoppingListUnitTests {
     private lateinit var service: OFFAPIService
-    private lateinit var viewModel: ShoppingListViewModel
 
     // Festlegung des Services, der gemockt werden soll
     @Before
@@ -26,6 +25,7 @@ class ShoppingListUnitTests {
     }
 
     // Test, ob die Methode addItemsToDatabase die Funktion addToShoppingList korrekt aufruft
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `addItemsToDatabase should invoke addToShoppingList`() {
 
@@ -57,6 +57,7 @@ class ShoppingListUnitTests {
     }
 
     // Test, ob die Methode getItemsFromDatabase die Funktion getShoppingList korrekt aufruft
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `getItemsFromDatabase should invoke getShoppingList`() {
 
@@ -94,6 +95,7 @@ class ShoppingListUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `removeItemFromDatabase should invoke removeFromShoppingList`() {
 
@@ -102,23 +104,21 @@ class ShoppingListUnitTests {
 
         val viewModel = ShoppingListViewModel(service, mainViewModel = MainViewModel())
         val productName = "Milch"
-        val quantity = 300
-        val quantityUnit = "ml"
 
         // Mock the behavior of service.removeFromShoppingList
         coEvery { service.removeFromShoppingList(productName, "") } returns listOf(
-            ShoppingItemDTO("Apfel", 3, "Stk", ""),
-            ShoppingItemDTO("Banane", 2, "Stk", ""),
-            ShoppingItemDTO("Milch", 300, "ml", "")
+            ShoppingItemDTO("Apfel", 3, "Stk", "ABC"),
+            ShoppingItemDTO("Banane", 2, "Stk", "ABC"),
+            ShoppingItemDTO("Milch", 300, "ml", "ABC")
         )
 
         // Ausführung des Tests
         runBlocking {
-            viewModel.removeItemFromDatabase(productName, quantity, quantityUnit)
+            viewModel.removeItemFromDatabase(productName)
         }
 
         // Verifizierung des korrekten Methodenaufrufs
-        coVerify { service.removeFromShoppingList(productName, "") }
+        coVerify { service.removeFromShoppingList(productName, "ABC") }
 
         // Zurücksetzen des Dispatchers
         Dispatchers.resetMain()

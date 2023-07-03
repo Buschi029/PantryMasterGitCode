@@ -22,7 +22,6 @@ import org.junit.Test
 // Diese Klasse testet alle Methoden des PantryViewModels
 class PantryUnitTests {
     private lateinit var service: OFFAPIService
-    private lateinit var viewModel: PantryViewModel
 
     // Festlegung des Services, der gemockt werden soll
     @Before
@@ -30,6 +29,7 @@ class PantryUnitTests {
         service = mockk()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `getPantryItemsFromDatabase should invoke getPantryList`() {
 
@@ -63,6 +63,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `getProductDetails should invoke postProductDetails`() {
 
@@ -97,6 +98,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `removeItemFromDatabase should invoke removeFromPantryList`() {
 
@@ -138,6 +140,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `setProductDetails should update showProductDetails state`() {
 
@@ -158,6 +161,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `updatePantryItem should update pantryItems and invoke updatePantryItem`() {
 

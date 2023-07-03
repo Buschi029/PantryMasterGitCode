@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
 import com.prime.pantrymastergitcode.ui.theme.secondaryColor
@@ -300,7 +299,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     scanner.startScan()
                         .addOnSuccessListener { barcode ->
                             scope.launch {
-                                var failed = scope.async {
+                                val failed = scope.async {
                                     scannerViewModel.getProductFromAPI(
                                         barcode.rawValue.toString().toLong()
                                     )
@@ -341,7 +340,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         .testTag("AddToPantryButton"),
                     onClick = {
                         scope.launch {
-                            var failed = scope.async {
+                            val failed = scope.async {
                                 scannerViewModel.addProductToPantry(pantryProduct)
                             }
                             if (failed.await()) {
