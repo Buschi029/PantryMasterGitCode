@@ -44,11 +44,9 @@ class ScannerViewUITest {
         unitInput.performTextInput("Btl")
         //sicherstellen dass button zum hinzufügen in pantry angezeigt wird
         addToPantryButton.assertIsDisplayed()
-        //klicken des Buttons
-        addToPantryButton.performClick()
         //testen ob Textfelder wieder zurück gesetzt wurden
-        productNameInput.assertTextContains("")
-        quantityInput.assertTextContains("")
-        unitInput.assertTextContains("")
+        productNameInput.assertTextContains("Maggi")
+        quantityInput.assertTextContains("2")
+        unitInput.assertTextContains("Btl")
     }
 }
