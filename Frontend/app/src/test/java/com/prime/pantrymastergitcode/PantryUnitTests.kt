@@ -22,7 +22,6 @@ import org.junit.Test
 // Diese Klasse testet alle Methoden des PantryViewModels
 class PantryUnitTests {
     private lateinit var service: OFFAPIService
-    private lateinit var viewModel: PantryViewModel
 
     // Festlegung des Services, der gemockt werden soll
     @Before
@@ -30,6 +29,7 @@ class PantryUnitTests {
         service = mockk()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `getPantryItemsFromDatabase should invoke getPantryList`() {
 
@@ -38,13 +38,13 @@ class PantryUnitTests {
 
         val viewModel = PantryViewModel(service, mainViewModel = MainViewModel())
 
-        coEvery { service.getPantryList("") } returns mutableListOf(
+        coEvery { service.getPantryList("ABC") } returns mutableListOf(
             PantryItemDTO(
-                123, "", "Apfel", java.time.LocalDate.now().toKotlinLocalDate(),
+                123, "ABC", "Apfel", java.time.LocalDate.now().toKotlinLocalDate(),
                 java.time.LocalDateTime.now().toKotlinLocalDateTime(), 1, "Stck"
             ),
             PantryItemDTO(
-                456, "", "Banane", java.time.LocalDate.now().toKotlinLocalDate(),
+                456, "ABC", "Banane", java.time.LocalDate.now().toKotlinLocalDate(),
                 java.time.LocalDateTime.now().toKotlinLocalDateTime(), 2, "Stck"
             )
         )
@@ -55,7 +55,7 @@ class PantryUnitTests {
         }
 
         // Verifizierung des Aufrufs
-        coVerify { service.getPantryList("") }
+        coVerify { service.getPantryList("ABC") }
 
         assertEquals(123, viewModel.items[0].productCode)
         assertEquals(2, viewModel.items[1].quantity)
@@ -63,6 +63,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `getProductDetails should invoke postProductDetails`() {
 
@@ -97,6 +98,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `removeItemFromDatabase should invoke removeFromPantryList`() {
 
@@ -138,6 +140,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `setProductDetails should update showProductDetails state`() {
 
@@ -158,6 +161,7 @@ class PantryUnitTests {
         Dispatchers.resetMain()
     }
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     @Test
     fun `updatePantryItem should update pantryItems and invoke updatePantryItem`() {
 

@@ -16,7 +16,6 @@ import org.junit.Test
 class ScannerUnitTests {
 
     private lateinit var service: OFFAPIService
-    private lateinit var viewModel: ScannerViewModel
 
     // Festlegung des Services, der gemockt werden soll
     @Before

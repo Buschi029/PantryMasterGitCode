@@ -2,7 +2,6 @@ package com.prime.pantrymastergitcode.view.scanner
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
@@ -11,7 +10,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
 
 class ScannerViewModel(private val service: OFFAPIService, private val mainViewModel: MainViewModel) : ViewModel() {

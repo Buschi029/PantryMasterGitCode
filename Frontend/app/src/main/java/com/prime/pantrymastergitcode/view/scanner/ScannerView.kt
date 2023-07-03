@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -49,7 +50,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.prime.pantrymastergitcode.MainViewModel
 import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.dto.PantryItemDTO
 import com.prime.pantrymastergitcode.ui.theme.secondaryColor
@@ -108,7 +108,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                                 )
                         )
                         Text(
-                            text = "Add your Product",
+                            text = stringResource(R.string.add_your_product),
                             style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold)
                         )
                     }
@@ -176,7 +176,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     } else {
                         ""
                     },
-                    label = { Text(text = "Product Name") },
+                    label = { Text(text = stringResource(R.string.product_name)) },
                     onValueChange = {
                         scannerViewModel.setPantryProduct(pantryProduct.copy(productName = it))
                     },
@@ -198,7 +198,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         } else {
                             ""
                         },
-                        label = { Text(text = "Quantity") },
+                        label = { Text(text = stringResource(R.string.quantity)) },
                         onValueChange = {
                             if (it != "") {
                                 scannerViewModel.setPantryProduct(pantryProduct.copy(quantity = it.toInt()))
@@ -226,7 +226,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         } else {
                             ""
                         },
-                        label = { Text(text = "Unit") },
+                        label = { Text(text = stringResource(R.string.unit)) },
                         onValueChange = { newValue ->
                             if (newValue.length <= 3) {
                                 scannerViewModel.setPantryProduct(pantryProduct.copy(quantityUnit = newValue))
@@ -270,7 +270,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                                 .weight(7f),
                             verticalArrangement = Arrangement.Center) {
                             Text(
-                                text = "Expiration Date",
+                                text = stringResource(R.string.expiration_date),
                                 style = TextStyle(color = Color.Black)
                             )
                             Text(
@@ -299,7 +299,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                     scanner.startScan()
                         .addOnSuccessListener { barcode ->
                             scope.launch {
-                                var failed = scope.async {
+                                val failed = scope.async {
                                     scannerViewModel.getProductFromAPI(
                                         barcode.rawValue.toString().toLong()
                                     )
@@ -326,7 +326,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                 }
             ) {
                 Text(
-                    text = "Scan Barcode",
+                    text = stringResource(R.string.scan_barcode),
                     style = TextStyle(color = Color.Black, fontSize = 16.sp)
                 )
             }
@@ -340,14 +340,14 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         .testTag("AddToPantryButton"),
                     onClick = {
                         scope.launch {
-                            var failed = scope.async {
+                            val failed = scope.async {
                                 scannerViewModel.addProductToPantry(pantryProduct)
                             }
                             if (failed.await()) {
                                 Log.e("ScannerViewModel", failed.await().toString())
                                 Toast.makeText(
                                     context,
-                                    "Could not add Product to Pantry",
+                                    R.string.could_not_add_product_to_pantry,
                                     Toast.LENGTH_LONG
                                 ).show()
                             }else{
@@ -360,7 +360,7 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
                         }
                     }
                 ) {
-                    Text(text = "Add Product", color = Color.Black, fontSize = 16.sp)
+                    Text(text = stringResource(R.string.add_product), color = Color.Black, fontSize = 16.sp)
                 }
             }
         }
@@ -373,8 +373,8 @@ fun ScannerView(scannerViewModel: ScannerViewModel, scanner: GmsBarcodeScanner) 
             dismissOnClickOutside = true
         ),
         buttons = {
-            positiveButton(text = "Okay")
-            negativeButton(text = "Cancel")
+            positiveButton(text = stringResource(R.string.okay))
+            negativeButton(text = stringResource(R.string.cancel))
         }
     ) {
         datepicker(

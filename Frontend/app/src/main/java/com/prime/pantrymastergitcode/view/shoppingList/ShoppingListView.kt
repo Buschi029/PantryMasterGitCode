@@ -17,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.ui.theme.mainColor
 import com.prime.pantrymastergitcode.ui.theme.secondaryColor
 
@@ -57,7 +59,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Shopping List",
+                text = stringResource(R.string.shopping_list),
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier
                     .padding(bottom = 12.dp)
@@ -96,7 +98,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                 TextField(
                     value = if (newQuantity != 0) newQuantity.toString() else "",
                     onValueChange = { newQuantity = it.toIntOrNull() ?: 0 },
-                    placeholder = { Text("Quantity", style = TextStyle(fontSize = 12.sp)) },
+                    placeholder = { Text(stringResource(R.string.quantity_shoppingList), style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
                         .weight(4f)
                         .height(50.dp)
@@ -108,7 +110,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                 TextField(
                     value = newQuantityType,
                     onValueChange = { newQuantityType = it },
-                    placeholder = { Text("Unit", style = TextStyle(fontSize = 12.sp)) },
+                    placeholder = { Text(stringResource(R.string.unit_shoppingList), style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
                         .weight(3f)
                         .height(50.dp)
@@ -120,7 +122,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                 TextField(
                     value = newItem,
                     onValueChange = { newItem = it },
-                    placeholder = { Text("Element", style = TextStyle(fontSize = 12.sp)) },
+                    placeholder = { Text(stringResource(R.string.element_shoppingList), style = TextStyle(fontSize = 12.sp)) },
                     modifier = Modifier
                         .weight(5f)
                         .height(50.dp)
@@ -145,7 +147,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         .height(50.dp)
                         .background(color = mainColor)
                 ) {
-                    Text("Add", color = Color.Black, style = TextStyle(fontSize = 12.sp))
+                    Text(stringResource(R.string.add_shoppingList), color = Color.Black, style = TextStyle(fontSize = 12.sp))
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -179,9 +181,7 @@ fun ShoppingList(shoppingListViewModel: ShoppingListViewModel) {
                         IconButton(
                             onClick = {
                                 shoppingListViewModel.removeItemFromDatabase(
-                                    item.productName,
-                                    item.quantity,
-                                    item.quantityUnit
+                                    item.productName
                                 )
                             }
                         ) {

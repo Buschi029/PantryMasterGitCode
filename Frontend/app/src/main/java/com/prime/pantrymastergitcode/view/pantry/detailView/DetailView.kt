@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.prime.pantrymastergitcode.MainViewModel
+import com.prime.pantrymastergitcode.R
 import com.prime.pantrymastergitcode.api.OFFAPIService
 import com.prime.pantrymastergitcode.view.pantry.PantryViewModel
 
@@ -90,7 +92,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                         horizontalAlignment = Alignment.CenterHorizontally) {
                             if (product.pictureLink != "") {
                                 AsyncImage(
-                                    model = "${product.pictureLink}",
+                                    model = product.pictureLink,
                                     contentDescription = "ProductImage",
                                     modifier = Modifier
                                         .height(150.dp)
@@ -101,7 +103,7 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "${pantryViewModel.checkAvailability(product.name)}",
+                                text = pantryViewModel.checkAvailability(product.name),
                                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)
                             )
                         }
@@ -119,8 +121,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Kilocalories: ${pantryViewModel.checkAvailability(product.kcal)}")
-                                Text(text = "Carbohydrates: ${pantryViewModel.checkAvailability(product.carbohydrates)}")
+                                Text(text = stringResource(R.string.kilocalories) + pantryViewModel.checkAvailability(product.kcal))
+                                Text(text = stringResource(R.string.carbohydrates) + pantryViewModel.checkAvailability(product.carbohydrates))
                             }
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -128,8 +130,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Fat: ${pantryViewModel.checkAvailability(product.fat)}")
-                                Text(text = "Sugar: ${pantryViewModel.checkAvailability(product.sugar)}")
+                                Text(text = stringResource(R.string.fat) + pantryViewModel.checkAvailability(product.fat))
+                                Text(text = stringResource(R.string.sugar) + pantryViewModel.checkAvailability(product.sugar))
                             }
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -137,8 +139,8 @@ fun DetailView(pantryViewModel: PantryViewModel) {
                                     .padding(start = 10.dp, end = 10.dp)
                                     .fillMaxWidth()
                             ) {
-                                Text(text = "Protein: ${pantryViewModel.checkAvailability(product.protein)}")
-                                Text(text = "Nutriscore: ${pantryViewModel.checkAvailability(product.nutriscore)}")
+                                Text(text = stringResource(R.string.protein) + pantryViewModel.checkAvailability(product.protein))
+                                Text(text = stringResource(R.string.nutriscore) + pantryViewModel.checkAvailability(product.nutriscore))
                             }
                         }
                     }

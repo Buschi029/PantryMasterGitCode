@@ -31,7 +31,7 @@ class inventoryItem(Schema):
 #Aufbau einer Connection zur Datenbank
 def tryConnect():
     conn = psycopg2.connect(
-    host=host, port=port, database=database, user=user, password=password
+    host=host, port=port, database=database, user=user, password=password, sslmode='require'
     )
     return conn
 

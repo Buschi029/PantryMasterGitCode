@@ -1,7 +1,6 @@
 package com.prime.pantrymastergitcode.view.shoppingList
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -18,18 +17,11 @@ import com.prime.pantrymastergitcode.util.Log
 // Klasse ShoppungListViewModel regelt die Funktionalität der Shopping List
 class ShoppingListViewModel(private val service: OFFAPIService, private val mainViewModel: MainViewModel): ViewModel() {
 
-    private val _items = mutableStateListOf<ShoppingItem>()
+
     var items: List<ShoppingItemDTO> by mutableStateOf(mutableListOf())
 
     // Initialisierung der Variablen
-    private val _newItem = mutableStateOf("")
-    val newItem: String get() = _newItem.value
 
-    private val _newQuantity = mutableStateOf("")
-    val newQuantity: String get() = _newQuantity.value
-
-    private val _newQuantityType = mutableStateOf("")
-    val newQuantityType: String get() = _newQuantityType.value
 
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
@@ -59,10 +51,10 @@ class ShoppingListViewModel(private val service: OFFAPIService, private val main
     }
 
     // Funktion zum Entfernen der Items aus der Datenbank
-    fun removeItemFromDatabase(productName: String, quantity: Int, quantityUnit: String) {
+    fun removeItemFromDatabase(productName: String) {
         viewModelScope.launch {
             try {
-                items = service.removeFromShoppingList(productName, "")!!
+                items = service.removeFromShoppingList(productName, mainViewModel.getUserID())!!
             } catch (e: Exception) {
                 Log.e("ShoppingListViewModel", e.toString())
             }
