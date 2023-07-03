@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PantryMasterGitCode</string>
+    <string name="app_name">PantryMaster</string>
     <string name="add_your_product">Add your Product</string>
     <string name="product_name">Product Name</string>
     <string name="quantity">Quantity</string>
