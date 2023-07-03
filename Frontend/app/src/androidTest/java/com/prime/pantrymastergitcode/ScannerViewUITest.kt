@@ -27,7 +27,8 @@ class ScannerViewUITest {
     fun setup() {
         composeTestRule.launchAPP(service)
     }
-    @Test 
+
+    @Test
     fun scannerViewTest() {
         // definieren der Elemente, die der Text verwendet
         val scannerIcon = composeTestRule.onNodeWithTag("Icon0")
