@@ -27,7 +27,7 @@ sslmode="require"
 #Aufbau einer Connection zur Datenbank
 def tryConnect():
     conn = psycopg2.connect(
-    host=host, port=port, database=database, user=userDB, password=password
+    host=host, port=port, database=database, user=userDB, password=password, sslmode='require'
     )
     return conn
 
