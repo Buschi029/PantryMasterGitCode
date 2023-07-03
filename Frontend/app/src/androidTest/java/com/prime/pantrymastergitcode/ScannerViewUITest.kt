@@ -15,36 +15,36 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ScannerViewUITest {
-    //Service für Backendabfragen intitialisieren, da dieser zum starten der App benötigt wird
+    // Service für Backendabfragen intitialisieren, da dieser zum starten der App benötigt wird
     private val service = OFFAPIService.create()
 
-    //Definierung der compose Rule um mit den compose Elementen interagieren zu können
+    // Definierung der compose Rule um mit den compose Elementen interagieren zu können
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    //starten der App zum testen
+    // starten der App zum testen
     @Before
-    fun setup(){
+    fun setup() {
         composeTestRule.launchAPP(service)
     }
-    @Test
+    @Test 
     fun scannerViewTest() {
-        //definieren der Elemente, die der Text verwendet
+        // definieren der Elemente, die der Text verwendet
         val scannerIcon = composeTestRule.onNodeWithTag("Icon0")
         val productNameInput = composeTestRule.onNodeWithTag("ProductNameInput")
         val quantityInput = composeTestRule.onNodeWithTag("QuantityInput")
         val unitInput = composeTestRule.onNodeWithTag("UnitInput")
         val addToPantryButton = composeTestRule.onNodeWithTag("AddToPantryButton")
 
-        //navigieren zum Viewm ScannerView
+        // navigieren zum Viewm ScannerView
         scannerIcon.performClick()
-        //eingabe von variablen in die textfelder
+        // eingabe von variablen in die textfelder
         productNameInput.performTextInput("Maggi")
         quantityInput.performTextInput("2")
         unitInput.performTextInput("Btl")
-        //sicherstellen dass button zum hinzufügen in pantry angezeigt wird
+        // sicherstellen dass button zum hinzufügen in pantry angezeigt wird
         addToPantryButton.assertIsDisplayed()
-        //testen ob Textfelder wieder zurück gesetzt wurden
+        // testen ob Textfelder wieder zurück gesetzt wurden
         productNameInput.assertTextContains("Maggi")
         quantityInput.assertTextContains("2")
         unitInput.assertTextContains("Btl")
